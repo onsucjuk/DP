@@ -5,9 +5,11 @@
 <mapper namespace="dp.fdis.persistance.mapper.IMyAddrMapper">
 
     <!-- 게시판 리스트 쿼리 -->
-    <select id="getMyAddrList" resultType="MyAddrDTO">
+    <select id="getMyAddrList" resultType="MyAddrDTO" parameterType="MyAddrDTO">
         SELECT USER_ID, SEQ, ADDR, MEMO
         FROM MY_ADDR
+        WHERE
+            USER_ID = #{userId}
         ORDER BY SEQ
     </select>
 

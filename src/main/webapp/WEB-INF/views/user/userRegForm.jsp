@@ -194,6 +194,7 @@
 
                         } else {
                             alert(json.msg);
+                            location.href = "/user/login";
                         }
                     }
                 }

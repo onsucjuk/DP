@@ -17,11 +17,11 @@ public class MyAddrService implements IMyAddrSerivce {
     private final IMyAddrMapper addrMapper;
 
     @Override
-    public List<MyAddrDTO> getMyAddrList() throws Exception {
+    public List<MyAddrDTO> getMyAddrList(MyAddrDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".getAddrList start!");
 
-        return addrMapper.getMyAddrList();
+        return addrMapper.getMyAddrList(pDTO);
     }
 
     @Override

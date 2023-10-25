@@ -63,7 +63,7 @@
         %>
     </div>
 </div>
-<button id="btnResult" type="button">로그인결과</button>
+<button id="btnResult" type="button">로그인 결과 화면</button>
 
 </body>
 </html>

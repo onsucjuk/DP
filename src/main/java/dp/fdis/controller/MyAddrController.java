@@ -29,12 +29,18 @@ public class MyAddrController {
     private final IMyAddrSerivce myAddrSerivce;
 
     @GetMapping(value = "myAddrList")
-    public String myAddrList(ModelMap model)
+    public String myAddrList(HttpSession session, ModelMap model)
             throws Exception {
 
         log.info(this.getClass().getName() + ".myAddrList Start!");
 
-        List<MyAddrDTO> rList = Optional.ofNullable(myAddrSerivce.getMyAddrList())
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("session user_id : " + userId);
+
+        MyAddrDTO pDTO = new MyAddrDTO();
+        pDTO.setUserId(userId);
+
+        List<MyAddrDTO> rList = Optional.ofNullable(myAddrSerivce.getMyAddrList(pDTO))
                 .orElseGet(ArrayList::new);
 
 

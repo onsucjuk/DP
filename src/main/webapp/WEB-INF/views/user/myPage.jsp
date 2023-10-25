@@ -39,7 +39,10 @@
                 }
             )
 
-            // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+            $("#btnResult").on("click", function () {
+                location.href = "/user/loginResult";
+            })
+
             $("#btnLogin").on("click", function () {
                 location.href = "/user/login";
             })
@@ -74,5 +77,6 @@
 <div></div>
 <br/><br/>
 <button id="btnLogin" type="button">로그인 화면 이동</button>
+<button id="btnResult" type="button">로그인 결과 화면</button>
 </body>
 </html>
