@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ page import ="dp.fdis.dto.UserInfoDTO" %>
 <%@ page import ="dp.fdis.util.CmmUtil" %>
 <%
     String ssUserName = CmmUtil.nvl((String) session.getAttribute("SS_USER_NAME"));
@@ -16,6 +15,7 @@
 
         // HTML로딩이 완료되고, 실행됨
         $(document).ready(function () {
+
             // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
             $("#btnSend").on("click", function () {
                 location.href = "/html/index.html";
@@ -34,6 +34,19 @@
             $("#btnMyPage").on("click", function () {
                 location.href = "/user/myPage";
             })
+
+            $("#btnMyAddr").on("click", function () {
+                location.href = "/addr/myAddrReg";
+            })
+            $("#btnMyAddrList").on("click", function () {
+                location.href = "/addr/myAddrList";
+            })
+
+            if (ssUserName === "") {
+                alert("로그인 해주시길 바랍니다.")
+                location.href = "/user/login";
+            }
+
         })
     </script>
 </head>
@@ -59,5 +72,7 @@
 <button id="btnList" type="button">게시판 이동</button>
 <button id="btnLogin" type="button">로그인 화면 이동</button>
 <button id="btnMyPage" type="button">마이 페이지 이동</button>
+<button id="btnMyAddr" type="button">즐겨찾기 등록</button>
+<button id="btnMyAddrList" type="button">즐겨찾기 리스트</button>
 </body>
 </html>

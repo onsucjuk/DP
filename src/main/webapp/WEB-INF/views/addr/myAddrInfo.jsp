@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<%@ page import="dp.fdis.dto.NoticeDTO" %>
 <%@ page import="dp.fdis.util.CmmUtil" %>
+<%@ page import="dp.fdis.dto.MyAddrDTO" %>
 <%
-    NoticeDTO rDTO = (NoticeDTO) request.getAttribute("rDTO");
+    MyAddrDTO rDTO = (MyAddrDTO) request.getAttribute("rDTO");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +20,7 @@
         const user_id = "<%=CmmUtil.nvl(rDTO.getUserId())%>";
 
         // 현재 글번호, 자바에서 받을 변수들은 자바스크립트 변수로 저장하면 편함
-        const nSeq = "<%=CmmUtil.nvl(rDTO.getNoticeSeq())%>";
+        const nSeq = "<%=CmmUtil.nvl(rDTO.getSeq())%>";
 
         // HTML로딩이 완료되고, 실행됨
         $(document).ready(function () {
@@ -36,14 +36,14 @@
 
             // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
             $("#btnList").on("click", function () {
-                location.href = "/notice/noticeList"; // 공지사항 리스트 이동
+                location.href = "/addr/myAddrList"; // 공지사항 리스트 이동
             })
         })
 
         //수정하기
         function doEdit() {
             if (SS_USER_ID === user_id) {
-                location.href = "/notice/noticeEditInfo?nSeq=" + nSeq;
+                location.href = "/addr/myAddrEdit?nSeq=" + nSeq;
 
             } else if (SS_USER_ID === "") {
                 alert("로그인 하시길 바랍니다.");
@@ -61,14 +61,14 @@
 
                     // Ajax 호출해서 글 삭제하기
                     $.ajax({
-                            url: "/notice/noticeDelete",
+                            url: "/addr/myAddrDelete",
                             type: "post", // 전송방식은 Post
                             dataType: "JSON", // 전송 결과는 JSON으로 받기
                             data: {"nSeq": nSeq}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
                             success:
-                                function (json) { // /notice/noticeDelete 호출이 성공했다면..
+                                function (json) { //
                                     alert(json.msg); // 메시지 띄우기
-                                    location.href = "/notice/noticeList"; // 공지사항 리스트 이동
+                                    location.href = "/addr/myAddrList"; //
                                 }
                         }
                     )
@@ -85,43 +85,33 @@
     </script>
 </head>
 <body>
-<h2>공지사항 상세보기</h2>
+<h2>즐겨찾기 상세보기</h2>
 <hr/>
 <br/>
 <div class="divTable minimalistBlack">
     <div class="divTableBody">
         <div class="divTableRow">
-            <div class="divTableCell">제목
+            <div class="divTableCell">아이디
             </div>
-            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getTitle())%>
-            </div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">공지글 여부
-            </div>
-            <div class="divTableCell">
-                예<input type="radio" name="noticeYn"
-                        value="Y" <%=CmmUtil.checked(CmmUtil.nvl(rDTO.getNoticeYn()), "Y") %> />
-                아니오<input type="radio" name="noticeYn"
-                          value="N" <%=CmmUtil.checked(CmmUtil.nvl(rDTO.getNoticeYn()), "N") %>/>
+            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getUserId())%>
             </div>
         </div>
         <div class="divTableRow">
-            <div class="divTableCell">작성일
+            <div class="divTableCell">순번
             </div>
-            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getRegDt())%>
-            </div>
-        </div>
-        <div class="divTableRow">
-            <div class="divTableCell">조회수
-            </div>
-            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getReadCnt())%>
+            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getSeq())%>
             </div>
         </div>
         <div class="divTableRow">
-            <div class="divTableCell">내용
+            <div class="divTableCell">주소
             </div>
-            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getContents())%>
+            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getAddr())%>
+            </div>
+        </div>
+        <div class="divTableRow">
+            <div class="divTableCell">메모
+            </div>
+            <div class="divTableCell"><%=CmmUtil.nvl(rDTO.getMemo())%>
             </div>
         </div>
     </div>

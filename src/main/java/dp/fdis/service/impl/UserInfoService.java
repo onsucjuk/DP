@@ -92,12 +92,6 @@ public class UserInfoService implements IUserInfoService {
         if (successs > 0) {
             res = 1;
 
-            /*
-             * #######################################################
-             *                  메일 발송 로직 추가 시작!
-             * #######################################################
-             */
-
             MailDTO mDTO = new MailDTO();
 
             //회원정보화면에서 입력받은 이메일 변수(아직 암호화되어 넘어오기 때문에 복호화 수행함)
@@ -111,11 +105,6 @@ public class UserInfoService implements IUserInfoService {
             //회원 가입이 성공했기 때문에 메일을 발송함
             mailService.doSendMail(mDTO);
 
-            /*
-             * ####################################################################
-             *                      메일 발송 로직 추가 끝!
-             * ####################################################################
-             */
         } else {
             res = 0;
         }
@@ -150,15 +139,6 @@ public class UserInfoService implements IUserInfoService {
         // userInfoMapper.getUserLoginCheck(pDTO) 함수 실행 결과가 NULL 발생하면, UserInfoDTO 메모리에 올리기
 
         UserInfoDTO rDTO = Optional.ofNullable(userInfoMapper.getLogin(pDTO)).orElseGet(UserInfoDTO::new);
-
-        /*
-         * userInfoMapper로부터 SELECT 쿼리의 결과로 회원아이디를 받아왔으면 로그인 성공
-         *
-         * DTO의 변수 값이 있는지 확인하기 처리속도 측면에서 변수 길이 가져오는 것이 빠름
-         * .length()함수로 글자수로 0보다 큰지 비교
-         * 0보다 크다면 글자 존재하는 것이므로 값이 존재한다.
-         *
-         */
 
         if(CmmUtil.nvl(rDTO.getUserId()).length() > 0) {
             MailDTO mDTO = new MailDTO();

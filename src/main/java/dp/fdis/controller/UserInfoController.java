@@ -308,22 +308,8 @@ public class UserInfoController {
 
             UserInfoDTO rDTO = userInfoService.getLogin(pDTO);
 
-            /*
-             * 로그인을 성공했다면, 회원아이디 정보를 session에 저장함
-             *
-             * 스프링에서 세션을 사용하기 위해서는 함수명의 파라미테어 HttpSesssion session 존재
-             * session은 톰켓 메모리에 저장
-             * jsp, controller에서 쉽게 불러올 수 있다.
-             *
-             */
-
             if(CmmUtil.nvl(rDTO.getUserId()).length() > 0) { // 로그인 성공
                 res = 1;
-                /*
-                 * 세션에 회원아이디 저장하기, 추후 로그인 여부를 체그하기 위해 세션에 값이 존재하는지 체크
-                 * 세션 저장 키는 대문자!!
-                 * SS..                 *
-                 */
 
                 msg = "로그인이 성공했습니다.";
 
@@ -437,32 +423,11 @@ public class UserInfoController {
     public String searchUserIdProc(HttpServletRequest request, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".user/searchUserIdProc Start!");
 
-        /*
-         * ######################################################################
-         *          웹(회원정보 입력화면)에서 받는 정보를 String 변수에 저장!
-         *
-         *      무조건 웹으로 받은 정보는 DTO에 저장하기 위해 임시로 String 변수에 저장함
-         * ######################################################################
-         */
-
         String userName = CmmUtil.nvl(request.getParameter("userName")); //이름
         String email = CmmUtil.nvl(request.getParameter("email")); //이메일
 
-        /*
-         * ######################################################################
-         *     반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함
-         *                        반드시 작성할 것
-         * ######################################################################
-         */
-
         log.info("userName : " + userName);
         log.info("email : " + email);
-
-        /*
-         * ######################################################################
-         *          웹(회원정보 입력화면)에서 받는 정보를 DTO에 저장하기!
-         * ######################################################################
-         */
 
         UserInfoDTO pDTO = new UserInfoDTO();
         pDTO.setUserName(userName);
@@ -483,8 +448,6 @@ public class UserInfoController {
     public String searchPassword(HttpSession session) {
         log.info(this.getClass().getName() + ".user/searchPassword Start!");
 
-        // 강제 URL 입력 등 오는 경우가 있어 세션 삭제
-        // 비밀번호 재생성하는 화면은 보안을 위해 생성한 NEW_PASSWORD 세션 삭제
         session.setAttribute("NEW_PASSWORD", "");
         session.removeAttribute("NEW_PASSWORD");
 
@@ -503,14 +466,6 @@ public class UserInfoController {
     @PostMapping(value = "searchPasswordProc")
     public String searchPasswordProc(HttpServletRequest request, ModelMap model, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + ".user/searchPasswordProc Start!");
-
-        /*
-         *  ######################################################################
-         *          웹(회원정보 입력화면)에서 받는 정보를 String 변수에 저장!!
-         *
-         *      무조건 웹으로 받은 정보는 DTO에 저장하기 위해 임시로 String 변수에 저장함
-         *  ######################################################################
-         */
 
         String userId = CmmUtil.nvl((request.getParameter("userId"))); // 아이디
         String userName = CmmUtil.nvl((request.getParameter("userName"))); // 이름
@@ -604,6 +559,5 @@ public class UserInfoController {
 
         return rDTO;
     }
-
 
 }

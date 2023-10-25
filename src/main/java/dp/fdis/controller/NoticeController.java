@@ -34,7 +34,6 @@ import java.util.Optional;
 @Controller
 public class NoticeController {
 
-    // @RequiredArgsConstructor 를 통해 메모리에 올라간 서비스 객체를 Controller에서 사용할 수 있게 주입함
     private final INoticeService noticeService;
 
     /**
@@ -46,32 +45,17 @@ public class NoticeController {
     public String noticeList(ModelMap model)
             throws Exception {
 
-        // 로그 찍기(추후 찍은 로그를 통해 이 함수에 접근했는지 파악하기 용이하다.)
         log.info(this.getClass().getName() + ".noticeList Start!");
 
-        // 로그인된 사용자 아이디는 Session에 저장함
-        // 교육용으로 아직 로그인을 구현하지 않았기 때문에 Session에 데이터를 저장하지 않았음
-        // 추후 로그인을 구현할 것으로 가정하고, 공지사항 리스트 출력하는 함수에서 로그인 한 것처럼 Session 값을 생성함
-
-        // 공지사항 리스트 조회하기
-        // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         List<NoticeDTO> rList = Optional.ofNullable(noticeService.getNoticeList())
                 .orElseGet(ArrayList::new);
 
-//        List<NoticeDTO> rList = noticeService.getNoticeList();
-//
-//        if (rList == null) {
-//            rList = new ArrayList<>();
-//        }
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
 
-        // 로그 찍기(추후 찍은 로그를 통해 이 함수 호출이 끝났는지 파악하기 용이하다.)
         log.info(this.getClass().getName() + ".noticeList End!");
 
-        // 함수 처리가 끝나고 보여줄 JSP 파일명
-        // webapp/WEB-INF/views/notice/noticeList.jsp
         return "notice/noticeList";
 
     }
@@ -90,8 +74,6 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeReg End!");
 
-        // 함수 처리가 끝나고 보여줄 JSP 파일명
-        // webapp/WEB-INF/views/notice/noticeReg.jsp
         return "notice/noticeReg";
     }
 
@@ -112,37 +94,26 @@ public class NoticeController {
         MsgDTO dto = null; // 결과 메시지 구조
 
         try {
-            // 로그인된 사용자 아이디를 가져오기
-            // 로그인을 아직 구현하지 않았기에 공지사항 리스트에서 로그인 한 것처럼 Session 값을 저장함
-            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 로그인 아이디
             String title = CmmUtil.nvl(request.getParameter("title")); // 제목
             String noticeYn = CmmUtil.nvl(request.getParameter("noticeYn")); // 공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); // 내용
 
-            /*
-             * ####################################################################################
-             * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
-             * ####################################################################################
-             */
             log.info("session user_id : " + userId);
             log.info("title : " + title);
             log.info("noticeYn : " + noticeYn);
             log.info("contents : " + contents);
 
-            // 데이터 저장하기 위해 DTO에 저장하기
             NoticeDTO pDTO = new NoticeDTO();
             pDTO.setUserId(userId);
             pDTO.setTitle(title);
             pDTO.setNoticeYn(noticeYn);
             pDTO.setContents(contents);
 
-            /*
-             * 게시글 등록하기위한 비즈니스 로직을 호출
-             */
             if(userId.length() > 0) {
                 noticeService.insertNoticeInfo(pDTO);
 
-                // 저장이 완료되면 사용자에게 보여줄 메시지
                 msg = "등록되었습니다.";
             } else {
                 msg = "로그인 해주세요.";
@@ -150,13 +121,12 @@ public class NoticeController {
 
         } catch (Exception e) {
 
-            // 저장이 실패되면 사용자에게 보여줄 메시지
             msg = "실패하였습니다. : " + e.getMessage();
             log.info(e.toString());
             e.printStackTrace();
 
         } finally {
-            // 결과 메시지 전달하기
+
             dto = new MsgDTO();
             dto.setMsg(msg);
 
@@ -176,11 +146,6 @@ public class NoticeController {
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
 
-        /*
-         * ####################################################################################
-         * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
-         * ####################################################################################
-         */
         log.info("nSeq : " + nSeq);
 
         /*
@@ -189,8 +154,7 @@ public class NoticeController {
         NoticeDTO pDTO = new NoticeDTO();
         pDTO.setNoticeSeq(nSeq);
 
-        // 공지사항 상세정보 가져오기
-        // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
+
         NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, true))
                 .orElseGet(NoticeDTO::new);
 
@@ -203,8 +167,6 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeInfo End!");
 
-        // 함수 처리가 끝나고 보여줄 JSP 파일명
-        // webapp/WEB-INF/views/notice/noticeInfo.jsp
         return "notice/noticeInfo";
     }
 
@@ -218,20 +180,11 @@ public class NoticeController {
 
         String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 공지글번호(PK)
 
-        /*
-         * ####################################################################################
-         * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
-         * ####################################################################################
-         */
         log.info("nSeq : " + nSeq);
 
-        /*
-         * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
-         */
         NoticeDTO pDTO = new NoticeDTO();
         pDTO.setNoticeSeq(nSeq);
 
-        // Java 8부터 제공되는 Optional 활용하여 NPE(Null Pointer Exception) 처리
         NoticeDTO rDTO = Optional.ofNullable(noticeService.getNoticeInfo(pDTO, false))
                 .orElseGet(NoticeDTO::new);
 
@@ -240,8 +193,6 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeEditInfo End!");
 
-        // 함수 처리가 끝나고 보여줄 JSP 파일명
-        // webapp/WEB-INF/views/notice/noticeEditInfo.jsp
         return "notice/noticeEditInfo";
     }
 
@@ -264,20 +215,12 @@ public class NoticeController {
             String noticeYn = CmmUtil.nvl(request.getParameter("noticeYn")); // 공지글 여부
             String contents = CmmUtil.nvl(request.getParameter("contents")); // 내용
 
-            /*
-             * ####################################################################################
-             * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
-             * ####################################################################################
-             */
             log.info("userId : " + userId);
             log.info("nSeq : " + nSeq);
             log.info("title : " + title);
             log.info("noticeYn : " + noticeYn);
             log.info("contents : " + contents);
 
-            /*
-             * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
-             */
             NoticeDTO pDTO = new NoticeDTO();
             pDTO.setUserId(userId);
             pDTO.setNoticeSeq(nSeq);
@@ -323,16 +266,8 @@ public class NoticeController {
         try {
             String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 글번호(PK)
 
-            /*
-             * ####################################################################################
-             * 반드시, 값을 받았으면, 꼭 로그를 찍어서 값이 제대로 들어오는지 파악해야함 반드시 작성할 것
-             * ####################################################################################
-             */
             log.info("nSeq : " + nSeq);
 
-            /*
-             * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
-             */
             NoticeDTO pDTO = new NoticeDTO();
             pDTO.setNoticeSeq(nSeq);
 
