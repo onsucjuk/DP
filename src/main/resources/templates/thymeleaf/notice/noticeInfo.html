@@ -235,11 +235,11 @@
         <thead>
         <!-- 제목 라인-->
         <tr
-                class="tr-title-bg font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 " style="background-color: #f0f0f0;"
+                class="tr-title-bg font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800 " style="background-color: #f0f0f0;"
         >
-          <td class="px-4 py-3" th:text="제목">
+          <td class="px-4 py-3 td-title-bg" th:text="제목">
           </td>
-          <td>
+          <td class="td-title-bg">
             <div style="float: left;">
               <span class="px-4 py-3" th:if="${rDTO.getNoticeYn == 'Y'}">
                 <b th:text="'공지'"></b>
