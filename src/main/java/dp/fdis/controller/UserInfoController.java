@@ -39,7 +39,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/userRegForm");
 
-        return "/user/userRegForm";
+        return "thymeleaf/user/userRegForm";
     }
 
     /**
@@ -189,8 +189,11 @@ public class UserInfoController {
         } finally {
             //결과 메세지 전달하기
             dto = new MsgDTO();
-            dto.setResult(res);
+            dto.setResult(1);
             dto.setMsg(msg);
+
+            log.info("dto.Msg : " + dto.getMsg());
+            log.info("dto.Result : ", dto.getResult());
 
             log.info(this.getClass().getName() + ".insertUserInfo End!");
         }
@@ -273,7 +276,16 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/login End!");
 
-        return "user/login";
+        return "thymeleaf/user/login";
+    }
+
+    @PostMapping(value = "login")
+    public String postLogin() {
+        log.info(this.getClass().getName() + ".user/login Start!");
+
+        log.info(this.getClass().getName() + ".user/login End!");
+
+        return "thymeleaf/user/login";
     }
 
     @ResponseBody
@@ -334,10 +346,10 @@ public class UserInfoController {
             dto = new MsgDTO();
             dto.setResult(res);
             dto.setMsg(msg);
-
+            log.info("result : " + dto.getResult());
+            log.info("msg : " + dto.getMsg());
             log.info(this.getClass().getName() + ".loginProc End!");
         }
-
         return dto;
     }
 
@@ -356,7 +368,7 @@ public class UserInfoController {
 
                 log.info(this.getClass().getName() + ".user/myPage End!");
 
-        return "user/myPage";
+        return "thymeleaf/index/404";
     }
 
     @ResponseBody
@@ -396,6 +408,8 @@ public class UserInfoController {
             dto = new MsgDTO();
             dto.setResult(res);
             dto.setMsg(msg);
+
+            log.info("msg : " + dto.getMsg());
             log.info(this.getClass().getName() + ".loginProc End!");
         }
 
@@ -412,7 +426,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/searchUserId End!");
 
-        return "user/searchUserId";
+        return "thymeleaf/user/searchUserId";
     }
 
     /**
@@ -440,7 +454,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/searchUserIdProc End!");
 
-        return "user/searchUserIdResult";
+        return "thymeleaf/user/searchUserIdResult";
 
     }
 
@@ -453,7 +467,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/searchPassword End!");
 
-        return "user/searchPassword";
+        return "thymeleaf/user/searchPassword";
 
     }
 
@@ -492,7 +506,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/searchPasswordProc End!");
 
-        return "user/newPassword";
+        return "thymeleaf/user/newPassword";
     }
 
     /**
@@ -538,7 +552,7 @@ public class UserInfoController {
 
         log.info(this.getClass().getName() + ".user/newPasswordProc End!");
 
-        return "user/newPasswordResult";
+        return "thymeleaf/user/newPasswordResult";
     }
 
     @ResponseBody
@@ -558,6 +572,15 @@ public class UserInfoController {
         log.info(this.getClass().getName() + ".sendEmailAuth End!");
 
         return rDTO;
+    }
+
+
+    @GetMapping(value = "userLogOut")
+    public String userLogout(HttpSession session) throws Exception {
+
+        session.invalidate();
+
+        return "thymeleaf/user/login";
     }
 
 }

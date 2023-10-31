@@ -4,12 +4,13 @@
     <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
 
     <!--로그 파일 저장장소-->
-    <property name="log_dir" value="/data/log/FDIS"/>
+<!--    <property name="log_dir" value="./tmp/log/mySpringPRJ"/>-->
+    <property name="log_dir" value="/workspace/log/mySpringPRJ"/>
 
 
     <!--파일에 로그를 남깁니다.-->
     <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log_dir}/myLog.log</file>
+        <file>${log_dir}/mySpringProject.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss} [%-5level] %logger{36} - %msg%n
@@ -27,9 +28,10 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
-    <Logger name="dp.fdis" level="DEBUG" additivity="false">
+    <Logger name="kopo.poly" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="File"/>
     </Logger>
 </configuration>
+
 

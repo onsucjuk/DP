@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기 결과</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/signup.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/searchUserIdResult.js}"></script>
+    <script th:inline="javascript">
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let msg = "";
+
+            if ([[${rDTO.userId}]].length > 0) {
+                msg = [[${rDTO.userName}]] + '회원님의' + [[${rDTO.userId}]] + '입니다.';
+            } else {
+                msg = '아이디가 존재하지 않습니다.';
+            }
+
+            // 'message' ID를 가진 요소에 메시지를 할당합니다.
+            let messageElement = document.getElementById('message');
+            messageElement.innerHTML = msg;
+        });
+
+    </script>
+
+</head>
+<body>
+<h1>아이디찾기</h1>
+<div class="form">
+    <ul class="tab-group">
+        <li class="tab active"><a href=searchUserId>아이디 찾기</a></li>
+        <li class="tab"><a href="searchPassword">비밀번호 찾기</a></li>
+    </ul>
+
+        <div class="tab-content">
+            <form id="f">
+                <div class="top-row">
+                    <div id="searchUserId">
+                        <div class="message" id="message"></div>
+                    </div>
+                </div>
+
+                <div class="field-wrap">
+                </div>
+
+                <div class="top-row">
+                    <p class="id-forgot" id="btnLogin">로그인</p>
+                </div>
+
+                <div class="field-wrap">
+                </div>
+            </form>
+        </div><!-- tab-content -->
+</div> <!-- /form -->
+</body>
+</html>

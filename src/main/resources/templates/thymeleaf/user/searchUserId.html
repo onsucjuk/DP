@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 찾기 화면</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/signup.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/searchUserId.js}"></script>
+</head>
+<body>
+<div class="form">
+    <ul class="tab-group">
+        <li class="tab active"><a href=searchUserId>아이디 찾기</a></li>
+        <li class="tab"><a href="searchPassword">비밀번호 찾기</a></li>
+    </ul>
+      <div class="tab-content">
+          <form id="f">
+            <div id="searchUserId">
+                <h1>아이디찾기</h1>
+                    <div class="top-row">
+                        <input type="text" name="userName" placeholder="이름 *"/>
+                    </div>
+                    <div class="field-wrap">
+                    </div>
+                    <div class="top-row">
+                        <div class="field-wrap">
+                            <input type="email" name="email" placeholder="이메일 *"/>
+                            <div class="field-wrap"></div>
+                        </div>
+                        <div>
+                            <p class="id-forgot" id="btnLogin">로그인</p>
+                        </div>
+                        <div class="field-wrap"></div>
+                    </div>
+                    <button type = "button" class="button button-block" id="btnSearchUserId">아이디 찾기</button>
+            </div>
+          </form>
+        </div>
+</div><!-- tab-content -->
+</div> <!-- /form -->
+</body>
+</html>

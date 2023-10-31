@@ -10,7 +10,7 @@
 			   N.REG_DT
 	      FROM NOTICE N, USER_INFO U
 	     WHERE N.USER_ID = U.USER_ID
-	 	 ORDER BY N.NOTICE_YN, N.REG_DT DESC
+	 	 ORDER BY N.NOTICE_YN DESC, N.REG_DT
 	</select>
 	
 	<!-- 게시판 등록 쿼리

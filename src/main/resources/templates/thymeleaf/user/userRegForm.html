@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 화면</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/signup.css}"/>
+    <script type="text/javascript" th:src="@{/js/jquery-3.6.0.min.js}"></script>
+    <script type="text/javascript" th:src="@{//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js}"></script>
+    <script type="text/javascript" th:src="@{/assets/js/signup.js}"></script>
+    <script th:inline="javascript">
+        let userIdCheck = "Y";
+        let emailAuthNumber = [[${emailAuthNumber}]];
+    </script>
+</head>
+<body>
+<div class="form">
+    <ul class="tab-group">
+        <li class="tab active"><a href="userRegForm">회원가입 하기</a></li>
+        <li class="tab"><a href="login">로그인</a></li>
+    </ul>
+
+        <div class="tab-content">
+            <form id="f">
+            <div id="signup">
+                <h1>회원가입 하기</h1>
+                <form th:action="@{/userRegForm}" method="post">
+                </form>
+                    <div class="top-row">
+                        <input type="text" name="userName" placeholder="이름 *"/>
+                    </div>
+                    <div class="field-wrap">
+                    </div>
+                    <div class="top-row">
+                        <div class="field-wrap">
+                            <input type="text" name="userId" placeholder="아이디 *">
+                            <button id="btnUserId" class="btnUserId" type="button" > 아이디 중복체크</button>
+                        </div>
+                        <div class="field-wrap"></div>
+                    </div>
+                    <div class="top-row">
+                        <div class="field-wrap">
+                            <input type="email" name="email" placeholder="이메일 *"/>
+                            <div class="field-wrap"></div>
+                            <input type="text" id="authNumber" name="authNumber" style="width:50%" placeholder="메일로 발송된 인증번호 *"/>
+                            <button id="btnEmail" class="btnEmail" type="button">인증번호 발송</button>
+                        </div>
+                        <div class="field-wrap"></div>
+                    </div>
+
+                    <div class="field-wrap">
+                        <input type="password"  name="password" placeholder="비밀번호 *"/>
+                    </div>
+
+                    <div class="field-wrap">
+                        <input type="password"  name="password2" placeholder="비밀번호 확인 *"/>
+                    </div>
+                    <div class="top-row">
+                        <div class="field-wrap">
+                            <input type="text"  name="addr1" placeholder="주소 *">
+                            <button id="btnAddr" class="btnAddr" type="button">우편번호</button>
+                        </div>
+                        <div class="field-wrap"></div>
+                    </div>
+                    <div class="top-row">
+                        <div class="field-wrap">
+                            <input type="text" name="addr2" placeholder="상세주소 *"/>
+                        </div>
+                        <div class="field-wrap">
+                        </div>
+                    </div>
+                    <button id="btnSend" type="button" class="button button-block"> 회원가입 하기 </button>
+                </div>
+            </form>
+        </div>
+</div><!-- tab-content -->
+</div> <!-- /form -->
+</body>
+</html>

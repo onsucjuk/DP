@@ -56,7 +56,7 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeList End!");
 
-        return "notice/noticeList";
+        return "thymeleaf/notice/noticeList";
 
     }
 
@@ -74,7 +74,7 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeReg End!");
 
-        return "notice/noticeReg";
+        return "thymeleaf/notice/noticeRegForm";
     }
 
     /**
@@ -167,7 +167,7 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeInfo End!");
 
-        return "notice/noticeInfo";
+        return "thymeleaf/notice/noticeInfo";
     }
 
     /**
@@ -193,7 +193,7 @@ public class NoticeController {
 
         log.info(this.getClass().getName() + ".noticeEditInfo End!");
 
-        return "notice/noticeEditInfo";
+        return "thymeleaf/notice/noticeEdit";
     }
 
     /**
