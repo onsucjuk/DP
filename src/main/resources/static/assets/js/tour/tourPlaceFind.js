@@ -3,10 +3,10 @@
     map.setMapType(Tmapv2.Map.MapType.ROAD);
 
     // 지도의 드래그 이동을 막아주는 함수입니다.
-    map.setOptions({ draggable: false });
+    map.setOptions({ draggable: true });
 
     // 지도의 확대축소 기능을 가능하게 하는 함수입니다.
-    map._data.options.scrollwheel = false;
+    map._data.options.scrollwheel = true;
 
     // 지도 옵션 줌컨트롤 표출 비활성화
     map.setOptions({zoomControl:false});
@@ -31,7 +31,8 @@
     $(document).ready(function () {
 
         // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-        $('[id^="btnAddPlace"]').on("click", function () {
+        $(document).on("click", '[id^="btnAddPlace"]', function () {
+
             // 클릭된 버튼의 ID에서 k 값을 추출
             let buttonId = $(this).attr("id");
 
@@ -44,6 +45,21 @@
             doAddPlace(k);
         });
 
+        function doAddPlace(k) {
+            let placeName = $(`#poi_${k} [name="placeName"]`).text();
+            let placeAddr = $(`#poi_${k} [name="placeAddr"]`).text();
+            let lat = $(`#poi_${k} [name="lat"]`).text();
+            let lon = $(`#poi_${k} [name="lon"]`).text();
+
+            if (placeName === "" || placeAddr === "" || lat === "" || lon === "") {
+                alert("모든 필드를 입력해야 합니다.");
+                return;
+            }
+
+            window.location.href = `/tour/tourPlaceRegForm?placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}`;
+
+        }
+
         if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
             alert("로그인 해주세요.");
             location.href = "/user/login";
@@ -51,30 +67,6 @@
 
     })
 
-    function doAddPlace(k) {
-        let placeName = document.querySelector(`#poi_${k} [name="placeName"]`).textContent;
-        let placeAddr = document.querySelector(`#poi_${k} [name="placeAddr"]`).textContent;
-        let lat = document.querySelector(`#poi_${k} [name="lat"]`).textContent;
-        let lon = document.querySelector(`#poi_${k} [name="lon"]`).textContent;
-
-        if (placeName === "" || placeAddr === "" || lat === "" || lon === "") {
-            alert("모든 필드를 입력해야 합니다.");
-            return;
-        }
-
-        // Ajax 호출해서 데이터 전송
-        $.ajax({
-            url: "/tour/addTourPlaceInfo",
-            type: "post",
-            dataType: "JSON",
-            data: {
-                placeName: placeName,
-                placeAddr: placeAddr,
-                lat: lat,
-                lon: lon
-            }
-        });
-    }
 
         // (장소 API) API [검색] 버튼 동작
     function apiSearchLocation() {
@@ -169,7 +161,7 @@
                         const thisId = labelInfo.split("_")[1];
                         marker3.setIconHTML(`
                                 <div class='_t_marker' style="position:relative;" >
-                                <img src="https://openapi.sk.comx/lib/img/_icon/marker_blue.svg" style="width:48px;height:48px;position:absolute;"/>
+                                <img src="https://openapi.sk.com/lib/img/_icon/marker_blue.svg" style="width:48px;height:48px;position:absolute;"/>
                                 <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 15px;line-height: 19px;">
                                 ${Number(thisK)+1}</div>
                                 </div>
@@ -210,6 +202,8 @@
                             </div>
                             ${(resultpoisData.length-1) === Number(k) ? "": `<div class="_search_item_split"></div>`}
                         `;
+
+
                     markerPoi.push(marker3);
                     positionBounds.extend(markerPosition);    // LatLngBounds의 객체 확장
                 }

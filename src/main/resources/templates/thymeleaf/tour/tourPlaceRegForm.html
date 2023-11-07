@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/assets/js/init-alpine.js"></script>
-  <script src="/assets/js/tour/tourInfoReg.js"></script>
+  <script src="/assets/js/tour/tourPlaceRegForm.js"></script>
   <script>
     let SS_USER_ID = "[[${session.SS_USER_ID}]]";
     let nSeq = "[[${session.SS_TOUR_SEQ}]]";
@@ -41,27 +41,29 @@
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">목적지 이름</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeName" placeholder="목적지명 입력해주세요.">
-          </label>
-        </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-          <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">목적지 주소</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeAddr" placeholder="주소를 입력해주세요.">
-            <button id="btnTourName" class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeName" placeholder="목적지명 입력해주세요." th:value="${pDTO.placeName}">
+            <button id="btnPlaceFind" class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                     type="button" > 목적지 찾기 </button>
           </label>
         </div>
+
+
+                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                  <label class="block text-sm">
+                    <span class="text-gray-700 dark:text-gray-400">목적지 주소</span>
+                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeAddr" placeholder="주소를 입력해주세요." th:value="${pDTO.placeAddr}">
+                  </label>
+                </div>
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">위도</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lat" placeholder="위도를 입력해주세요.">
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lat" placeholder="위도를 입력해주세요." th:value="${pDTO.lat}">
           </label>
         </div>
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">경도</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lon" placeholder="경도를 입력해주세요.">
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lon" placeholder="경도를 입력해주세요." th:value="${pDTO.lon}">
           </label>
         </div>
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
@@ -76,7 +78,7 @@
         <div class="flex space-x-1">
           <div class="px-6 my-6">
             <button
-                    id="btnSend"
+                    id="btnPlaceReg"
                     class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                     type="button"
             >

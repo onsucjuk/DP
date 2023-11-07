@@ -9,11 +9,9 @@ import dp.fdis.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -30,6 +28,34 @@ import java.util.stream.Stream;
 public class TourController {
 
     private final ITourInfoService tourInfoService;
+
+/*    @ResponseBody
+    @PostMapping(value = "addTourPlaceInfo")
+    public TourDTO addTourPlaceInfo(ModelMap model, HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".addTourPlaceInfo Start!");
+
+        String placeName = request.getParameter("placeName");
+        String placeAddr = request.getParameter("placeAddr");
+        String lat = request.getParameter("lat");
+        String lon = request.getParameter("lon");
+
+        log.info("placeName : " + placeName);
+        log.info("placeAddr : " + placeAddr);
+        log.info("lat : " + lat);
+        log.info("lon : " + lon);
+
+        TourDTO pDTO = new TourDTO();
+
+        pDTO.setPlaceName(placeName);
+        pDTO.setPlaceAddr(placeAddr);
+        pDTO.setLat(lat);
+        pDTO.setLon(lon);
+
+        log.info(this.getClass().getName() + ".addTourPlaceInfo End!");
+
+        return pDTO;
+    }*/
 
     /**
      * 여행 정보 페이지로 이동
@@ -72,18 +98,6 @@ public class TourController {
     }
 
     /**
-     * 여행 등록 페이지로 이동
-     */
-    @GetMapping(value = "tourPlaceReg")
-    public String tourPlaceReg() throws Exception {
-
-        log.info(this.getClass().getName() + ".tourPlaceReg Start!");
-
-        return "thymeleaf/tour/tourPlaceReg";
-
-    }
-
-    /**
      * 여행 수정 페이지로 이동
      */
     @GetMapping(value = "tourNameEdit")
@@ -93,101 +107,6 @@ public class TourController {
 
         return "thymeleaf/tour/tourNameEdit";
 
-    }
-
-    /**
-     * 목적지 등록 페이지로 이동
-     */
-    @GetMapping(value = "tourDayInfo")
-    public String tourDayInfo(HttpSession session, HttpServletRequest request) throws Exception {
-
-        log.info(this.getClass().getName() + ".tourDayInfo Start!");
-
-        String userId = (String) session.getAttribute("SS_USER_ID");
-        String tourSeq = (String) session.getAttribute("SS_TOUR_SEQ");
-        String daySeq = request.getParameter("nSeq");
-
-        log.info("userId : " + userId);
-        log.info("tourSeq : " + tourSeq);
-        log.info("daySeq : " + daySeq);
-
-        session.setAttribute("SS_USER_ID", userId);
-        session.setAttribute("SS_TOUR_SEQ", tourSeq);
-        session.setAttribute("SS_DAY_SEQ", daySeq);
-
-
-        return "thymeleaf/tour/tourDayInfo";
-
-    }
-
-    /**
-     * 목적지 등록 페이지로 이동
-     */
-    @GetMapping(value = "tourPlaceRegForm")
-    public String tourPlaceRegForm() throws Exception {
-
-        log.info(this.getClass().getName() + ".tourPlaceRegForm Start!");
-
-        return "thymeleaf/tour/tourPlaceRegForm";
-
-    }
-
-    /**
-     * 여행 정보 등록
-     */
-    @ResponseBody
-    @PostMapping(value = "insertTourInfo")
-    public MsgDTO insertTourInfo(HttpServletRequest request, HttpSession session) {
-
-        log.info(this.getClass().getName() + ".insertTourInfo Start!");
-
-        String msg = ""; // 메시지 내용
-
-        MsgDTO dto = null; // 결과 메시지 구조
-
-        try {
-
-            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 로그인 아이디
-            String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 제목
-
-            log.info("session user_id : " + userId);
-            log.info("tourName : " + tourName);
-
-
-            TourDTO pDTO = new TourDTO();
-            pDTO.setUserId(userId);
-            pDTO.setTourName(tourName);
-
-            if(userId.length() > 0) {
-                tourInfoService.insertTourInfo(pDTO);
-
-                TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourSeq(pDTO)).orElseGet(TourDTO::new);
-
-                tourInfoService.addTourDay(rDTO);
-
-                msg = "등록되었습니다.";
-
-            } else {
-
-                msg = "로그인 해주세요.";
-
-            }
-
-        } catch (Exception e) {
-
-            msg = "실패하였습니다. : " + e.getMessage();
-            log.info(e.toString());
-            e.printStackTrace();
-
-        } finally {
-
-            dto = new MsgDTO();
-            dto.setMsg(msg);
-
-            log.info(this.getClass().getName() + ".insertTourInfo End!");
-        }
-
-        return dto;
     }
 
     /**
@@ -432,15 +351,17 @@ public class TourController {
         TourDTO pDTO = new TourDTO();
         pDTO.setTourSeq(nSeq);
 
-        List<TourDTO> rList2 = Optional.ofNullable(tourInfoService.getTourDay(pDTO))
+/*        List<TourDTO> rList2 = Optional.ofNullable(tourInfoService.getTourDay(pDTO))
                 .orElseGet(ArrayList::new);
         List<TourDTO> rList1 = Optional.ofNullable(tourInfoService.getTourYn(pDTO))
                 .orElseGet(ArrayList::new);
 
         List<TourDTO> rList = Stream.concat(rList2.stream(), rList1.stream())
                 .distinct()
-                .collect(Collectors.toList());
+                .collect(Collectors.toList());*/
 
+        List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourDayList(pDTO))
+                .orElseGet(ArrayList::new);
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
@@ -505,24 +426,66 @@ public class TourController {
         return dto;
     }
 
-    @ResponseBody
-    @PostMapping(value = "addTourPlaceInfo")
-    public String addTourPlaceInfo(ModelMap model, HttpServletRequest request, HttpSession session) {
+    /**
+     * 여행 일자 정보 페이지로 이동
+     */
+    @GetMapping(value = "tourDayInfo")
+    public String tourDayInfo(HttpSession session, HttpServletRequest request) throws Exception {
 
-        log.info(this.getClass().getName() + ".addTourPlaceInfo Start!");
+        log.info(this.getClass().getName() + ".tourDayInfo Start!");
 
-        String itemSeq = (String) session.getAttribute("SS_ITEM_SEQ");
-        String placeName = request.getParameter("placeName"+itemSeq);
-        String placeAddr = request.getParameter("placeAddr"+itemSeq);
-        String lat = request.getParameter("lat"+itemSeq);
-        String lon = request.getParameter("lon"+itemSeq);
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+        String daySeq = CmmUtil.nvl(request.getParameter("nSeq"));
 
-        log.info("itemSeq : " + itemSeq);
+        log.info("userId : " + userId);
+        log.info("tourSeq : " + tourSeq);
+        log.info("daySeq : " + daySeq);
+
+        session.setAttribute("SS_USER_ID", userId);
+        session.setAttribute("SS_TOUR_SEQ", tourSeq);
+        session.setAttribute("SS_DAY_SEQ", daySeq);
+
+
+
+        return "thymeleaf/tour/tourDayInfo";
+
+    }
+
+
+    /**
+     * 목적지 찾기 페이지로 이동
+     */
+    @GetMapping(value = "tourPlaceFind")
+    public String tourPlaceFind() throws Exception {
+
+        log.info(this.getClass().getName() + ".tourPlaceFind Start!");
+
+        return "thymeleaf/tour/tourPlaceFind";
+
+    }
+
+    /**
+     * 목적지 등록 페이지로 이동
+     */
+    @GetMapping(value = "tourPlaceRegForm")
+    public String tourPlaceRegForm(HttpServletRequest request, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".tourPlaceRegForm Start!");
+
+        String placeName = CmmUtil.nvl(request.getParameter("placeName"));
+        String placeAddr = CmmUtil.nvl(request.getParameter("placeAddr"));
+        String lat = CmmUtil.nvl(request.getParameter("lat"));
+        String lon = CmmUtil.nvl(request.getParameter("lon"));
+
         log.info("placeName : " + placeName);
         log.info("placeAddr : " + placeAddr);
         log.info("lat : " + lat);
         log.info("lon : " + lon);
 
+        /*
+         * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
+         */
         TourDTO pDTO = new TourDTO();
 
         pDTO.setPlaceName(placeName);
@@ -530,10 +493,140 @@ public class TourController {
         pDTO.setLat(lat);
         pDTO.setLon(lon);
 
-        model.addAttribute(pDTO);
 
-        log.info(this.getClass().getName() + ".addTourPlaceInfo End!");
+        // 조회된 리스트 결과값 넣어주기
+        model.addAttribute("pDTO", pDTO);
+
+        log.info(this.getClass().getName() + ".tourPlaceRegForm End!");
 
         return "thymeleaf/tour/tourPlaceRegForm";
+    }
+
+    /**
+     * 여행 정보 등록
+     */
+    @ResponseBody
+    @PostMapping(value = "insertTourInfo")
+    public MsgDTO insertTourInfo(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".insertTourInfo Start!");
+
+        String msg = ""; // 메시지 내용
+
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 로그인 아이디
+            String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 제목
+
+            log.info("session user_id : " + userId);
+            log.info("tourName : " + tourName);
+
+
+            TourDTO pDTO = new TourDTO();
+            pDTO.setUserId(userId);
+            pDTO.setTourName(tourName);
+
+            if(userId.length() > 0) {
+                tourInfoService.insertTourInfo(pDTO);
+
+                TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourSeq(pDTO)).orElseGet(TourDTO::new);
+
+                tourInfoService.addTourDay(rDTO);
+
+                msg = "등록되었습니다.";
+
+            } else {
+
+                msg = "로그인 해주세요.";
+
+            }
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".insertTourInfo End!");
+        }
+
+        return dto;
+    }
+
+    /**
+     * 목적지 등록
+     */
+    @ResponseBody
+    @PostMapping(value = "insertTourPlace")
+    public MsgDTO insertTourPlace(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".insertTourPlace Start!");
+
+        String msg = ""; // 메시지 내용
+
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+            String daySeq = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+            String placeNick = CmmUtil.nvl(request.getParameter("placeNick"));
+            String placeName = CmmUtil.nvl(request.getParameter("placeName"));
+            String placeAddr = CmmUtil.nvl(request.getParameter("placeAddr"));
+            String memo = CmmUtil.nvl(request.getParameter("memo"));
+            String lat = CmmUtil.nvl(request.getParameter("lat"));
+            String lon = CmmUtil.nvl(request.getParameter("lon"));
+
+            log.info("session tourSeq : " + tourSeq);
+            log.info("session daySeq : " + daySeq);
+            log.info("placeNick : " + placeNick);
+            log.info("placeName : " + placeName);
+            log.info("placeAddr : " + placeAddr);
+            log.info("memo : " + memo);
+            log.info("lat : " + lat);
+            log.info("lon : " + lon);
+
+            TourDTO pDTO = new TourDTO();
+
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setTourDay(daySeq);
+            pDTO.setPlaceNick(placeNick);
+            pDTO.setPlaceName(placeName);
+            pDTO.setPlaceName(placeAddr);
+            pDTO.setMemo(memo);
+            pDTO.setLat(lat);
+            pDTO.setLon(lon);
+
+            if(userId.length() > 0) {
+                tourInfoService.insertTourPlace(pDTO);
+
+                msg = "등록되었습니다.";
+            } else {
+                msg = "로그인 해주세요.";
+            }
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".insertTourPlace End!");
+        }
+
+        return dto;
     }
 }

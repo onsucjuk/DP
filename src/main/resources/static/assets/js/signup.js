@@ -163,7 +163,7 @@ function doSubmit(f) {
         f.addr2.focus();
         return;
     }
-    alert("회원가입이 완료되었습니다!");
+
     // Ajax 호출해서 회원가입하기
     $.ajax({
             url: "/user/insertUserInfo",

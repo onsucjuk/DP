@@ -45,6 +45,8 @@ public interface ITourMapper {
     // 진행도
     List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
 
+    List<TourDTO> getTourDayList(TourDTO pDTO) throws Exception;
+
     //여행 일자 상세보기
     TourDTO getTourDayInfo(TourDTO pDTO) throws Exception;
 

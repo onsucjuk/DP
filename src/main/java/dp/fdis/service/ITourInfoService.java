@@ -11,7 +11,6 @@ public interface ITourInfoService {
 
     TourDTO getTourSeq(TourDTO pDTO) throws Exception;
 
-    List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
 
     //여행지 상세보기
     TourDTO getTourInfo(TourDTO pDTO) throws Exception;
@@ -41,6 +40,8 @@ public interface ITourInfoService {
     // 여행 일수, 진행도
     List<TourDTO> getTourDay(TourDTO pDTO) throws Exception;
 
+    List<TourDTO> getTourDayList(TourDTO pDTO) throws Exception;
+
     //여행 일자 상세보기
     TourDTO getTourDayInfo(TourDTO pDTO) throws Exception;
 
@@ -61,6 +62,7 @@ public interface ITourInfoService {
      *  여기서부터 TourPlace Service
      */
 
+    List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
 
     // 여행 목적지 삭제
     void deleteTourPlace(TourDTO pDTO) throws Exception;

@@ -153,6 +153,15 @@
         GROUP BY TOUR_SEQ, TOUR_DAY
     </select>
 
+    <!-- tourDayList -->
+
+    <select id="getTourDayList" parameterType = "TourDTO" resultType="TourDTO">
+        SELECT A.TOUR_SEQ AS TOUR_SEQ, A.TOUR_DAY AS TOUR_DAY, A.DAY_START AS DAY_START, COUNT(CASE WHEN B.TOUR_YN = 'Y' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_Y, COUNT(CASE WHEN B.TOUR_YN = 'N' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_N
+        FROM TOUR_DAY A, TOUR_PLACE B
+        WHERE A.TOUR_SEQ = #{tourSeq}
+        GROUP BY TOUR_SEQ, TOUR_DAY
+    </select>
+
     <delete id="deleteTourDay" parameterType="TourDTO">
         DELETE FROM TOUR_DAY
         WHERE TOUR_SEQ = #{tourSeq}
@@ -167,12 +176,12 @@
     <!-- 여기서부터 Tour_Place 매퍼 || 여행 일수, 진행도 가져오기-->
 
     <insert id="insertTourPlace" parameterType="TourDTO">
-        INSERT INTO TOUR_INFO (
-            TOUR_SEQ, TOUR_DAY, PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, TOUR_YN, LAT, LON
+        INSERT INTO TOUR_PLACE (
+            TOUR_SEQ, TOUR_DAY, PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, LAT, LON
         )
         VALUES (
-                   #{tourSeq}, #{tourDay}, (SELECT COALESCE(MAX(A.TOUR_DAY), 0) FROM TOUR_PLACE A WHERE A.TOUR_SEQ = #{tourSeq} AND A.TOUR_DAY = #{tourDay}) + 1,
-                   #{placeNick},#{placeNmae},#{placeAddr}, #{memo}, #{tourYn}, #{lat}, #{lon}
+                   #{tourSeq}, #{tourDay}, (SELECT COALESCE(MAX(A.PLACE_SEQ), 0) FROM TOUR_PLACE A WHERE A.TOUR_SEQ = #{tourSeq} AND A.TOUR_DAY = #{tourDay}) + 1,
+                   #{placeNick},#{placeName},#{placeAddr}, #{memo}, #{lat}, #{lon}
                )
     </insert>
 
