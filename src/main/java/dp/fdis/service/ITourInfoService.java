@@ -68,8 +68,6 @@ public interface ITourInfoService {
     // 여행 목적지 등록
     void insertTourPlace(TourDTO pDTO) throws Exception;
 
-    void insertTourPlaceMany(TourDTO pDTO) throws Exception;
-
     // 여행 목적지 수정
     void updateTourPlace(TourDTO pDTO) throws Exception;
 

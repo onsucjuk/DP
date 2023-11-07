@@ -2,9 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title th:text="day+${session.nSeq}"></title>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/tour/tourDayInfo.js"></script>
 </head>
 <body>
+
+<div class="flex space-x-1">
+    <div class="px-6 my-6">
+        <button
+                id="btnPlaceReg"
+                class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                type="button"
+        >
+            <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold">목적지 등록</span>
+                <span class="ml-2" aria-hidden="true">+</span>
+            </div>
+        </button>
+    </div>
+</div>
 
 </body>
 </html>

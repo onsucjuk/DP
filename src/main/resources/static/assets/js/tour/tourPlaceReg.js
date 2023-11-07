@@ -38,6 +38,8 @@
             // ID에서 숫자 부분을 추출
             let k = buttonId.replace("btnAddPlace", "");
 
+            sessionStorage.setItem("SS_ITEM_SEQ", k);
+
             // k를 이용하여 작업을 수행
             doAddPlace(k);
         });
@@ -62,7 +64,7 @@
 
         // Ajax 호출해서 데이터 전송
         $.ajax({
-            url: "/tour/insertTourPlace",
+            url: "/tour/addTourPlaceInfo",
             type: "post",
             dataType: "JSON",
             data: {
@@ -70,14 +72,6 @@
                 placeAddr: placeAddr,
                 lat: lat,
                 lon: lon
-            },
-            success: function (json) {
-                alert(json.msg);
-                if (json.msg === "로그인 해주세요.") {
-                    location.href = "/user/login";
-                } else {
-                    location.href = "/tour/tourDayList?nSeq="+nSeq;
-                }
             }
         });
     }

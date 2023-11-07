@@ -96,6 +96,43 @@ public class TourController {
     }
 
     /**
+     * 목적지 등록 페이지로 이동
+     */
+    @GetMapping(value = "tourDayInfo")
+    public String tourDayInfo(HttpSession session, HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".tourDayInfo Start!");
+
+        String userId = (String) session.getAttribute("SS_USER_ID");
+        String tourSeq = (String) session.getAttribute("SS_TOUR_SEQ");
+        String daySeq = request.getParameter("nSeq");
+
+        log.info("userId : " + userId);
+        log.info("tourSeq : " + tourSeq);
+        log.info("daySeq : " + daySeq);
+
+        session.setAttribute("SS_USER_ID", userId);
+        session.setAttribute("SS_TOUR_SEQ", tourSeq);
+        session.setAttribute("SS_DAY_SEQ", daySeq);
+
+
+        return "thymeleaf/tour/tourDayInfo";
+
+    }
+
+    /**
+     * 목적지 등록 페이지로 이동
+     */
+    @GetMapping(value = "tourPlaceRegForm")
+    public String tourPlaceRegForm() throws Exception {
+
+        log.info(this.getClass().getName() + ".tourPlaceRegForm Start!");
+
+        return "thymeleaf/tour/tourPlaceRegForm";
+
+    }
+
+    /**
      * 여행 정보 등록
      */
     @ResponseBody
@@ -466,5 +503,37 @@ public class TourController {
         }
 
         return dto;
+    }
+
+    @ResponseBody
+    @PostMapping(value = "addTourPlaceInfo")
+    public String addTourPlaceInfo(ModelMap model, HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".addTourPlaceInfo Start!");
+
+        String itemSeq = (String) session.getAttribute("SS_ITEM_SEQ");
+        String placeName = request.getParameter("placeName"+itemSeq);
+        String placeAddr = request.getParameter("placeAddr"+itemSeq);
+        String lat = request.getParameter("lat"+itemSeq);
+        String lon = request.getParameter("lon"+itemSeq);
+
+        log.info("itemSeq : " + itemSeq);
+        log.info("placeName : " + placeName);
+        log.info("placeAddr : " + placeAddr);
+        log.info("lat : " + lat);
+        log.info("lon : " + lon);
+
+        TourDTO pDTO = new TourDTO();
+
+        pDTO.setPlaceName(placeName);
+        pDTO.setPlaceAddr(placeAddr);
+        pDTO.setLat(lat);
+        pDTO.setLon(lon);
+
+        model.addAttribute(pDTO);
+
+        log.info(this.getClass().getName() + ".addTourPlaceInfo End!");
+
+        return "thymeleaf/tour/tourPlaceRegForm";
     }
 }

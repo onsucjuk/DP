@@ -168,11 +168,11 @@
 
     <insert id="insertTourPlace" parameterType="TourDTO">
         INSERT INTO TOUR_INFO (
-            TOUR_SEQ, TOUR_DAY, PLACE_SEQ, PLACE_NAME, MEMO, TOUR_YN, LAT, LON
+            TOUR_SEQ, TOUR_DAY, PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, TOUR_YN, LAT, LON
         )
         VALUES (
                    #{tourSeq}, #{tourDay}, (SELECT COALESCE(MAX(A.TOUR_DAY), 0) FROM TOUR_PLACE A WHERE A.TOUR_SEQ = #{tourSeq} AND A.TOUR_DAY = #{tourDay}) + 1,
-                   #{placeNmae}, #{memo}, #{tourYn}, #{lat}, #{lon}
+                   #{placeNick},#{placeNmae},#{placeAddr}, #{memo}, #{tourYn}, #{lat}, #{lon}
                )
     </insert>
 

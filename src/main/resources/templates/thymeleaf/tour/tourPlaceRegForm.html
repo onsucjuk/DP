@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>목적지 등록</title>
+  <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet"
+  />
+  <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="/assets/js/init-alpine.js"></script>
+  <script src="/assets/js/tour/tourInfoReg.js"></script>
+  <script>
+    let SS_USER_ID = "[[${session.SS_USER_ID}]]";
+    let nSeq = "[[${session.SS_TOUR_SEQ}]]";
+    let nDay = "[[${session.SS_DAY_SEQ}]]";
+  </script>
+</html>
+<body>
+<div class="flex flex-col flex-1 w-full">
+  <main class="h-full pb-16 overflow-y-auto">
+    <div class="container grid px-6 mx-auto">
+      <hr>
+      <h2
+              class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+      >
+        목적지 등록
+      </h2>
+      <hr>
+      <form name="f" id="f">
+        <!-- With actions -->
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">목적지명</span>
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeNick" placeholder="목적지를 입력해주세요.">
+          </label>
+        </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">목적지 이름</span>
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeName" placeholder="목적지명 입력해주세요.">
+          </label>
+        </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">목적지 주소</span>
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeAddr" placeholder="주소를 입력해주세요.">
+            <button id="btnTourName" class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="button" > 목적지 찾기 </button>
+          </label>
+        </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">위도</span>
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lat" placeholder="위도를 입력해주세요.">
+          </label>
+        </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">경도</span>
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lon" placeholder="경도를 입력해주세요.">
+          </label>
+        </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">메모</span>
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="memo" placeholder="메모를 입력해주세요.">
+          </label>
+        </div>
+
+
+        <!-- 기능 버튼 2개-->
+        <div class="flex space-x-1">
+          <div class="px-6 my-6">
+            <button
+                    id="btnSend"
+                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="button"
+            >
+              <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold">등록</span>
+                <span class="ml-2" aria-hidden="true">+</span>
+              </div>
+            </button>
+          </div>
+          <div class="px-6 my-6">
+            <button
+                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="reset"
+            >
+              <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold" >다시 작성</span>
+                <span class="ml-2" aria-hidden="true">@</span>
+              </div>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>
+</div>
+
+</body>
+</html>

@@ -28,7 +28,10 @@ public class TourDTO {
     private String dayStart;
 
     //--------------------------------------------------------------- TOUR_PLACE
-    private String placeName; // 여행 방문지명
+
+    private String placeNick; // 사용자 설정 목적지명
+    private String placeName; // 목적지명
+    private String placeAddr; // 목적지 주소
     private String memo; // 메모
     private int tourY; // Y의 갯수
     private int tourN; // N의 갯수

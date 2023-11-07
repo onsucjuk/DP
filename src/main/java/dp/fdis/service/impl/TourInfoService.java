@@ -186,17 +186,6 @@ public class TourInfoService implements ITourInfoService {
 
     }
 
-    @Override
-    public void insertTourPlaceMany(TourDTO pDTO) throws Exception {
-
-        log.info(this.getClass().getName() + ".insertTourPlaceMany start!");
-
-        tourMapper.insertTourPlaceMany(pDTO);
-
-        log.info(this.getClass().getName() + ".insertTourPlaceMany End!");
-
-    }
-
     @Transactional
     @Override
     public void updateTourPlace(TourDTO pDTO) throws Exception {

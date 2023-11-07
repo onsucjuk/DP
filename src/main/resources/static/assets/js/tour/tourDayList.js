@@ -1,7 +1,7 @@
 
 
 function doDetail(seq) {
-    location.href = "/tour/tourDayDetail?nSeq=" + seq;
+    location.href = "/tour/tourDayInfo?nSeq=" + seq;
 }
 
 function doAdd() {

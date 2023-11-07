@@ -78,7 +78,4 @@ public interface ITourMapper {
 
     void insertTourPlace(TourDTO pDTO) throws Exception;
 
-    void insertTourPlaceMany(TourDTO pDTO) throws Exception;
-
-
 }
