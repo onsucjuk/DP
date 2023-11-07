@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>목적지 등록</title>
+  <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/tour/tourPlaceReg.css" />
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=B06BWPIrhC5CJXueAhPi7hG3V6avEXn8edbvjar9"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script th:inline="javascript">
+      const SS_USER_ID = [[${session.SS_USER_ID}]];
+      const nSeq = [[${session.SS_TOUR_SEQ}]];
+  </script>
+</head>
+<body>
+<div class="all_map">
+  <div class="_map_overlay_row">
+    <div class="input_place">
+      <input type="text" class="_search_entry" id="searchPlace" name = "searchPlace" placeholder="목적지를 입력하세요" onkeyup="onKeyupSearchLocation(this);">
+      <button onclick="apiSearchLocation();" style="margin-top: 14px; margin-bottom: 14px;    pointer-events: all;" >
+        <img src="https://openapi.sk.com/lib/img/_icon/search.svg" alt="">
+      </button>
+     </div>
+  </div>
+  <div id="map_div">
+    <div class="_map_layer_overlay">
+      <div class="__space_10_h"></div>
+     </div>
+  </div>
+    <div id="apiResult" class="_map_overlay_row2">
+      <div class="_result_panel_bg ">
+        <div class="_result_panel">
+          <div class="__disable_text">검색할 주소를 입력하세요.</div>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+
+  var map = new Tmapv2.Map("map_div", { // 지도가 생성될 div
+    center: new Tmapv2.LatLng(37.570028, 126.986072),    // 지도의 중심좌표
+    width : "600px", // 지도의 넓이
+    height : "600px", // 지도의 높이
+    zoom : 15, // 지도의 줌레벨
+    httpsMode: true,    // https모드 설정
+
+  });
+</script>
+<script src="/assets/js/tour/tourPlaceReg.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</body>
+</html>

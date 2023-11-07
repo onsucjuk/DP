@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>여행지 일자 관리</title>
+    <link rel="stylesheet" href="/assets/css/tour/tourDayInfo.css" />
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <script src="/assets/js/init-alpine.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/tour/tourDayList.js"></script>
+    <script th:inline="javascript">
+        const SS_USER_ID = [[${session.SS_USER_ID}]];
+        const nSeq = [[${session.SS_TOUR_SEQ}]];
+    </script>
+</head>
+<body>
+    <form id = "f" name = "f">
+        <div class="container" th:each="dto, iterStat : ${rList}"  th:if="${dto.tourSeq} != '' " th:onclick="doDetail([[${dto.tourDay}]])">
+            <div>
+                <table>
+                    <tr>
+                        <th th:text="'Day' + ${iterStat.index + 1}">
+                        </th>
+                    </tr>
+                    <tr>
+                        <!--<td th:text="${dto.tourN} + 'N, Y' + ${T(Integer).parseInt(dto.tourY)}"></td>-->
+                        <td th:if="${dto.tourY} + ${dto.tourN} == 0" th:text="'여행 준비 중입니다.'">
+                        </td>
+                        <td th:unless="${dto.tourY} + ${dto.tourN} == 0" th:text="'달성도 ' + ((${dto.tourY} * 100) / (${dto.tourY} + ${dto.tourN})) + '%'"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    <div class="flex space-x-1">
+        <div class="px-6 my-6">
+            <button
+                    id="btnAddDay"
+                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="button"
+            >
+                <div class="w-full">
+                    <span class="px-4 py-3 text-sm font-semibold">Day등록</span>
+                    <span class="ml-2" aria-hidden="true">+</span>
+                </div>
+            </button>
+        </div>
+        <div class="px-6 my-6">
+            <button
+                    id="btnEditTour"
+                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="button"
+            >
+                <div class="w-full">
+                    <span class="px-4 py-3 text-sm font-semibold">여행 수정</span>
+                    <span class="ml-2" aria-hidden="true">+</span>
+                </div>
+            </button>
+        </div>
+        <div class="px-6 my-6">
+            <button
+                    id="btnDeleteTour"
+                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="button"
+            >
+                <div class="w-full">
+                    <span class="px-4 py-3 text-sm font-semibold" >여행 삭제</span>
+                    <span class="ml-2" aria-hidden="true">-</span>
+                </div>
+            </button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
