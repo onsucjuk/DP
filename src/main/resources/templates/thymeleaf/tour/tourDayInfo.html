@@ -1,32 +1,135 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="day+${session.SS_DAY_SEQ}"></title>
     <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
     />
     <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/tour/tourDayInfo.css" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/assets/js/tour/tourDayInfo.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
-<div class="flex space-x-1">
-    <div class="px-6 my-6">
-        <button
-                id="btnPlaceReg"
-                class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                type="button"
-        >
-            <div class="w-full">
-                <span class="px-4 py-3 text-sm font-semibold">목적지 등록</span>
-                <span class="ml-2" aria-hidden="true">+</span>
-            </div>
-        </button>
-    </div>
-</div>
+<div class="flex flex-col flex-1 w-full">
+    <main class="h-full pb-16 overflow-y-auto">
+        <div class="container grid px-6 mx-auto">
+            <h2
+                    class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
+            >
+                목적지 목록
+            </h2>
 
+            <!-- With actions -->
+            <h4
+                    class="mb-4 text-lg font-semibold text-gray-600 dark:text-gray-300"
+            >
+            </h4>
+            <div class="w-full overflow-hidden rounded-lg shadow-xs">
+                <div class="w-full overflow-x-auto">
+
+                    <table th:if="${rList}" th:each="dto, iterStat : ${rList}" class="w-full whitespace-no-wrap" onclick="toggleTable(this)" th:id="'plc_'+ ${dto.placeSeq}">
+                        <thead class="table-header">
+                            <tr
+                                    class="text-sm font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
+                            >
+                                <th class="px-2 py-2 td-title-bg" th:text="'목적지' + ${iterStat.index + 1}"></th>
+                                <th class="px-2 py-2 td-title-bg" th:name = "placeNick"><b th:text="${dto.placeNick}"></b></th>
+                                <th class="px-2 py-2 td-title-bg">
+                                    <div class="float-right">
+                                        <button
+                                                th:id="'btnPlaceEdit' + ${dto.placeSeq}"
+                                                class="px-2 py-2 seq"
+                                                type="button"
+                                        >
+                                            <div class="w-full">
+                                                <span class="px-2 py-2 text-sm font-semibold">수정</span>
+                                                <span class="ml-2" aria-hidden="true">+</span>
+                                            </div>
+                                        </button>
+                                        <button
+                                                th:id="'btnPlaceDel' + ${dto.placeSeq}"
+                                                class="px-2 py-2 seq"
+                                                type="button"
+                                        >
+                                            <div class="w-full">
+                                                <span class="px-2 py-2 text-sm font-semibold">삭제</span>
+                                                <span class="ml-2" aria-hidden="true">+</span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                            <tbody
+                                    class="table-body bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
+                            >
+                                <tr class="text-gray-700 dark:text-gray-400 tr-bg"
+                                >
+                                    <td class="px-2 py-2 seq">
+                                        <b th:text="장소명"></b>
+                                    </td>
+                                    <td class="px-2 py-2 seq" th:name = "placeName" th:text="${dto.placeName}">
+                                    </td>
+                                </tr>
+                                <tr class="text-gray-700 dark:text-gray-400 tr-bg"
+                                >
+                                    <td class="px-2 py-2 seq">
+                                        <b th:text="주소"></b>
+                                    </td>
+                                    <td class="px-2 py-2 seq" th:name = "placeAddr" th:text="${dto.placeAddr}">
+                                    </td>
+                                </tr>
+                                <tr class="text-gray-700 dark:text-gray-400 tr-bg"
+                                >
+                                    <td class="px-2 py-2 seq">
+                                        <b th:text="메모"></b>
+                                    </td>
+                                    <td class="px-2 py-2 seq" th:name = "memo" th:text="${dto.memo}">
+                                    </td>
+                                </tr>
+                                <tr class="text-gray-700 dark:text-gray-400 tr-bg"
+                                >
+                                    <td class="px-2 py-2 seq">
+                                        <b th:text="위도"></b>
+                                    </td>
+                                    <td class="px-2 py-2 seq" th:name = "lat" th:text="${dto.lat}">
+                                    </td>
+                                </tr>
+                                <tr class="text-gray-700 dark:text-gray-400 tr-bg"
+                                >
+                                    <td class="px-2 py-2 seq">
+                                        <b th:text="경도"></b>
+                                    </td>
+                                    <td class="px-2 py-2 seq" th:name = "lon" th:text="${dto.lon}">
+                                    </td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="flex space-x-1">
+                <div class="px-4 my-6">
+                    <button
+                            id="btnPlaceReg"
+                            class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                            type="button"
+                    >
+                        <div class="w-full">
+                            <span class="px-3 py-3 text-sm font-semibold">목적지 등록</span>
+                            <span class="ml-2" aria-hidden="true">+</span>
+                        </div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
 </body>
+<script src="/assets/js/tour/tourDayInfo.js"></script>
 </html>

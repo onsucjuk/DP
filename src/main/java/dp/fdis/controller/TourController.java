@@ -29,34 +29,6 @@ public class TourController {
 
     private final ITourInfoService tourInfoService;
 
-/*    @ResponseBody
-    @PostMapping(value = "addTourPlaceInfo")
-    public TourDTO addTourPlaceInfo(ModelMap model, HttpServletRequest request) {
-
-        log.info(this.getClass().getName() + ".addTourPlaceInfo Start!");
-
-        String placeName = request.getParameter("placeName");
-        String placeAddr = request.getParameter("placeAddr");
-        String lat = request.getParameter("lat");
-        String lon = request.getParameter("lon");
-
-        log.info("placeName : " + placeName);
-        log.info("placeAddr : " + placeAddr);
-        log.info("lat : " + lat);
-        log.info("lon : " + lon);
-
-        TourDTO pDTO = new TourDTO();
-
-        pDTO.setPlaceName(placeName);
-        pDTO.setPlaceAddr(placeAddr);
-        pDTO.setLat(lat);
-        pDTO.setLon(lon);
-
-        log.info(this.getClass().getName() + ".addTourPlaceInfo End!");
-
-        return pDTO;
-    }*/
-
     /**
      * 여행 정보 페이지로 이동
      */
@@ -292,7 +264,7 @@ public class TourController {
         try {
 
             String nSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
-            String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 여행 번호(PK)
+            String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 여행 이름(PK)
             String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
 
             log.info("nSeq : " + nSeq);
@@ -341,6 +313,7 @@ public class TourController {
         session.setAttribute("SS_USER_ID", ssUserId);
 
         String ssSeq = (String) session.getAttribute("SS_TOUR_SEQ");
+
         log.info("nSeq : " + nSeq);
         log.info("ssSeq : " + ssSeq);
         log.info("ssUserId : " + ssUserId);
@@ -349,28 +322,31 @@ public class TourController {
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
          */
         TourDTO pDTO = new TourDTO();
+
         pDTO.setTourSeq(nSeq);
+        pDTO.setUserId(ssUserId);
 
-/*        List<TourDTO> rList2 = Optional.ofNullable(tourInfoService.getTourDay(pDTO))
-                .orElseGet(ArrayList::new);
-        List<TourDTO> rList1 = Optional.ofNullable(tourInfoService.getTourYn(pDTO))
-                .orElseGet(ArrayList::new);
+        String existsYn = tourInfoService.tourSeqExists(pDTO).getExistsYn();
 
-        List<TourDTO> rList = Stream.concat(rList2.stream(), rList1.stream())
-                .distinct()
-                .collect(Collectors.toList());*/
+        log.info("existsYn : " + existsYn);
 
-        List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourDayList(pDTO))
-                .orElseGet(ArrayList::new);
+        if (existsYn.equals("N")) {
 
-        // 조회된 리스트 결과값 넣어주기
-        model.addAttribute("rList", rList);
+                return "/tour/tourInfo";
 
-        log.info(this.getClass().getName() + ".tourDayList End!");
+        } else {
+
+            List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourDayList(pDTO))
+                    .orElseGet(ArrayList::new);
+
+            // 조회된 리스트 결과값 넣어주기
+            model.addAttribute("rList", rList);
 
 
-        return "thymeleaf/tour/tourDayList";
+            log.info(this.getClass().getName() + ".tourDayList End!");
 
+            return "thymeleaf/tour/tourDayList";
+        }
     }
 
 
@@ -430,23 +406,32 @@ public class TourController {
      * 여행 일자 정보 페이지로 이동
      */
     @GetMapping(value = "tourDayInfo")
-    public String tourDayInfo(HttpSession session, HttpServletRequest request) throws Exception {
+    public String tourDayInfo(HttpSession session, HttpServletRequest request, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".tourDayInfo Start!");
 
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
-        String daySeq = CmmUtil.nvl(request.getParameter("nSeq"));
+        String tourDay = CmmUtil.nvl(request.getParameter("nSeq"));
 
         log.info("userId : " + userId);
         log.info("tourSeq : " + tourSeq);
-        log.info("daySeq : " + daySeq);
+        log.info("daySeq : " + tourDay);
 
         session.setAttribute("SS_USER_ID", userId);
         session.setAttribute("SS_TOUR_SEQ", tourSeq);
-        session.setAttribute("SS_DAY_SEQ", daySeq);
+        session.setAttribute("SS_DAY_SEQ", tourDay);
 
+        TourDTO pDTO = new TourDTO();
 
+        pDTO.setTourSeq(tourSeq);
+        pDTO.setTourDay(tourDay);
+
+        List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourPlace(pDTO))
+                .orElseGet(ArrayList::new);
+
+        // 조회된 리스트 결과값 넣어주기
+        model.addAttribute("rList", rList);
 
         return "thymeleaf/tour/tourDayInfo";
 
@@ -487,6 +472,8 @@ public class TourController {
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
          */
         TourDTO pDTO = new TourDTO();
+
+
 
         pDTO.setPlaceName(placeName);
         pDTO.setPlaceAddr(placeAddr);
@@ -600,7 +587,7 @@ public class TourController {
             pDTO.setTourDay(daySeq);
             pDTO.setPlaceNick(placeNick);
             pDTO.setPlaceName(placeName);
-            pDTO.setPlaceName(placeAddr);
+            pDTO.setPlaceAddr(placeAddr);
             pDTO.setMemo(memo);
             pDTO.setLat(lat);
             pDTO.setLon(lon);
@@ -628,5 +615,44 @@ public class TourController {
         }
 
         return dto;
+    }
+
+    /**
+     * 목적지 수정 페이지로 이동
+     */
+    @GetMapping(value = "tourPlaceEditForm")
+    public String tourPlaceEditForm(HttpSession session, HttpServletRequest request, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".tourPlaceEditForm Start!");
+
+        String placeNick = CmmUtil.nvl(request.getParameter("placeNick"));
+        String placeName = CmmUtil.nvl(request.getParameter("placeName"));
+        String placeAddr = CmmUtil.nvl(request.getParameter("placeAddr"));
+        String lat = CmmUtil.nvl(request.getParameter("lat"));
+        String lon = CmmUtil.nvl(request.getParameter("lon"));
+        String memo = CmmUtil.nvl(request.getParameter("memo"));
+
+        log.info("placeNick : " + placeNick);
+        log.info("placeName : " + placeName);
+        log.info("placeAddr : " + placeAddr);
+        log.info("lat : " + lat);
+        log.info("lon : " + lon);
+        log.info("memo : " + memo);
+
+        TourDTO pDTO = new TourDTO();
+
+        pDTO.setPlaceNick(placeNick);
+        pDTO.setPlaceName(placeName);
+        pDTO.setPlaceAddr(placeAddr);
+        pDTO.setLat(lat);
+        pDTO.setLon(lon);
+        pDTO.setMemo(memo);
+
+        // 조회된 리스트 결과값 넣어주기
+        model.addAttribute("pDTO", pDTO);
+
+        log.info(this.getClass().getName() + ".tourPlaceEditForm End!");
+
+        return "thymeleaf/tour/tourPlaceEditForm";
     }
 }

@@ -56,6 +56,11 @@
                 return;
             }
 
+            placeName = encodeURIComponent(placeName);
+            placeAddr = encodeURIComponent(placeAddr);
+            lat = encodeURIComponent(lat);
+            lon = encodeURIComponent(lon);
+
             window.location.href = `/tour/tourPlaceRegForm?placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}`;
 
         }

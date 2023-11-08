@@ -1,7 +1,5 @@
 package dp.fdis.persistance.mapper;
 
-import dp.fdis.dto.MailDTO;
-import dp.fdis.dto.NoticeDTO;
 import dp.fdis.dto.UserInfoDTO;
 import org.apache.ibatis.annotations.Mapper;
 

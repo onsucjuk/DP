@@ -16,7 +16,7 @@ public class TourDTO {
     private String tourEnd; // 여행 종료일자
     private String userId; // 아이디
 
-    private String existsYn; // 여행 이름 존재 여부 확인
+    private String existsYn; // 존재 여부 확인
 
 
     //--------------------------------------------------------------- TOUR_DAY

@@ -1,6 +1,7 @@
 package dp.fdis.service;
 
 import dp.fdis.dto.TourDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -10,6 +11,8 @@ public interface ITourInfoService {
     TourDTO getTourNameExists(TourDTO pDTO) throws Exception;
 
     TourDTO getTourSeq(TourDTO pDTO) throws Exception;
+
+    TourDTO tourSeqExists(TourDTO pDTO) throws Exception;
 
 
     //여행지 상세보기
@@ -62,7 +65,11 @@ public interface ITourInfoService {
      *  여기서부터 TourPlace Service
      */
 
-    List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
+    // 목적지 하나 정보 들고 오기
+    TourDTO getTourPlaceOne(TourDTO pDTO) throws Exception;
+
+    // 목적지 목록
+    List<TourDTO> getTourPlace(TourDTO pDTO) throws Exception;
 
     // 여행 목적지 삭제
     void deleteTourPlace(TourDTO pDTO) throws Exception;
@@ -78,5 +85,7 @@ public interface ITourInfoService {
 
     // 방문 완료 체크
     void updateTourDayYN(TourDTO pDTO) throws Exception;
+
+    List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
 
 }

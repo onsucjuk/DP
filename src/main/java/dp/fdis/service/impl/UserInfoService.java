@@ -1,7 +1,6 @@
 package dp.fdis.service.impl;
 
 import dp.fdis.dto.MailDTO;
-import dp.fdis.dto.NoticeDTO;
 import dp.fdis.dto.UserInfoDTO;
 import dp.fdis.persistance.mapper.IUserInfoMapper;
 import dp.fdis.service.IMailService;
@@ -12,7 +11,6 @@ import dp.fdis.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;

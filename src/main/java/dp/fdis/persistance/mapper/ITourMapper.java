@@ -15,6 +15,9 @@ public interface ITourMapper {
 
     TourDTO getTourSeq(TourDTO pDTO) throws Exception;
 
+    // 여행지 번호 있는지 조회
+    TourDTO tourSeqExists(TourDTO pDTO) throws Exception;
+
     //여행지 등록
     void insertTourInfo(TourDTO pDTO) throws Exception;
 
@@ -75,6 +78,10 @@ public interface ITourMapper {
     /**
      *  여기서부터 TourPlace Mapper
      */
+
+    List<TourDTO> getTourPlace(TourDTO pDTO) throws Exception;
+
+    TourDTO getTourPlaceOne(TourDTO pDTO) throws Exception;
 
     void deleteTourPlace(TourDTO pDTO) throws Exception;
 

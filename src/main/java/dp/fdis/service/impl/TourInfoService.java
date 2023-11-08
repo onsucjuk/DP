@@ -1,7 +1,6 @@
 package dp.fdis.service.impl;
 
 import dp.fdis.dto.TourDTO;
-import dp.fdis.dto.UserInfoDTO;
 import dp.fdis.persistance.mapper.ITourMapper;
 import dp.fdis.service.ITourInfoService;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +27,9 @@ public class TourInfoService implements ITourInfoService {
         return tourMapper.getTourList(pDTO);
     }
 
+
+
+    @Transactional
     @Override
     public TourDTO getTourNameExists(TourDTO pDTO) throws Exception {
 
@@ -47,6 +49,19 @@ public class TourInfoService implements ITourInfoService {
 
 
         return tourMapper.getTourSeq(pDTO);
+    }
+
+    @Transactional
+    @Override
+    public TourDTO tourSeqExists(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + "tourSeqExists Start!");
+
+        TourDTO rDTO = tourMapper.tourSeqExists(pDTO);
+
+        log.info(this.getClass().getName() + "tourSeqExists End!");
+
+        return rDTO;
     }
 
     @Transactional
@@ -261,10 +276,6 @@ public class TourInfoService implements ITourInfoService {
     }
 
 
-    /**
-     *  여기서부터 TOUR_PLACE Service
-     */
-
     @Transactional
     @Override
     public List<TourDTO> getTourDayList(TourDTO pDTO) throws Exception {
@@ -274,6 +285,30 @@ public class TourInfoService implements ITourInfoService {
 
         return tourMapper.getTourDayList(pDTO);
     }
+
+
+
+    /**
+     *  여기서부터 TOUR_PLACE Service
+     */
+
+    @Override
+    public TourDTO getTourPlaceOne(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourPlaceOne start!");
+
+        return tourMapper.getTourPlaceOne(pDTO);
+    }
+
+    @Override
+    public List<TourDTO> getTourPlace(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourPlace start!");
+
+
+        return tourMapper.getTourPlace(pDTO);
+    }
+
 
     @Transactional
     @Override

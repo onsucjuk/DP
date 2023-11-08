@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>여행지 일자 관리</title>
-    <link rel="stylesheet" href="/assets/css/tour/tourDayInfo.css" />
+    <link rel="stylesheet" href="/assets/css/tour/tourDayList.css" />
     <link
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
             rel="stylesheet"
@@ -21,9 +21,8 @@
 </head>
 <body>
     <form id = "f" name = "f">
-        <div class="container" th:each="dto, iterStat : ${rList}"  th:if="${dto.tourSeq} != '' " th:onclick="doDetail([[${dto.tourDay}]])">
-            <div>
-                <table>
+        <div class="container">
+                <table th:each="dto, iterStat : ${rList}"  th:if="${dto.tourSeq} != '' " th:onclick="doDetail([[${dto.tourDay}]])">
                     <tr>
                         <th th:text="'Day' + ${iterStat.index + 1}">
                         </th>
@@ -35,7 +34,6 @@
                         <td th:unless="${dto.tourY} + ${dto.tourN} == 0" th:text="'달성도 ' + ((${dto.tourY} * 100) / (${dto.tourY} + ${dto.tourN})) + '%'"></td>
                     </tr>
                 </table>
-            </div>
         </div>
 
     <div class="flex space-x-1">
