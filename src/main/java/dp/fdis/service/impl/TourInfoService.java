@@ -205,30 +205,6 @@ public class TourInfoService implements ITourInfoService {
 
     @Transactional
     @Override
-    public void updateTourPlace(TourDTO pDTO) throws Exception {
-
-        log.info(this.getClass().getName() + ".updateTourPlace start!");
-
-        tourMapper.updateTourPlace(pDTO);
-
-        log.info(this.getClass().getName() + ".updateTourPlace End!");
-
-    }
-
-    @Transactional
-    @Override
-    public void updateTourDayMemo(TourDTO pDTO) throws Exception {
-
-        log.info(this.getClass().getName() + ".updateTourDayMemo start!");
-
-        tourMapper.updateTourDayMemo(pDTO);
-
-        log.info(this.getClass().getName() + ".updateTourDayMemo End!");
-
-    }
-
-    @Transactional
-    @Override
     public void updateTourDayYN(TourDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".updateTourDayYN start!");
@@ -319,6 +295,30 @@ public class TourInfoService implements ITourInfoService {
         tourMapper.deleteTourPlace(pDTO);
 
         log.info(this.getClass().getName() + ".deleteTourPlace End!");
+
+    }
+
+    @Override
+    public void deleteTourPlaceOne(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteTourPlaceOne start!");
+
+        tourMapper.deleteTourPlaceOne(pDTO);
+
+        log.info(this.getClass().getName() + ".deleteTourPlaceOne End!");
+
+    }
+
+
+    @Transactional
+    @Override
+    public void updateTourPlace(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".updateTourPlace start!");
+
+        tourMapper.updateTourPlace(pDTO);
+
+        log.info(this.getClass().getName() + ".updateTourPlace End!");
 
     }
 

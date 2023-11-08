@@ -18,6 +18,18 @@ $(document).ready(function () {
         doEdit(seq);
     });
 
+    $(document).on("click", '[id^="btnPlaceDel"]', function () {
+
+        // 클릭된 버튼의 ID에서 k 값을 추출
+        let buttonId = $(this).attr("id");
+
+        // ID에서 숫자 부분을 추출
+        const pSeq = buttonId.replace("btnPlaceDel", "");
+
+        // k를 이용하여 작업을 수행
+        doDel(pSeq);
+    });
+
     function doEdit(seq) {
         let placeNick = $(`#plc_${seq} [name="placeNick"]`).text();
         let placeName = $(`#plc_${seq} [name="placeName"]`).text();
@@ -25,6 +37,7 @@ $(document).ready(function () {
         let memo = $(`#plc_${seq} [name="memo"]`).text();
         let lat = $(`#plc_${seq} [name="lat"]`).text();
         let lon = $(`#plc_${seq} [name="lon"]`).text();
+        let placeSeq = seq;
 
         if (placeNick === "" || memo === "" || placeName === "" || placeAddr === "" || lat === "" || lon === "") {
             alert("모든 필드를 입력해야 합니다.");
@@ -37,12 +50,46 @@ $(document).ready(function () {
         placeAddr = encodeURIComponent(placeAddr);
         lat = encodeURIComponent(lat);
         lon = encodeURIComponent(lon);
+        placeSeq = encodeURIComponent(placeSeq);
 
-        window.location.href = `/tour/tourPlaceEditForm?placeNick=${placeNick}&memo=${memo}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}`;
+        window.location.href = `/tour/tourPlaceEditForm?placeNick=${placeNick}&memo=${memo}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}&placeSeq=${placeSeq}`;
 
     }
 
 })
+
+function doDel(pSeq) {
+
+    if (pSeq === "") {
+        alert("장소 번호에 문제가 있습니다. 새로고침 합니다.");
+
+        location.reload();
+    }
+
+    else if(confirm("계획한 여행을 삭제하시겠습니까?")) {
+
+        alert(pSeq);
+
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+            url: "/tour/deleteTourPlaceOne",
+            type: "post",
+            datatype: "JSON",
+            data: { "pSeq" : pSeq },
+            success: function (json) {
+
+                if (json.result === 1) {
+                    alert(json.msg);
+                    location.href = "/user/login";
+
+                } else {
+                    alert(json.msg);
+                    location.reload();
+                }
+            }
+        })
+    }
+}
 
 function toggleTable(tableElement) {
     const tbody = tableElement.querySelector('tbody');

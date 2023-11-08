@@ -206,10 +206,38 @@
                )
     </insert>
 
+    <!-- 여행 진척도 수정 쿼리 -->
+    <update id="updateTourPlace" parameterType="TourDTO">
+        UPDATE TOUR_PLACE
+        SET
+            PLACE_NICK = #{placeNick},
+            PLACE_NAME = #{placeName},
+            PLACE_ADDR = #{placeAddr},
+            MEMO = #{memo},
+            LAT = #{lat},
+            LON = #{lon}
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+          AND
+            PLACE_SEQ = #{placeSeq}
+    </update>
 
     <delete id="deleteTourPlace" parameterType="TourDTO">
         DELETE FROM TOUR_PLACE
-        WHERE TOUR_SEQ = #{tourSeq}
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+    </delete>
+
+    <delete id="deleteTourPlaceOne" parameterType="TourDTO">
+        DELETE FROM TOUR_PLACE
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+          AND
+            PLACE_SEQ = #{placeSeq}
     </delete>
 
 </mapper>

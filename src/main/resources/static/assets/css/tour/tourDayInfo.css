@@ -1,5 +1,5 @@
-tr[name="lat"],
-tr[name="lon"] {
+tr[name="lathidden"],
+tr[name="lonhidden"] {
     display: none;
 }
 

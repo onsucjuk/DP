@@ -8,8 +8,11 @@
   <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=B06BWPIrhC5CJXueAhPi7hG3V6avEXn8edbvjar9"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
-      const SS_USER_ID = [[${session.SS_USER_ID}]];
-      const nSeq = [[${session.SS_TOUR_SEQ}]];
+    const SS_USER_ID = [[${session.SS_USER_ID}]];
+    const SS_PLACE_NICK = [[${session.SS_PLACE_NICK}]];
+    const SS_MEMO = [[${session.SS_MEMO}]];
+    const SS_PLACE_SEQ = [[${session.SS_PLACE_SEQ}]];
+    const nSeq = [[${session.SS_TOUR_SEQ}]];
   </script>
 </head>
 <body>
@@ -20,20 +23,20 @@
       <button onclick="apiSearchLocation();" style="margin-top: 14px; margin-bottom: 14px;    pointer-events: all;" >
         <img src="https://openapi.sk.com/lib/img/_icon/search.svg" alt="">
       </button>
-     </div>
+    </div>
   </div>
   <div id="map_div">
     <div class="_map_layer_overlay">
       <div class="__space_10_h"></div>
-     </div>
+    </div>
   </div>
-    <div id="apiResult" class="_map_overlay_row2">
-      <div class="_result_panel_bg ">
-        <div class="_result_panel">
-          <div class="__disable_text">검색할 주소를 입력하세요.</div>
-        </div>
+  <div id="apiResult" class="_map_overlay_row2">
+    <div class="_result_panel_bg ">
+      <div class="_result_panel">
+        <div class="__disable_text">검색할 주소를 입력하세요.</div>
       </div>
     </div>
+  </div>
 </div>
 
 <script>
@@ -47,7 +50,7 @@
 
   });
 </script>
-<script src="/assets/js/tour/tourPlaceFind.js"></script>
+<script src="/assets/js/tour/tourPlaceFind_E.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 </body>
 </html>

@@ -1,15 +1,12 @@
 package dp.fdis.controller;
 
 import dp.fdis.dto.MsgDTO;
-import dp.fdis.dto.NoticeDTO;
 import dp.fdis.dto.TourDTO;
-import dp.fdis.dto.UserInfoDTO;
 import dp.fdis.service.ITourInfoService;
 import dp.fdis.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,8 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Slf4j
 @RequestMapping(value = "/tour")
@@ -451,6 +447,18 @@ public class TourController {
     }
 
     /**
+     * 목적지 찾기 페이지(수정)로 이동
+     */
+    @GetMapping(value = "tourPlaceFind_E")
+    public String tourPlaceFind_E() throws Exception {
+
+        log.info(this.getClass().getName() + ".tourPlaceFind_E Start!");
+
+        return "thymeleaf/tour/tourPlaceFind_E";
+
+    }
+
+    /**
      * 목적지 등록 페이지로 이동
      */
     @GetMapping(value = "tourPlaceRegForm")
@@ -631,6 +639,7 @@ public class TourController {
         String lat = CmmUtil.nvl(request.getParameter("lat"));
         String lon = CmmUtil.nvl(request.getParameter("lon"));
         String memo = CmmUtil.nvl(request.getParameter("memo"));
+        String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
 
         log.info("placeNick : " + placeNick);
         log.info("placeName : " + placeName);
@@ -638,6 +647,17 @@ public class TourController {
         log.info("lat : " + lat);
         log.info("lon : " + lon);
         log.info("memo : " + memo);
+        log.info("placeSeq : " + placeSeq);
+
+        // 장소 찾기 들어가서 정보 가져왔을 때 placeSeq, nick, memo는 넘겨받지 못하므로 임시로 세션에 저장함
+
+        session.setAttribute("SS_PLACE_NICK", placeNick);
+        session.setAttribute("SS_MEMO", memo);
+        session.setAttribute("SS_PLACE_SEQ", placeSeq);
+
+        log.info("SS_PLACE_NICK : " + session.getAttribute("SS_PLACE_NICK"));
+        log.info("SS_MEMO : " + session.getAttribute("SS_MEMO"));
+        log.info("SS_PLACE_SEQ : " + session.getAttribute("SS_PLACE_SEQ"));
 
         TourDTO pDTO = new TourDTO();
 
@@ -655,4 +675,140 @@ public class TourController {
 
         return "thymeleaf/tour/tourPlaceEditForm";
     }
+
+    /**
+     *   목적지 수정
+     **/
+    @ResponseBody
+    @PostMapping(value = "updateTourPlace")
+    public MsgDTO updateTourPlace(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".updateTourPlace Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+            String tourDay = CmmUtil.nvl((String)session.getAttribute("SS_DAY_SEQ"));
+            String placeSeq = CmmUtil.nvl((String)session.getAttribute("SS_PLACE_SEQ"));
+            String placeNick = CmmUtil.nvl(request.getParameter("placeNick"));
+            String placeName = CmmUtil.nvl(request.getParameter("placeName"));
+            String placeAddr = CmmUtil.nvl(request.getParameter("placeAddr"));
+            String lat = CmmUtil.nvl(request.getParameter("lat"));
+            String lon = CmmUtil.nvl(request.getParameter("lon"));
+            String memo = CmmUtil.nvl(request.getParameter("memo"));
+
+            log.info("tourSeq : " + tourSeq);
+            log.info("tourDay : " + tourDay);
+            log.info("placeSeq : " + placeSeq);
+            log.info("placeNick : " + placeNick);
+            log.info("placeName : " + placeName);
+            log.info("placeAddr : " + placeAddr);
+            log.info("lat : " + lat);
+            log.info("lon : " + lon);
+            log.info("memo : " + memo);
+
+            TourDTO pDTO = new TourDTO();
+
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setTourDay(tourDay);
+            pDTO.setPlaceSeq(placeSeq);
+            pDTO.setPlaceNick(placeNick);
+            pDTO.setPlaceName(placeName);
+            pDTO.setPlaceAddr(placeAddr);
+            pDTO.setLat(lat);
+            pDTO.setLon(lon);
+            pDTO.setMemo(memo);
+
+            if (tourSeq.length() > 0 && tourDay.length() > 0 && placeSeq.length() > 0) {
+
+                tourInfoService.updateTourPlace(pDTO);
+
+                msg = "목적지 정보가 수정되었습니다.";
+
+            } else {
+
+                msg = "여행 번호 혹은 일자 혹은 장소 번호가 맞지 않습니다.";
+            }
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".updateTourPlace End!");
+
+        }
+
+        return dto;
+    }
+
+    /**
+     *   목적지 정보 삭제
+     **/
+    @ResponseBody
+    @PostMapping(value = "deleteTourPlaceOne")
+    public MsgDTO deleteTourPlaceOne(HttpSession session, HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".deleteTourPlaceOne Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+            String tourDay = CmmUtil.nvl((String)session.getAttribute("SS_DAY_SEQ"));
+            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+
+            log.info("placeSeq : " + placeSeq);
+            log.info("tourDay : " + tourDay);
+            log.info("tourSeq : " + tourSeq);
+
+
+            if (placeSeq.length() > 0 && tourDay.length() > 0 && tourSeq.length() > 0) {
+
+                TourDTO pDTO = new TourDTO();
+
+                pDTO.setTourSeq(tourSeq);
+                pDTO.setTourDay(tourDay);
+                pDTO.setPlaceSeq(placeSeq);
+
+
+                // 목적지 한 개 삭제하기 DB
+                tourInfoService.deleteTourPlaceOne(pDTO);
+
+                msg = "삭제되었습니다.";
+
+            } else {
+
+                msg = "여행 번호 혹은 목적지 번호 혹은 일자 번호가 올바르지 않습니다. 화면을 새로고침 하겠습니다.";
+
+            }
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".deleteTourPlaceOne End!");
+
+        }
+
+        return dto;
+    }
+
+
 }

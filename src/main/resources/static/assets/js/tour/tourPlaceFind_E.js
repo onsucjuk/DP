@@ -31,37 +31,44 @@
     $(document).ready(function () {
 
         // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
-        $(document).on("click", '[id^="btnAddPlace"]', function () {
+        $(document).on("click", '[id^="btnEditPlace"]', function () {
 
             // 클릭된 버튼의 ID에서 k 값을 추출
             let buttonId = $(this).attr("id");
 
             // ID에서 숫자 부분을 추출
-            let k = buttonId.replace("btnAddPlace", "");
+            let k = buttonId.replace("btnEditPlace", "");
 
             sessionStorage.setItem("SS_ITEM_SEQ", k);
 
             // k를 이용하여 작업을 수행
-            doAddPlace(k);
+            doEditPlace(k);
         });
 
-        function doAddPlace(k) {
+        function doEditPlace(k) {
+
+            let placeNick = SS_PLACE_NICK;
             let placeName = $(`#poi_${k} [name="placeName"]`).text();
             let placeAddr = $(`#poi_${k} [name="placeAddr"]`).text();
             let lat = $(`#poi_${k} [name="lat"]`).text();
             let lon = $(`#poi_${k} [name="lon"]`).text();
+            let memo = SS_MEMO;
+            let placeSeq = SS_PLACE_SEQ;
 
             if (placeName === "" || placeAddr === "" || lat === "" || lon === "") {
                 alert("모든 필드를 입력해야 합니다.");
                 return;
             }
 
+            placeNick = encodeURIComponent(placeNick);
             placeName = encodeURIComponent(placeName);
             placeAddr = encodeURIComponent(placeAddr);
             lat = encodeURIComponent(lat);
             lon = encodeURIComponent(lon);
+            memo = encodeURIComponent(memo);
+            placeSeq = encodeURIComponent(placeSeq);
 
-            window.location.href = `/tour/tourPlaceRegForm?placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}`;
+            window.location.href = `/tour/tourPlaceEditForm?placeNick=${placeNick}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}&memo=${memo}&placeSeq=${placeSeq}`;
 
         }
 
@@ -192,7 +199,7 @@
                                         <p class="_search_item_info_address" name = "lon">${lon}</p>
                                             <div class="px-6 my-6">
                                                 <button 
-                                                        id="btnAddPlace${k}"
+                                                        id="btnEditPlace${k}"
                                                         class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                                                         type="button"
                                                 >

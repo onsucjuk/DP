@@ -74,14 +74,13 @@ public interface ITourInfoService {
     // 여행 목적지 삭제
     void deleteTourPlace(TourDTO pDTO) throws Exception;
 
+    void deleteTourPlaceOne(TourDTO pDTO) throws Exception;
+
     // 여행 목적지 등록
     void insertTourPlace(TourDTO pDTO) throws Exception;
 
     // 여행 목적지 수정
     void updateTourPlace(TourDTO pDTO) throws Exception;
-
-    // 여행 메모 수정
-    void updateTourDayMemo(TourDTO pDTO) throws Exception;
 
     // 방문 완료 체크
     void updateTourDayYN(TourDTO pDTO) throws Exception;

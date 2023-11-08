@@ -58,12 +58,6 @@ public interface ITourMapper {
     //여행 일자 등록
     void addTourDay(TourDTO pDTO) throws Exception;
 
-    // 여행 목적지 수정
-    void updateTourPlace(TourDTO pDTO) throws Exception;
-
-    // 여행 메모 수정
-    void updateTourDayMemo(TourDTO pDTO) throws Exception;
-
     // 방문 완료 체크
     void updateTourDayYN(TourDTO pDTO) throws Exception;
 
@@ -85,6 +79,12 @@ public interface ITourMapper {
 
     void deleteTourPlace(TourDTO pDTO) throws Exception;
 
+    void deleteTourPlaceOne(TourDTO pDTO) throws Exception;
+
     void insertTourPlace(TourDTO pDTO) throws Exception;
+
+    void updateTourPlace(TourDTO pDTO) throws Exception;
+
+
 
 }

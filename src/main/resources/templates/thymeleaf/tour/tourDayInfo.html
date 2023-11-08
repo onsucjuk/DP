@@ -11,7 +11,7 @@
     <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
     <link href="/assets/css/style.css" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/tour/tourDayInfo.css" />
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -24,6 +24,7 @@
             >
                 목적지 목록
             </h2>
+            <hr>
 
             <!-- With actions -->
             <h4
@@ -59,7 +60,7 @@
                                         >
                                             <div class="w-full">
                                                 <span class="px-2 py-2 text-sm font-semibold">삭제</span>
-                                                <span class="ml-2" aria-hidden="true">+</span>
+                                                <span class="ml-2" aria-hidden="true">-</span>
                                             </div>
                                         </button>
                                     </div>
@@ -93,7 +94,7 @@
                                     <td class="px-2 py-2 seq" th:name = "memo" th:text="${dto.memo}">
                                     </td>
                                 </tr>
-                                <tr class="text-gray-700 dark:text-gray-400 tr-bg"
+                                <tr class="text-gray-700 dark:text-gray-400 tr-bg" th:name = "lathidden"
                                 >
                                     <td class="px-2 py-2 seq">
                                         <b th:text="위도"></b>
@@ -101,7 +102,7 @@
                                     <td class="px-2 py-2 seq" th:name = "lat" th:text="${dto.lat}">
                                     </td>
                                 </tr>
-                                <tr class="text-gray-700 dark:text-gray-400 tr-bg"
+                                <tr class="text-gray-700 dark:text-gray-400 tr-bg" th:name = "lonhidden"
                                 >
                                     <td class="px-2 py-2 seq">
                                         <b th:text="경도"></b>
