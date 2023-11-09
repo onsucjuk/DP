@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <title>목적지 찾기</title>
   <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
-  <link rel="stylesheet" href="/assets/css/tour/tourPlaceFind.css" />
+  <!--<link rel="stylesheet" href="/assets/css/tour/tourPlaceFind.css" />-->
+  <link rel="stylesheet" href="/assets/css/tour/_tmap_preview_right.css" />
+  <link rel="stylesheet" href="/assets/css/tour/_tmap_overlay.css" />
   <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=B06BWPIrhC5CJXueAhPi7hG3V6avEXn8edbvjar9"></script>
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script th:inline="javascript">
@@ -37,14 +39,58 @@
       </div>
     </div>
   </div>
+ <div class="px-3 my-6">
+  <button
+          id="btnEditForm"
+          class="flex items-left justify-between w-1/15 px-3 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          type="button"
+  >
+    <div class="w-full">
+      <span class="px-3 py-2 text-sm font-semibold">돌아가기</span>
+      <span class="ml-2" aria-hidden="true">></span>
+    </div>
+  </button>
+ </div>
 </div>
+<!--<div id="map_div" style="position: relative;">
+
+  <div class="_map_layer_overlay">
+    <div class="__space_10_h"></div>
+    <div class="_map_overlay_row">
+      <input type="text" class="_search_entry" id="searchAddress" placeholder="목적지를 입력하세요" onkeyup="onKeyupSearchLocation(this);">
+      <button onclick="apiSearchLocation();" style="margin-top: 14px; margin-bottom: 14px;    pointer-events: all;" >
+        <img src="https://openapi.sk.com/lib/img/_icon/search.svg" alt="">
+      </button>
+    </div>
+    <div class="__flex_expand"></div>
+    <div id="apiResult" class="_map_overlay_row">
+      <div class="_result_panel_bg ">
+        <div class="_result_panel">
+          <div class="__disable_text">검색할 주소를 입력하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="px-3 my-6">
+  <button
+          id="btnEditForm"
+          class="flex items-left justify-between w-1/15 px-3 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+          type="button"
+  >
+    <div class="w-full">
+      <span class="px-3 py-2 text-sm font-semibold">수정 페이지로 돌아가기</span>
+      <span class="ml-2" aria-hidden="true">≡</span>
+    </div>
+  </button>
+</div>-->
 
 <script>
 
   var map = new Tmapv2.Map("map_div", { // 지도가 생성될 div
     center: new Tmapv2.LatLng(37.570028, 126.986072),    // 지도의 중심좌표
-    width : "600px", // 지도의 넓이
-    height : "600px", // 지도의 높이
+    width : "750px", // 지도의 넓이
+    height : "750px", // 지도의 높이
     zoom : 15, // 지도의 줌레벨
     httpsMode: true,    // https모드 설정
 
@@ -52,5 +98,6 @@
 </script>
 <script src="/assets/js/tour/tourPlaceFind_E.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<!--<script src="/assets/js/tour/preview_tmap.bundle.js"></script>-->
 </body>
 </html>

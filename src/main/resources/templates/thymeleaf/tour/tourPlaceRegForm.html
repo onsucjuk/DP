@@ -1,129 +1,404 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-  <meta charset="UTF-8" />
+  <!-- Required meta tags -->
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>목적지 등록</title>
+  <link rel="stylesheet" href="/assets/css/tour/tourInfo.css" />
   <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
   />
   <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/assets/js/init-alpine.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
   <script src="/assets/js/tour/tourPlaceRegForm.js"></script>
   <link rel="stylesheet" href="/assets/css/tour/tourPlaceRegForm.css" />
-  <script>
-    let SS_USER_ID = "[[${session.SS_USER_ID}]]";
-    let nSeq = "[[${session.SS_TOUR_SEQ}]]";
-    let nDay = "[[${session.SS_DAY_SEQ}]]";
+  <script src="/assets/js/init-alpine.js"></script>
+  <!-- plugins:css -->
+  <link rel="stylesheet" href="/itda/vendors/feather/feather.css">
+  <link rel="stylesheet" href="/itda/vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="/itda/vendors/css/vendor.bundle.base.css">
+  <link rel="stylesheet" href="/itda/vendors/mdi/css/materialdesignicons.min.css">
+  <link rel="stylesheet" href="/itda/pages/icons/mdi.html">
+  <!-- endinject -->
+  <!-- Plugin css for this page -->
+  <link rel="stylesheet" href="/itda/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
+  <link rel="stylesheet" href="/itda/vendors/ti-icons/css/themify-icons.css">
+  <link rel="stylesheet" type="text/css" href="/itda/js/select.dataTables.min.css">
+  <!-- End plugin css for this page -->
+  <!-- inject:css -->
+  <link rel="stylesheet" href="/itda/css/vertical-layout-light/style.css">
+  <!-- endinject -->
+  <link rel="shortcut icon" href="/itda/images/favicon.png" />
+  <script th:inline="javascript">
+    let SS_USER_ID = [[${session.SS_USER_ID}]];
+    let nSeq = [[${session.SS_TOUR_SEQ}]];
+    let nDay = [[${session.SS_DAY_SEQ}]];
   </script>
-</html>
+</head>
 <body>
-<div class="flex flex-col flex-1 w-full">
-  <main class="h-full pb-16 overflow-y-auto">
-    <div class="container grid px-6 mx-auto">
-      <hr>
-      <h2
-              class="my-6 text-2xl font-semibold text-gray-700 dark:text-gray-200"
-      >
-        목적지 등록
-      </h2>
-      <hr>
-      <form name="f" id="f">
-        <!-- With actions -->
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-          <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">목적지명</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeNick" placeholder="목적지를 입력해주세요.">
-          </label>
-        </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-          <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">목적지 이름</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeName" placeholder="목적지명 입력해주세요." th:value="${pDTO.placeName}">
-            <button id="btnPlaceFind" class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    type="button" > 목적지 찾기 </button>
-          </label>
-        </div>
+<div class="container-scroller">
+  <!-- partial:partials/_navbar.html -->
+  <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+    <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+      <a class="navbar-brand brand-logo mr-5" href="/index/index"><img src="/itda/images/logo-modified.png" class="mr-2" alt="logo" /></a>
+      <!--이게 내가 말한 로고-->
+      <a class="navbar-brand brand-logo-mini" href="/index/index"><img src="/itda/images/logo-modified.png" alt="logo"/></a>
+      <!--여기는 반응형 웹으로 줄어들면 나오는 로고-->
+    </div>
+    <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+      <!--            <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+                      <span class="icon-menu"></span>
+                  </button>-->
 
-
-                <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-                  <label class="block text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">목적지 주소</span>
-                    <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeAddr" placeholder="주소를 입력해주세요." th:value="${pDTO.placeAddr}">
+      <ul class="navbar-nav navbar-nav-right">
+        <li class="nav-item nav-profile dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+            <i class="icon-head"></i>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+            <a class="dropdown-item" href="#">
+              <i class="mdi mdi-account text-primary"></i>
+              myPage
+            </a>
+            <a class="dropdown-item" href="/user/userLogOut">
+              <i class="ti-power-off text-primary"></i>
+              Logout
+            </a>
+          </div>
+        </li>
+        <li class="nav-item nav-settings d-none d-lg-flex">
+          <a class="nav-link" href="#">
+            <i class="icon-ellipsis"></i>
+          </a>
+        </li>
+      </ul>
+      <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
+        <span class="icon-menu"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- partial -->
+  <div class="container-fluid page-body-wrapper">
+    <!-- partial:partials/_settings-panel.html -->
+    <div class="theme-setting-wrapper">
+      <div id="settings-trigger"><i class="ti-settings"></i></div>
+      <div id="theme-settings" class="settings-panel">
+        <i class="settings-close ti-close"></i>
+        <p class="settings-heading">SIDEBAR SKINS</p>
+        <div class="sidebar-bg-options selected" id="sidebar-light-theme"><div class="img-ss rounded-circle bg-light border mr-3"></div>Light</div>
+        <div class="sidebar-bg-options" id="sidebar-dark-theme"><div class="img-ss rounded-circle bg-dark border mr-3"></div>Dark</div>
+        <p class="settings-heading mt-2">HEADER SKINS</p>
+        <div class="color-tiles mx-0 px-4">
+          <div class="tiles success"></div>
+          <div class="tiles warning"></div>
+          <div class="tiles danger"></div>
+          <div class="tiles info"></div>
+          <div class="tiles dark"></div>
+          <div class="tiles default"></div>
+        </div>
+      </div>
+    </div>
+    <div id="right-sidebar" class="settings-panel">
+      <i class="settings-close ti-close"></i>
+      <ul class="nav nav-tabs border-top" id="setting-panel" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" id="todo-tab" data-toggle="tab" href="#todo-section" role="tab" aria-controls="todo-section" aria-expanded="true">TO DO LIST</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="chats-tab" data-toggle="tab" href="#chats-section" role="tab" aria-controls="chats-section">CHATS</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="setting-content">
+        <div class="tab-pane fade show active scroll-wrapper" id="todo-section" role="tabpanel" aria-labelledby="todo-section">
+          <div class="add-items d-flex px-3 mb-0">
+            <form class="form w-100">
+              <div class="form-group d-flex">
+                <input type="text" class="form-control todo-list-input" placeholder="Add To-do">
+                <button type="submit" class="add btn btn-primary todo-list-add-btn" id="add-task">Add</button>
+              </div>
+            </form>
+          </div>
+          <div class="list-wrapper px-3">
+            <ul class="d-flex flex-column-reverse todo-list">
+              <li>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox">
+                    Team review meeting at 3.00 PM
                   </label>
                 </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="latdiv">
-          <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">위도</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lat" placeholder="위도를 입력해주세요." th:value="${pDTO.lat}">
-          </label>
-        </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="londiv">
-          <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">경도</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lon" placeholder="경도를 입력해주세요." th:value="${pDTO.lon}">
-          </label>
-        </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="poidiv">
-          <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">POI</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="poi" placeholder="POI 값을 입력해주세요." th:value="${pDTO.poi}">
-          </label>
-        </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
-          <label class="block text-sm">
-            <span class="text-gray-700 dark:text-gray-400">메모</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="memo" placeholder="메모를 입력해주세요.">
-          </label>
-        </div>
-
-
-        <!-- 기능 버튼 2개-->
-        <div class="flex space-x-1">
-          <div class="px-6 my-6">
-            <button
-                    id="btnPlaceReg"
-                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    type="button"
-            >
-              <div class="w-full">
-                <span class="px-4 py-3 text-sm font-semibold">등록</span>
-                <span class="ml-2" aria-hidden="true">+</span>
-              </div>
-            </button>
+                <i class="remove ti-close"></i>
+              </li>
+              <li>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox">
+                    Prepare for presentation
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+              <li>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox">
+                    Resolve all the low priority tickets due today
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+              <li class="completed">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox" checked>
+                    Schedule meeting for next week
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+              <li class="completed">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input class="checkbox" type="checkbox" checked>
+                    Project review
+                  </label>
+                </div>
+                <i class="remove ti-close"></i>
+              </li>
+            </ul>
           </div>
-          <div class="px-6 my-6">
-            <button
-                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    type="reset"
-            >
-              <div class="w-full">
-                <span class="px-4 py-3 text-sm font-semibold" >다시 작성</span>
-                <span class="ml-2" aria-hidden="true">@</span>
-              </div>
-            </button>
+          <h4 class="px-3 text-muted mt-5 font-weight-light mb-0">Events</h4>
+          <div class="events pt-4 px-3">
+            <div class="wrapper d-flex mb-2">
+              <i class="ti-control-record text-primary mr-2"></i>
+              <span>Feb 11 2018</span>
+            </div>
+            <p class="mb-0 font-weight-thin text-gray">Creating component page build a js</p>
+            <p class="text-gray mb-0">The total number of sessions</p>
           </div>
-          <div class="px-6 my-6">
-            <button
-                    id="btnDayInfo"
-                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    type="button"
-            >
-              <div class="w-full">
-                <span class="px-4 py-3 text-sm font-semibold">목적지 목록</span>
-                <span class="ml-2" aria-hidden="true">≡</span>
-              </div>
-            </button>
+          <div class="events pt-4 px-3">
+            <div class="wrapper d-flex mb-2">
+              <i class="ti-control-record text-primary mr-2"></i>
+              <span>Feb 7 2018</span>
+            </div>
+            <p class="mb-0 font-weight-thin text-gray">Meeting with Alisa</p>
+            <p class="text-gray mb-0 ">Call Sarah Graves</p>
           </div>
         </div>
-      </form>
+        <!-- To do section tab ends -->
+        <div class="tab-pane fade" id="chats-section" role="tabpanel" aria-labelledby="chats-section">
+          <div class="d-flex align-items-center justify-content-between border-bottom">
+            <p class="settings-heading border-top-0 mb-3 pl-3 pt-0 border-bottom-0 pb-0">Friends</p>
+            <small class="settings-heading border-top-0 mb-3 pt-0 border-bottom-0 pb-0 pr-3 font-weight-normal">See All</small>
+          </div>
+          <ul class="chat-list">
+            <li class="list active">
+              <div class="profile"><img src="#" alt="image"><span class="online"></span></div>
+              <div class="info">
+                <p>Thomas Douglas</p>
+                <p>Available</p>
+              </div>
+              <small class="text-muted my-auto">19 min</small>
+            </li>
+          </ul>
+        </div>
+        <!-- chat tab ends -->
+      </div>
     </div>
-  </main>
-</div>
-</div>
+    <!-- partial -->
+    <!-- partial:partials/_sidebar.html -->
+    <nav class="sidebar sidebar-offcanvas" id="sidebar">
+      <ul class="nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/tour/goItda/">
+            <i class="icon-grid menu-icon"></i>
+            <span class="menu-title">Do Itda</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/tour/tourInfo" aria-expanded="false" aria-controls="ui-basic">
+            <i class="icon-layout menu-icon"></i>
+            <span class="menu-title">여행 관리</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/notice/noticeList">
+            <i class="icon-paper menu-icon"></i>
+            <span class="menu-title">게시판</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="collapse" href="#profile" aria-expanded="false" aria-controls="auth">
+            <i class="icon-head menu-icon"></i>
+            <span class="menu-title">유저 페이지</span>
+            <i class="menu-arrow"></i>
+          </a>
+          <div class="collapse" id="profile">
+            <ul class="nav flex-column sub-menu">
+              <li class="nav-item"> <a class="nav-link" href="#"> myPage </a></li>
+              <li class="nav-item"> <a class="nav-link" href="/user/userLogOut"> Logout </a></li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <!-- partial -->
+    <div class="main-panel">
+      <div class="content-wrapper">
+        <div class="row">
+          <div class="col-md-12 grid-margin">
+            <div class="row">
+              <div class="col-12 col-xl-8 mb-4 mb-xl-0">
+                <h3 class="font-weight-bold">목적지 등록</h3>
+                <!--                  <h6 class="font-weight-normal mb-0">All systems are running smoothly! You have <span class="text-primary">3 unread alerts!</span></h6>-->
+              </div>
 
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="card position-relative w-full">
+            <form name="f" id="f">
+              <!-- With actions -->
+              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">목적지명</span>
+                  <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeNick" placeholder="목적지를 입력해주세요.">
+                </label>
+              </div>
+              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">목적지 이름</span>
+                  <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeName" placeholder="목적지명 입력해주세요." th:value="${pDTO.placeName}">
+                  <button id="btnPlaceFind" class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                          type="button" > 목적지 찾기 </button>
+                </label>
+              </div>
+
+
+              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">목적지 주소</span>
+                  <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeAddr" placeholder="주소를 입력해주세요." th:value="${pDTO.placeAddr}">
+                </label>
+              </div>
+              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="latdiv">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">위도</span>
+                  <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lat" placeholder="위도를 입력해주세요." th:value="${pDTO.lat}">
+                </label>
+              </div>
+              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="londiv">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">경도</span>
+                  <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lon" placeholder="경도를 입력해주세요." th:value="${pDTO.lon}">
+                </label>
+              </div>
+              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="poidiv">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">POI</span>
+                  <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="poi" placeholder="POI 값을 입력해주세요." th:value="${pDTO.poi}">
+                </label>
+              </div>
+              <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <label class="block text-sm">
+                  <span class="text-gray-700 dark:text-gray-400">메모</span>
+                  <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="memo" placeholder="메모를 입력해주세요.">
+                </label>
+              </div>
+
+
+              <!-- 기능 버튼 2개-->
+              <div class="flex space-x-1">
+                <div class="px-6 my-6">
+                  <button
+                          id="btnPlaceReg"
+                          class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                          type="button"
+                  >
+                    <div class="w-full">
+                      <span class="px-4 py-3 text-sm font-semibold">등록</span>
+                      <span class="ml-2" aria-hidden="true">+</span>
+                    </div>
+                  </button>
+                </div>
+                <div class="px-6 my-6">
+                  <button
+                          class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                          type="reset"
+                  >
+                    <div class="w-full">
+                      <span class="px-4 py-3 text-sm font-semibold" >다시 작성</span>
+                      <span class="ml-2" aria-hidden="true">@</span>
+                    </div>
+                  </button>
+                </div>
+                <div class="px-6 my-6">
+                  <button
+                          id="btnDayInfo"
+                          class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                          type="button"
+                  >
+                    <div class="w-full">
+                      <span class="px-4 py-3 text-sm font-semibold">목적지 목록</span>
+                      <span class="ml-2" aria-hidden="true">≡</span>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- content-wrapper ends -->
+  <!-- partial:partials/_footer.html -->
+  <!--        <footer class="footer">
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Copyright © 2021.  Premium <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap admin template</a> from BootstrapDash. All rights reserved.</span>
+              <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center">Hand-crafted & made with <i class="ti-heart text-danger ml-1"></i></span>
+            </div>
+            <div class="d-sm-flex justify-content-center justify-content-sm-between">
+              <span class="text-muted text-center text-sm-left d-block d-sm-inline-block">Distributed by <a href="https://www.themewagon.com/" target="_blank">Themewagon</a></span>
+            </div>
+          </footer> -->
+  <!-- partial -->
+</div>
+<!-- main-panel ends -->
+</div>
+<!-- page-body-wrapper ends -->
+</div>
+<!-- container-scroller -->
+
+<!-- plugins:js -->
+<script src="/itda/vendors/js/vendor.bundle.base.js"></script>
+<!-- endinject -->
+<!-- Plugin js for this page -->
+<script src="/itda/vendors/chart.js/Chart.min.js"></script>
+<script src="/itda/vendors/datatables.net/jquery.dataTables.js"></script>
+<script src="/itda/vendors/datatables.net-bs4/dataTables.bootstrap4.js"></script>
+<script src="/itda/js/dataTables.select.min.js"></script>
+
+<!-- End plugin js for this page -->
+<!-- inject:js -->
+<script src="/itda/js/off-canvas.js"></script>
+<script src="/itda/js/hoverable-collapse.js"></script>
+<script src="/itda/js/template.js"></script>
+<script src="/itda/js/settings.js"></script>
+<script src="/itda/js/todolist.js"></script>
+<!-- endinject -->
+<!-- Custom js for this page-->
+<script src="/itda/js/dashboard.js"></script>
+<script src="/itda/js/Chart.roundedBarCharts.js"></script>
+</script>
+<!-- End custom js for this page-->
 </body>
 </html>
+

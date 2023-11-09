@@ -41,5 +41,7 @@ public class TourDTO {
     private String lon; // 경도
     private String lng; // 실시간 서울 도시 데이터의 경도
 
+    private String endTime; // 방문 끝난 시간
+
 
 }

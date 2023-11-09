@@ -4,7 +4,7 @@ $(document).ready(function () {
         doSubmit(); // 공지사항 등록하기 실행
     })
 
-    if (SS_USER_ID.length < 0) {
+    if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
         alert("로그인 해주세요.");
         location.href = "/user/login";
     }

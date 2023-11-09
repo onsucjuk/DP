@@ -12,6 +12,12 @@ $(document).ready(function () {
 
     })
 
+    $("#btnDelDay").on("click", function () {
+
+        doDelete(dSeq)
+
+    })
+
     $(document).on("click", '[id^="btnPlaceEdit"]', function () {
 
         // 클릭된 버튼의 ID에서 k 값을 추출
@@ -43,6 +49,7 @@ $(document).ready(function () {
         let memo = $(`#plc_${seq} [name="memo"]`).text();
         let lat = $(`#plc_${seq} [name="lat"]`).text();
         let lon = $(`#plc_${seq} [name="lon"]`).text();
+        let poi = $(`#plc_${seq} [name="poi"]`).text();
         let placeSeq = seq;
 
         if (placeNick === "" || memo === "" || placeName === "" || placeAddr === "" || lat === "" || lon === "") {
@@ -56,9 +63,11 @@ $(document).ready(function () {
         placeAddr = encodeURIComponent(placeAddr);
         lat = encodeURIComponent(lat);
         lon = encodeURIComponent(lon);
+        poi = encodeURIComponent(poi);
         placeSeq = encodeURIComponent(placeSeq);
 
-        window.location.href = `/tour/tourPlaceEditForm?placeNick=${placeNick}&memo=${memo}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}&placeSeq=${placeSeq}`;
+
+        window.location.href = `/tour/tourPlaceEditForm?poi=${poi}&placeNick=${placeNick}&memo=${memo}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}&placeSeq=${placeSeq}`;
 
     }
 
@@ -73,8 +82,6 @@ function doDel(pSeq) {
     }
 
     else if(confirm("계획한 여행을 삭제하시겠습니까?")) {
-
-        alert(pSeq);
 
         // Ajax 호출해서 회원가입하기
         $.ajax({
@@ -91,6 +98,37 @@ function doDel(pSeq) {
                 } else {
                     alert(json.msg);
                     location.reload();
+                }
+            }
+        })
+    }
+}
+
+function doDelete(dSeq) {
+
+    if (dSeq === "") {
+        alert("날짜 번호에 문제가 있습니다. 여행지 관리로 돌아갑니다.");
+
+        location.href = "/tour/tourInfo";
+    }
+
+    else if(confirm("계획한 여행을 삭제하시겠습니까?")) {
+
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+            url: "/tour/deleteTourDay",
+            type: "post",
+            datatype: "JSON",
+            data: { "dSeq" : dSeq },
+            success: function (json) {
+
+                if (json.result === 1) {
+                    alert(json.msg);
+                    location.href = "/user/login";
+
+                } else {
+                    alert(json.msg);
+                    location.href = "/tour/tourDayList?nSeq=" + nSeq;
                 }
             }
         })

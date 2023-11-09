@@ -100,7 +100,8 @@
 
 .sticky-top.navbar .navbar-nav .nav-link:hover,
 .sticky-top.navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
+    /*color: var(--primary);*/
+    color: #00B98E;
 }
 
 .navbar .navbar-brand h1 {

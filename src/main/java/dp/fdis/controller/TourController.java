@@ -446,6 +446,56 @@ public class TourController {
 
 
     /**
+     *   여행 정보 삭제
+     **/
+    @ResponseBody
+    @PostMapping(value = "deleteTourDay")
+    public MsgDTO deleteTourDay(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".deleteTourDay Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String tourDay = CmmUtil.nvl(request.getParameter("dSeq")); // 여행 일자
+            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+
+            log.info("tourDay : " + tourDay);
+            log.info("tourSeq : " + tourSeq);
+
+            TourDTO pDTO = new TourDTO();
+            pDTO.setTourDay(tourDay);
+            pDTO.setTourSeq(tourSeq);
+
+
+            // 여행 일자 삭제하기 DB
+
+            tourInfoService.deleteTourDay(pDTO);
+
+            msg = "삭제되었습니다.";
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".deleteTourDay End!");
+
+        }
+
+        return dto;
+    }
+
+
+
+    /**
      * 목적지 찾기 페이지로 이동
      */
     @GetMapping(value = "tourPlaceFind")
@@ -831,6 +881,27 @@ public class TourController {
         }
 
         return dto;
+    }
+
+    /**
+     * ##################################################################################
+     *
+     *                              Itda 서비스 컨트롤러
+     *
+     *  ##################################################################################
+     */
+
+    /**
+     * Itda 페이지 이동
+     */
+
+    @GetMapping(value = "goItda")
+    public String goItda() throws Exception {
+
+        log.info(this.getClass().getName() + ".tourInfo Start!");
+
+        return "thymeleaf/tour/goItda";
+
     }
 
 

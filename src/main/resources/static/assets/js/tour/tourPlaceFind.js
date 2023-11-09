@@ -31,6 +31,11 @@
     $(document).ready(function () {
 
         // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
+        $("#btnback").on("click", function () {
+            history.back();
+
+        })
+
         $(document).on("click", '[id^="btnAddPlace"]', function () {
 
             // 클릭된 버튼의 ID에서 k 값을 추출

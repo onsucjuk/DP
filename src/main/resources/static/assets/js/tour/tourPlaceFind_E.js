@@ -30,6 +30,12 @@
 
     $(document).ready(function () {
 
+        $("#btnEditForm").on("click", function () {
+
+            history.back();
+
+        })
+
         // 버튼 클릭했을때, 발생되는 이벤트 생성함(onclick 이벤트와 동일함)
         $(document).on("click", '[id^="btnEditPlace"]', function () {
 
@@ -186,6 +192,7 @@
                         $("._result_panel_scroll").animate({scrollTop: scrollOffset}, 'slow');
                         $("._result_panel_scroll ._search_item_poi_icon").removeClass("_search_item_poi_icon_blue");
                         $("#poi_"+thisK).find('._search_item_poi_icon').addClass("_search_item_poi_icon_blue");
+
                     });
 
 

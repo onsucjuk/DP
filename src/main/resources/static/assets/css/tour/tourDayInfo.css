@@ -1,5 +1,6 @@
 tr[name="lathidden"],
-tr[name="lonhidden"] {
+tr[name="lonhidden"],
+tr[name="poihidden"]{
     display: none;
 }
 
