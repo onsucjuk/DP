@@ -1,0 +1,150 @@
+._route_item {
+  display: flex;
+  width: 100%;
+  height: 19px;
+  margin-bottom: 15px;
+}
+._route_item_info, ._route_item_type {
+  color: #474b5a;
+  font-family: SUIT;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 19px;
+}
+._route_item_type {
+  cursor: pointer!important;
+  flex-grow: 1;
+  pointer-events: all;
+}
+
+._search_item_single {
+  width: 100%;
+  display: flex;
+}
+
+._search_item {
+
+
+  margin-top: 6px;
+  margin-bottom: 6px;
+  display: flex;
+
+  /* height: 111px; */ /* 2023-09-26 */
+
+  /* background-color: rgba(83, 165, 165, 0.483); */
+
+  /* border-bottom: 1px solid #aeb2c1; */
+}
+._search_item_split{
+  height: 1px;
+  width: 100%;
+  margin-top: 5px;
+  margin-left: 7px;
+  margin-right: 2px;
+  background: #DFE2EB;
+}
+._search_item_poi {
+  width: 48px;
+  height: 48px;
+
+  margin-right: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+._search_item_poi_icon {
+  padding: 0px;
+  /* margin: 5px 8px; */
+  width: 32px;
+  height: 38px;
+  background: url("https://openapi.sk.com/lib/img/_icon/poi_grey.svg") center center / cover no-repeat;
+}
+._search_item_poi_icon_blue {
+  background: url("https://openapi.sk.com/lib/img/_icon/marker_blue.svg") center center / cover no-repeat !important;
+}
+._search_item_poi_icon_red {
+  background: url("https://openapi.sk.com/lib/img/_icon/poi_red.svg") center center / cover no-repeat !important;
+}
+._search_item_poi_icon_text {
+  /* margin-top: 6px;
+  margin-left: 2px; */
+  height: 19px;
+  /* width: 20px; */
+
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 32px;
+  /* GRAY SCALE / GRAY 00 */
+  color: #fafbff;
+  text-align: center;
+}
+
+._search_item_info {
+  flex-grow: 1;
+}
+
+._search_item_info_title {
+  width: 100%;
+  /* height: 19px; */ /* 2023-09-26 */
+
+  margin-top: 11px;
+  margin-bottom: 7px;
+
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 19px;
+  /* GRAY SCALE/GRAY 10 */
+  color: #474b5a;
+}
+._search_item_info_address {
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 21px;
+  /* GRAY SCALE/GRAY 10 */
+  color: #474b5a;
+}
+._search_item_button_panel {
+  display: flex;
+  flex-direction: column;
+}
+._search_item_button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 95px;
+  height: 35px;
+  background: #ffffff;
+  /* PRIMARY/BLUE 00 */
+
+  border: 1px solid #474b5a;
+  border-radius: 2px;
+
+  font-family: "SUIT";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+
+  /* PRIMARY/BLUE 01 */
+
+  color: #474b5a;
+
+  margin-left: 10px;
+  margin-bottom: 5px;
+  
+  cursor: pointer;
+}
+/* 2023-09-26 [s] */
+._search_item_button_panel ._search_item_button:last-child {
+  margin-bottom:0;
+}
+/* 2023-09-26 [e] */
