@@ -46,6 +46,7 @@
         });
 
         function doAddPlace(k) {
+            let poi = $(`#poi_${k} [name="poi"]`).text();
             let placeName = $(`#poi_${k} [name="placeName"]`).text();
             let placeAddr = $(`#poi_${k} [name="placeAddr"]`).text();
             let lat = $(`#poi_${k} [name="lat"]`).text();
@@ -56,12 +57,13 @@
                 return;
             }
 
+            poi = encodeURIComponent(poi);
             placeName = encodeURIComponent(placeName);
             placeAddr = encodeURIComponent(placeAddr);
             lat = encodeURIComponent(lat);
             lon = encodeURIComponent(lon);
 
-            window.location.href = `/tour/tourPlaceRegForm?placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}`;
+            window.location.href = `/tour/tourPlaceRegForm?poi=${poi}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}`;
 
         }
 
@@ -115,6 +117,8 @@
 
                 for(var k in resultpoisData){
                     var name = resultpoisData[k].name;
+
+                    var poi = Number(resultpoisData[k].id);
 
                     var lat = Number(resultpoisData[k].noorLat);
                     var lon = Number(resultpoisData[k].noorLon);
@@ -186,6 +190,7 @@
                                     </div>
                                 </div>
                                     <div class="_search_item_info">
+                                        <p class="_search_item_info_address" name ="poi">${poi}</p>
                                         <p class="_search_item_info_title" name = "placeName" >${name}</p>
                                         <p class="_search_item_info_address" name ="placeAddr">${fullAddressRoad}</p>
                                         <p class="_search_item_info_address" name = "lat">${lat}</p>

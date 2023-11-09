@@ -6,6 +6,12 @@ $(document).ready(function () {
 
     })
 
+    $("#btnDayList").on("click", function () {
+
+        location.href = "/tour/tourDayList?nSeq=" + nSeq;
+
+    })
+
     $(document).on("click", '[id^="btnPlaceEdit"]', function () {
 
         // 클릭된 버튼의 ID에서 k 값을 추출

@@ -22,7 +22,7 @@
 <body>
     <form id = "f" name = "f">
         <div class="container">
-                <table th:each="dto, iterStat : ${rList}"  th:if="${dto.tourSeq} != '' " th:onclick="doDetail([[${dto.tourDay}]])">
+                <table th:each="dto, iterStat : ${rList}" th:onclick="doDetail([[${dto.tourDay}]])">
                     <tr>
                         <th th:text="'Day' + ${iterStat.index + 1}">
                         </th>

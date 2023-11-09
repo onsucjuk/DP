@@ -14,21 +14,24 @@ function doAdd() {
 
     } else {
 
-        (confirm("계획한 여행 일수를 추가하시겠습니까?"))
+        if (confirm("계획한 여행 일수를 추가하시겠습니까?")) {
 
-        // Ajax 호출해서 글 삭제하기
-        $.ajax({
-                url: "/tour/addTourDay",
-                type: "post", // 전송방식은 Post
-                dataType: "JSON", // 전송 결과는 JSON으로 받기
-                data: {"nSeq": nSeq}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
-                success:
-                    function (json) {
-                        alert(json.msg); // 메시지 띄우기
-                        location.reload();//
-                    }
-            }
-        )
+            // Ajax 호출해서 글 삭제하기
+            $.ajax({
+                    url: "/tour/addTourDay",
+                    type: "post", // 전송방식은 Post
+                    dataType: "JSON", // 전송 결과는 JSON으로 받기
+                    data: {"nSeq": nSeq}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
+                    success:
+                        function (json) {
+                            alert(json.msg); // 메시지 띄우기
+                            location.reload();//
+                        }
+                }
+            )
+        } else {
+            location.reload();
+        }
 
     }
 }
@@ -39,7 +42,7 @@ function doDelete() {
         location.href = "/user/login";
     } else {
 
-        (confirm("계획한 여행을 삭제하시겠습니까?"))
+        if (confirm("계획한 여행을 삭제하시겠습니까?"))
 
             {
                 // Ajax 호출해서 글 삭제하기
@@ -55,7 +58,10 @@ function doDelete() {
                             }
                     }
                 )
-            }
+            } else {
+
+                    location.reload();
+        }
         }
 }
 

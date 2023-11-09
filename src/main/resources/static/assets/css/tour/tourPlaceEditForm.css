@@ -1,0 +1,5 @@
+div[name="poidiv"],
+div[name="latdiv"],
+div[name="londiv"]{
+    display: none;
+}

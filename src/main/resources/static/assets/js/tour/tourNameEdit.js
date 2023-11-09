@@ -4,6 +4,11 @@ $(document).ready(function () {
         doEdit(); // 공지사항 등록하기 실행
     })
 
+    $("#btnTourName").on("click", function () {
+        tourNameExists(f)
+
+    })
+
     if (SS_USER_ID.length < 0) {
         alert("로그인 해주세요.");
         location.href = "/user/login";
@@ -27,6 +32,34 @@ function calBytes(str) {
     return tcount;
 }
 
+
+function tourNameExists(f) {
+
+    if (f.tourName.value === ""){
+        alert("여행명을 입력하세요.");
+        f.tourName.focus();
+        return;
+    }
+
+    $.ajax({
+            url: "/tour/getTourNameExists",
+            type: "post",
+            dataType: "JSON",
+            data: $("#f").serialize(),
+            success: function (json) {
+                if(json.existsYn === "Y") {
+                    alert("동일한 여행명이 존재합니다.");
+                    tourNameCheck = "Y";
+                    f.tourName.focus();
+                } else {
+                    alert("작성 가능한 여행명입니다.");
+                    tourNameCheck = "N";
+                }
+            }
+        }
+    )
+}
+
 function doEdit() {
 
     let f = document.getElementById("f"); // form 태그
@@ -38,6 +71,11 @@ function doEdit() {
     }
     if (calBytes(f.tourName.value) > 240) {
         alert("최대 240Bytes까지 입력 가능합니다.");
+        f.tourName.focus();
+        return;
+    }
+    if (tourNameCheck != "N") {
+        alert("여행명 중복 체크 및 중복되지 않은 여행명을 등록 바랍니다.");
         f.tourName.focus();
         return;
     }

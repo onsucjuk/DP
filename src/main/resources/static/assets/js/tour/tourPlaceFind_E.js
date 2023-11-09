@@ -48,6 +48,7 @@
         function doEditPlace(k) {
 
             let placeNick = SS_PLACE_NICK;
+            let poi = $(`#poi_${k} [name="poi"]`).text();
             let placeName = $(`#poi_${k} [name="placeName"]`).text();
             let placeAddr = $(`#poi_${k} [name="placeAddr"]`).text();
             let lat = $(`#poi_${k} [name="lat"]`).text();
@@ -60,6 +61,7 @@
                 return;
             }
 
+            poi = encodeURIComponent(poi);
             placeNick = encodeURIComponent(placeNick);
             placeName = encodeURIComponent(placeName);
             placeAddr = encodeURIComponent(placeAddr);
@@ -68,7 +70,7 @@
             memo = encodeURIComponent(memo);
             placeSeq = encodeURIComponent(placeSeq);
 
-            window.location.href = `/tour/tourPlaceEditForm?placeNick=${placeNick}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}&memo=${memo}&placeSeq=${placeSeq}`;
+            window.location.href = `/tour/tourPlaceEditForm?poi=${poi}&placeNick=${placeNick}&placeName=${placeName}&placeAddr=${placeAddr}&lat=${lat}&lon=${lon}&memo=${memo}&placeSeq=${placeSeq}`;
 
         }
 
@@ -122,6 +124,8 @@
 
                 for(var k in resultpoisData){
                     var name = resultpoisData[k].name;
+
+                    var poi = Number(resultpoisData[k].id);
 
                     var lat = Number(resultpoisData[k].noorLat);
                     var lon = Number(resultpoisData[k].noorLon);
@@ -193,6 +197,7 @@
                                     </div>
                                 </div>
                                     <div class="_search_item_info">
+                                        <p class="_search_item_info_address" name ="poi">${poi}</p>
                                         <p class="_search_item_info_title" name = "placeName" >${name}</p>
                                         <p class="_search_item_info_address" name ="placeAddr">${fullAddressRoad}</p>
                                         <p class="_search_item_info_address" name = "lat">${lat}</p>

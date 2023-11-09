@@ -26,3 +26,9 @@
     position: relative;
     left : 25%;
 }
+
+p[name="poi"],
+p[name="lat"],
+p[name="lon"]{
+    display: none;
+}

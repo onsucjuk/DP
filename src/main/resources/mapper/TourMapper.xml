@@ -155,7 +155,8 @@
 
     <select id="getTourDayList" parameterType = "TourDTO" resultType="TourDTO">
         SELECT A.TOUR_SEQ AS TOUR_SEQ, A.TOUR_DAY AS TOUR_DAY, A.DAY_START AS DAY_START, COUNT(CASE WHEN B.TOUR_YN = 'Y' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_Y, COUNT(CASE WHEN B.TOUR_YN = 'N' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_N
-        FROM TOUR_DAY A, TOUR_PLACE B
+        FROM TOUR_DAY A
+        LEFT JOIN TOUR_PLACE B ON A.TOUR_SEQ = B.TOUR_SEQ AND A.TOUR_DAY = B.TOUR_DAY
         WHERE A.TOUR_SEQ = #{tourSeq}
         GROUP BY TOUR_SEQ, TOUR_DAY
         ORDER BY TOUR_DAY
@@ -198,11 +199,11 @@
 
     <insert id="insertTourPlace" parameterType="TourDTO">
         INSERT INTO TOUR_PLACE (
-            TOUR_SEQ, TOUR_DAY, PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, LAT, LON
+            TOUR_SEQ, TOUR_DAY, PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, LAT, LON, POI
         )
         VALUES (
                    #{tourSeq}, #{tourDay}, (SELECT COALESCE(MAX(A.PLACE_SEQ), 0) FROM TOUR_PLACE A WHERE A.TOUR_SEQ = #{tourSeq} AND A.TOUR_DAY = #{tourDay}) + 1,
-                   #{placeNick},#{placeName},#{placeAddr}, #{memo}, #{lat}, #{lon}
+                   #{placeNick},#{placeName},#{placeAddr}, #{memo}, #{lat}, #{lon}, #{poi}
                )
     </insert>
 
@@ -215,7 +216,8 @@
             PLACE_ADDR = #{placeAddr},
             MEMO = #{memo},
             LAT = #{lat},
-            LON = #{lon}
+            LON = #{lon},
+            POI = #{poi}
         WHERE
             TOUR_SEQ = #{tourSeq}
           AND

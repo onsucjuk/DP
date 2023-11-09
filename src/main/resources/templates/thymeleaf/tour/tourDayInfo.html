@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="/assets/css/tour/tourDayInfo.css" />
     <script src="/js/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script th:inline="javascript">
+        const nSeq = [[${session.SS_TOUR_SEQ}]];
+    </script>
 </head>
 <body>
 
@@ -34,7 +37,7 @@
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
                 <div class="w-full overflow-x-auto">
 
-                    <table th:if="${rList}" th:each="dto, iterStat : ${rList}" class="w-full whitespace-no-wrap" onclick="toggleTable(this)" th:id="'plc_'+ ${dto.placeSeq}">
+                    <table th:if="${session.SS_EXISTS_YN} == 'Y'" th:each="dto, iterStat : ${rList}" class="w-full whitespace-no-wrap" onclick="toggleTable(this)" th:id="'plc_'+ ${dto.placeSeq}">
                         <thead class="table-header">
                             <tr
                                     class="text-sm font-semibold tracking-wide text-left text-white uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800"
@@ -112,6 +115,9 @@
                                 </tr>
                         </tbody>
                     </table>
+                    <div th:unless="${session.SS_EXISTS_YN} == 'Y'" class="px-4 py-3 text-lg font-semibold text-gray-600" >
+                        <b th:text="'목적지를 등록해주세요.'"></b>
+                    </div>
                 </div>
             </div>
             <div class="flex space-x-1">
@@ -124,6 +130,18 @@
                         <div class="w-full">
                             <span class="px-3 py-3 text-sm font-semibold">목적지 등록</span>
                             <span class="ml-2" aria-hidden="true">+</span>
+                        </div>
+                    </button>
+                </div>
+                <div class="px-4 my-6">
+                    <button
+                            id="btnDayList"
+                            class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                            type="button"
+                    >
+                        <div class="w-full">
+                            <span class="px-3 py-3 text-sm font-semibold">여행일자관리</span>
+                            <span class="ml-2" aria-hidden="true">≡</span>
                         </div>
                     </button>
                 </div>

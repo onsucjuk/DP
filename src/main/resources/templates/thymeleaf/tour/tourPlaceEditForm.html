@@ -13,6 +13,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="/assets/js/init-alpine.js"></script>
   <script src="/assets/js/tour/tourPlaceEditForm.js"></script>
+  <link rel="stylesheet" href="/assets/css/tour/tourPlaceEditForm.css" />
   <script>
     let SS_USER_ID = "[[${session.SS_USER_ID}]]";
     let nSeq = "[[${session.SS_TOUR_SEQ}]]";
@@ -55,13 +56,13 @@
             <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="placeAddr" placeholder="주소를 입력해주세요." th:value="${pDTO.placeAddr}">
           </label>
         </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="latdiv">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">위도</span>
             <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lat" placeholder="위도를 입력해주세요." th:value="${pDTO.lat}">
           </label>
         </div>
-        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="londiv">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">경도</span>
             <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="lon" placeholder="경도를 입력해주세요." th:value="${pDTO.lon}">
@@ -71,6 +72,12 @@
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">메모</span>
             <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="memo" placeholder="메모를 입력해주세요." th:value="${pDTO.memo}">
+          </label>
+        </div>
+        <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800" name="poidiv">
+          <label class="block text-sm">
+            <span class="text-gray-700 dark:text-gray-400">POI</span>
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="poi" placeholder="메모를 입력해주세요." th:value="${pDTO.poi}">
           </label>
         </div>
 
@@ -97,6 +104,18 @@
               <div class="w-full">
                 <span class="px-4 py-3 text-sm font-semibold" >다시 작성</span>
                 <span class="ml-2" aria-hidden="true">@</span>
+              </div>
+            </button>
+          </div>
+          <div class="px-6 my-6">
+            <button
+                    id="btnDayInfo"
+                    class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                    type="button"
+            >
+              <div class="w-full">
+                <span class="px-4 py-3 text-sm font-semibold">목적지 목록</span>
+                <span class="ml-2" aria-hidden="true">≡</span>
               </div>
             </button>
           </div>

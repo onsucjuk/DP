@@ -46,6 +46,11 @@ public class TourController {
         List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourList(pDTO))
                 .orElseGet(ArrayList::new);
 
+        if (rList.isEmpty()) {
+            session.setAttribute("SS_EXISTS_YN", "N");
+        } else {
+            session.setAttribute("SS_EXISTS_YN", "Y");
+        }
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
@@ -426,6 +431,12 @@ public class TourController {
         List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourPlace(pDTO))
                 .orElseGet(ArrayList::new);
 
+        if(rList.isEmpty()){
+            session.setAttribute("SS_EXISTS_YN", "N");
+        } else {
+            session.setAttribute("SS_EXISTS_YN", "Y");
+        }
+
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("rList", rList);
 
@@ -466,11 +477,13 @@ public class TourController {
 
         log.info(this.getClass().getName() + ".tourPlaceRegForm Start!");
 
+        String poi = CmmUtil.nvl(request.getParameter("poi"));
         String placeName = CmmUtil.nvl(request.getParameter("placeName"));
         String placeAddr = CmmUtil.nvl(request.getParameter("placeAddr"));
         String lat = CmmUtil.nvl(request.getParameter("lat"));
         String lon = CmmUtil.nvl(request.getParameter("lon"));
 
+        log.info("poi : " + poi);
         log.info("placeName : " + placeName);
         log.info("placeAddr : " + placeAddr);
         log.info("lat : " + lat);
@@ -483,6 +496,7 @@ public class TourController {
 
 
 
+        pDTO.setPoi(poi);
         pDTO.setPlaceName(placeName);
         pDTO.setPlaceAddr(placeAddr);
         pDTO.setLat(lat);
@@ -579,6 +593,7 @@ public class TourController {
             String memo = CmmUtil.nvl(request.getParameter("memo"));
             String lat = CmmUtil.nvl(request.getParameter("lat"));
             String lon = CmmUtil.nvl(request.getParameter("lon"));
+            String poi = CmmUtil.nvl(request.getParameter("poi"));
 
             log.info("session tourSeq : " + tourSeq);
             log.info("session daySeq : " + daySeq);
@@ -588,6 +603,7 @@ public class TourController {
             log.info("memo : " + memo);
             log.info("lat : " + lat);
             log.info("lon : " + lon);
+            log.info("poi : " + poi);
 
             TourDTO pDTO = new TourDTO();
 
@@ -599,6 +615,7 @@ public class TourController {
             pDTO.setMemo(memo);
             pDTO.setLat(lat);
             pDTO.setLon(lon);
+            pDTO.setPoi(poi);
 
             if(userId.length() > 0) {
                 tourInfoService.insertTourPlace(pDTO);
@@ -640,6 +657,7 @@ public class TourController {
         String lon = CmmUtil.nvl(request.getParameter("lon"));
         String memo = CmmUtil.nvl(request.getParameter("memo"));
         String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+        String poi = CmmUtil.nvl(request.getParameter("poi"));
 
         log.info("placeNick : " + placeNick);
         log.info("placeName : " + placeName);
@@ -648,6 +666,7 @@ public class TourController {
         log.info("lon : " + lon);
         log.info("memo : " + memo);
         log.info("placeSeq : " + placeSeq);
+        log.info("poi : " + poi);
 
         // 장소 찾기 들어가서 정보 가져왔을 때 placeSeq, nick, memo는 넘겨받지 못하므로 임시로 세션에 저장함
 
@@ -667,6 +686,7 @@ public class TourController {
         pDTO.setLat(lat);
         pDTO.setLon(lon);
         pDTO.setMemo(memo);
+        pDTO.setPoi(poi);
 
         // 조회된 리스트 결과값 넣어주기
         model.addAttribute("pDTO", pDTO);
@@ -699,6 +719,7 @@ public class TourController {
             String lat = CmmUtil.nvl(request.getParameter("lat"));
             String lon = CmmUtil.nvl(request.getParameter("lon"));
             String memo = CmmUtil.nvl(request.getParameter("memo"));
+            String poi = CmmUtil.nvl(request.getParameter("poi"));
 
             log.info("tourSeq : " + tourSeq);
             log.info("tourDay : " + tourDay);
@@ -709,6 +730,7 @@ public class TourController {
             log.info("lat : " + lat);
             log.info("lon : " + lon);
             log.info("memo : " + memo);
+            log.info("poi : " + poi);
 
             TourDTO pDTO = new TourDTO();
 
@@ -721,6 +743,7 @@ public class TourController {
             pDTO.setLat(lat);
             pDTO.setLon(lon);
             pDTO.setMemo(memo);
+            pDTO.setPoi(poi);
 
             if (tourSeq.length() > 0 && tourDay.length() > 0 && placeSeq.length() > 0) {
 
@@ -764,7 +787,7 @@ public class TourController {
 
         try {
 
-            String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+            String placeSeq = CmmUtil.nvl(request.getParameter("pSeq"));
             String tourDay = CmmUtil.nvl((String)session.getAttribute("SS_DAY_SEQ"));
             String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
 

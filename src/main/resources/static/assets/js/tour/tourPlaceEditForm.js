@@ -9,6 +9,13 @@ $(document).ready(function () {
 
     $("#btnPlaceEdit").on("click", function () {
         doPlaceEdit(f)
+
+    })
+
+    $("#btnDayInfo").on("click", function () {
+
+        location.href = "/tour/tourDayInfo?nSeq=" + nDay;
+
     })
 
     function doPlaceEdit(f) {
@@ -32,14 +39,20 @@ $(document).ready(function () {
         }
 
         if (f.lat.value === "") {
-            alert("위도를 입력하세요.");
-            f.lat.focus();
+            alert("목적지를 찾기로 추가하세요.");
+            f.placeName.focus();
             return;
         }
 
         if (f.lon.value === "") {
-            alert("경도를 입력하세요.");
-            f.lon.focus();
+            alert("목적지를 찾기로 추가하세요.");
+            f.placeName.focus();
+            return;
+        }
+
+        if (f.poi.value === "") {
+            alert("목적지를 찾기로 추가하세요.");
+            f.placeName.focus();
             return;
         }
 

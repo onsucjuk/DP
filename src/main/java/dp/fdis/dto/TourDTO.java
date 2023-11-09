@@ -33,7 +33,7 @@ public class TourDTO {
     private String placeName; // 목적지명
     private String placeAddr; // 목적지 주소
     private String memo; // 메모
-
+    private String poi; // 메모
     private String tourYn; // Y or N 여부 [default N]
     private int tourY; // Y의 갯수
     private int tourN; // N의 갯수
