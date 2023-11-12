@@ -156,52 +156,7 @@ public class TourController {
         return dto;
     }
 
-    /**
-     *   여행 시작일 수정
-     **/
-    @ResponseBody
-    @PostMapping(value = "updateTourStart")
-    public MsgDTO updateTourStart(HttpServletRequest request, HttpSession session) {
-
-        log.info(this.getClass().getName() + ".updateTourStart Start!");
-
-        String msg = ""; // 메시지 내용
-        MsgDTO dto = null; // 결과 메시지 구조
-
-        try {
-
-            String nSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
-            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
-
-            log.info("nSeq : " + nSeq);
-            log.info("userId : " + userId);
-
-            TourDTO pDTO = new TourDTO();
-            pDTO.setTourSeq(nSeq);
-            pDTO.setUserId(userId);
-
-            tourInfoService.updateTourStart(pDTO);
-
-            msg = "여행 시작일이 수정되었습니다.";
-
-        } catch (Exception e) {
-            msg = "실패하였습니다. : " + e.getMessage();
-            log.info(e.toString());
-            e.printStackTrace();
-
-        } finally {
-            // 결과 메시지 전달하기
-            dto = new MsgDTO();
-            dto.setMsg(msg);
-            
-            log.info(this.getClass().getName() + ".updateTourStart End!");
-            
-        }
-
-        return dto;
-    }
-
-    /**
+        /**
      *   여행 종료일 수정
      **/
     @ResponseBody
@@ -896,12 +851,174 @@ public class TourController {
      */
 
     @GetMapping(value = "goItda")
-    public String goItda() throws Exception {
+    public String goItda(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
 
-        log.info(this.getClass().getName() + ".tourInfo Start!");
+        log.info(this.getClass().getName() + ".goItda Start!");
+
+        String tourDay = CmmUtil.nvl(request.getParameter("nSeq"));
+        String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+        String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+
+        log.info("tourDay : " + tourDay);
+        log.info("tourSeq : " + tourSeq);
+        log.info("userId : " + userId);
+
+        TourDTO pDTO = new TourDTO();
+
+        pDTO.setTourDay(tourDay);
+        pDTO.setTourSeq(tourSeq);
+        pDTO.setUserId(userId);
+
+        List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourPlace(pDTO))
+                .orElseGet(ArrayList::new);
+
+        if(rList.isEmpty()){
+            session.setAttribute("SS_EXISTS_YN", "N");
+        } else {
+            session.setAttribute("SS_EXISTS_YN", "Y");
+        }
+
+        List<TourDTO> dList = Optional.ofNullable(tourInfoService.getTourDayList(pDTO))
+                .orElseGet(ArrayList::new);
+
+        session.setAttribute("SS_DAY_SEQ", tourDay);
+
+                log.info("rList 존재 여부 : " + (String)session.getAttribute("SS_EXISTS_YN"));
+
+        if(dList.isEmpty()) {
+            log.info("dList Empty");
+        }
+
+        TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourInfo(pDTO))
+                .orElseGet(TourDTO::new);
+
+        TourDTO dDTO = Optional.ofNullable(tourInfoService.getTourDayInfo(pDTO))
+                .orElseGet(TourDTO::new);
+
+
+            model.addAttribute("rList", rList);
+            model.addAttribute("dList", dList);
+            model.addAttribute("rDTO", rDTO);
+            model.addAttribute("dDTO", dDTO);
 
         return "thymeleaf/tour/goItda";
 
+    }
+
+    /**
+     *   여행 시작
+     **/
+    @ResponseBody
+    @PostMapping(value = "updateTourStart")
+    public MsgDTO updateTourStart(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".updateTourStart Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
+            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+
+            log.info("tourSeq : " + tourSeq);
+            log.info("userId : " + userId);
+            log.info("tourDay : " + tourDay);
+
+            TourDTO pDTO = new TourDTO();
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setUserId(userId);
+            pDTO.setTourDay(tourDay);
+
+            if (tourDay.equals("1")) {
+
+                tourInfoService.updateTourStart(pDTO);
+                tourInfoService.updateTourDaySt(pDTO);
+
+                msg = "여행을 시작합니다.";
+
+            } else {
+
+                tourInfoService.updateTourDaySt(pDTO);
+                msg = "여행을 시작합니다.";
+
+            }
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".updateTourStart End!");
+
+        }
+
+        return dto;
+    }
+
+    /**
+     *   여행 시작
+     **/
+    @ResponseBody
+    @PostMapping(value = "resetTourStart")
+    public MsgDTO resetTourStart(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".resetTourStart Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
+            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+
+            log.info("tourSeq : " + tourSeq);
+            log.info("userId : " + userId);
+            log.info("tourDay : " + tourDay);
+
+            TourDTO pDTO = new TourDTO();
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setUserId(userId);
+            pDTO.setTourDay(tourDay);
+
+            if (tourDay.equals("1")) {
+
+                tourInfoService.resetTourStart(pDTO);
+                tourInfoService.resetTourDaySt(pDTO);
+
+                msg = "여행이 취소되었습니다.";
+
+            } else {
+
+                tourInfoService.resetTourDaySt(pDTO);
+                msg = "여행을 취소되었습니다.";
+
+            }
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".resetTourStart End!");
+
+        }
+
+        return dto;
     }
 
 

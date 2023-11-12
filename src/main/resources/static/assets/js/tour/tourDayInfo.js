@@ -18,6 +18,12 @@ $(document).ready(function () {
 
     })
 
+    $("#btnGoItda").on("click", function () {
+
+        location.href = "/tour/goItda?dSeq=" + dSeq;
+
+    })
+
     $(document).on("click", '[id^="btnPlaceEdit"]', function () {
 
         // 클릭된 버튼의 ID에서 k 값을 추출

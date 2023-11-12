@@ -149,4 +149,9 @@ $(document).ready(function () {
         location.href = "/tour/tourInfoReg";
     })
 
+    if(SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
+        alert("로그인 해주세요.");
+        location.href = "/user/login";
+    }
+
 })

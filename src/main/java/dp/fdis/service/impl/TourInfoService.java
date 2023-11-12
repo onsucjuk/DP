@@ -42,6 +42,7 @@ public class TourInfoService implements ITourInfoService {
         return rDTO;
     }
 
+    @Transactional
     @Override
     public TourDTO getTourSeq(TourDTO pDTO) throws Exception {
 
@@ -113,6 +114,18 @@ public class TourInfoService implements ITourInfoService {
 
     @Transactional
     @Override
+    public void resetTourStart(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".resetTourStart start!");
+
+        tourMapper.resetTourStart(pDTO);
+
+        log.info(this.getClass().getName() + ".resetTourStart End!");
+
+    }
+
+    @Transactional
+    @Override
     public void updateTourEnd(TourDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".updateTourEnd start!");
@@ -147,7 +160,6 @@ public class TourInfoService implements ITourInfoService {
 
     }
 
-
     /**
      *  여기서부터 TOUR_DAY SERVICE
      */
@@ -157,26 +169,6 @@ public class TourInfoService implements ITourInfoService {
         log.info(this.getClass().getName() + ".getTourYn start!");
 
         return tourMapper.getTourYn(pDTO);
-    }
-
-    @Transactional
-    @Override
-    public List<TourDTO> getTourDay(TourDTO pDTO) throws Exception {
-
-        log.info(this.getClass().getName() + ".getTourDay start!");
-
-        return tourMapper.getTourDay(pDTO);
-    }
-
-
-
-    @Transactional
-    @Override
-    public TourDTO getTourDayInfo(TourDTO pDTO) throws Exception {
-
-        log.info(this.getClass().getName() + ".getTourDayInfo start!");
-
-        return tourMapper.getTourDayInfo(pDTO);
     }
 
     @Transactional
@@ -229,6 +221,18 @@ public class TourInfoService implements ITourInfoService {
 
     @Transactional
     @Override
+    public void resetTourDaySt(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".resetTourDaySt start!");
+
+        tourMapper.resetTourDaySt(pDTO);
+
+        log.info(this.getClass().getName() + ".resetTourDaySt End!");
+
+    }
+
+    @Transactional
+    @Override
     public void deleteTourDayAll(TourDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".deleteTourDayAll start!");
@@ -262,12 +266,22 @@ public class TourInfoService implements ITourInfoService {
         return tourMapper.getTourDayList(pDTO);
     }
 
+    @Transactional
+    @Override
+    public TourDTO getTourDayInfo(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourDayInfo start!");
+
+
+        return tourMapper.getTourDayInfo(pDTO);
+    }
 
 
     /**
      *  여기서부터 TOUR_PLACE Service
      */
 
+    @Transactional
     @Override
     public TourDTO getTourPlaceOne(TourDTO pDTO) throws Exception {
 
@@ -276,6 +290,7 @@ public class TourInfoService implements ITourInfoService {
         return tourMapper.getTourPlaceOne(pDTO);
     }
 
+    @Transactional
     @Override
     public List<TourDTO> getTourPlace(TourDTO pDTO) throws Exception {
 
@@ -298,6 +313,7 @@ public class TourInfoService implements ITourInfoService {
 
     }
 
+    @Transactional
     @Override
     public void deleteTourPlaceOne(TourDTO pDTO) throws Exception {
 

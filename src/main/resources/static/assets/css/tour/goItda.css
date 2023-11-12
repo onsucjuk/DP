@@ -1,0 +1,11 @@
+td[name="lathidden"],
+td[name="lonhidden"],
+td[name="poihidden"],
+table[name="nowTable"],
+
+th[name="lathiddenTh"],
+th[name="lonhiddenTh"],
+th[name="poihiddenTh"]
+{
+    display: none;
+}

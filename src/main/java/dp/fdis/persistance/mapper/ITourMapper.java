@@ -27,6 +27,8 @@ public interface ITourMapper {
     //여행 시작
     void updateTourStart(TourDTO pDTO) throws Exception;
 
+    void resetTourStart(TourDTO pDTO) throws Exception;
+
     //여행 종료
     void updateTourEnd(TourDTO pDTO) throws Exception;
 
@@ -40,14 +42,12 @@ public interface ITourMapper {
      *  여기서부터 TourDay Mapper
      */
 
-    // 여행 일자 리스트
 
-    // 여행 일수, 진행도
-    List<TourDTO> getTourDay(TourDTO pDTO) throws Exception;
 
     // 진행도
     List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
 
+    // 여행 일자 리스트
     List<TourDTO> getTourDayList(TourDTO pDTO) throws Exception;
 
     //여행 일자 상세보기
@@ -63,6 +63,8 @@ public interface ITourMapper {
 
     // 여행 시작일자 등록
     void updateTourDaySt(TourDTO pDTO) throws Exception;
+
+    void resetTourDaySt(TourDTO pDTO) throws Exception;
 
     void deleteTourDayAll(TourDTO pDTO) throws Exception;
 

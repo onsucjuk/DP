@@ -1,11 +1,12 @@
 
 
 function doDetail(seq) {
+    /*location.href = "/tour/tourDayInfo?nSeq="*/
     location.href = "/tour/tourDayInfo?nSeq=" + seq;
 }
 
 function doAdd() {
-    if (SS_USER_ID === "") {
+    if (SS_USER_ID == null || !(SS_USER_ID.length > 0) ) {
          {
              alert("로그인 하시길 바랍니다.");
              location.href = "/user/login";
