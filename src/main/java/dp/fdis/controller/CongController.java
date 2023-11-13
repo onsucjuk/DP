@@ -28,6 +28,12 @@ public class CongController {
             String poi = CmmUtil.nvl(request.getParameter("poi"));
             String lat = CmmUtil.nvl(request.getParameter("lat"));
             String lon = CmmUtil.nvl(request.getParameter("lon"));
+            String index = CmmUtil.nvl(request.getParameter("index"));
+
+            log.info("poi : " + poi);
+            log.info("lat : " + lat);
+            log.info("lon : " + lon);
+            log.info("index : " + index);
 
             CongDTO pDTO = new CongDTO();
 
@@ -36,6 +42,8 @@ public class CongController {
             pDTO.setLng(lon);
 
             CongDTO rDTO = congService.getCong(pDTO);
+
+            rDTO.setIndex(index);
 
             if (rDTO == null) {
                 rDTO = new CongDTO();

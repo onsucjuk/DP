@@ -14263,6 +14263,22 @@ a.badge-warning:focus, .preview-list .preview-item .preview-thumbnail a.badge.ba
   box-shadow: 0 0 0 0.2rem rgba(255, 193, 0, 0.5);
 }
 
+
+.badge-realWarning, .preview-list .preview-item .preview-thumbnail .badge.badge-busy {
+    color: #212529;
+    background-color: #f07807;
+}
+
+a.badge-realWarning:hover, .preview-list .preview-item .preview-thumbnail a.badge.badge-busy:hover, a.badge-warning:focus, .preview-list .preview-item .preview-thumbnail a.badge.badge-busy:focus {
+    color: #212529;
+    background-color: #cc9a00;
+}
+
+a.badge-realWarning:focus, .preview-list .preview-item .preview-thumbnail a.badge.badge-busy:focus, a.badge-warning.focus, .preview-list .preview-item .preview-thumbnail a.focus.badge.badge-busy {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(255, 193, 0, 0.5);
+}
+
 .badge-danger {
   color: #fff;
   background-color: #FF4747;

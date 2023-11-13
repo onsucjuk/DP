@@ -1,11 +1,13 @@
 td[name="lathidden"],
 td[name="lonhidden"],
 td[name="poihidden"],
+td[name="conghidden"],
 table[name="nowTable"],
 
 th[name="lathiddenTh"],
 th[name="lonhiddenTh"],
-th[name="poihiddenTh"]
+th[name="poihiddenTh"],
+th[name="conghiddenTh"]
 {
     display: none;
 }

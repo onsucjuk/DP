@@ -149,7 +149,7 @@
     <update id="resetTourDaySt" parameterType="TourDTO">
         UPDATE TOUR_DAY
         SET
-            DAY_TIME = null
+            DAY_START = null
         WHERE
             TOUR_SEQ = #{tourSeq}
           AND

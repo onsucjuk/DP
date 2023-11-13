@@ -855,7 +855,7 @@ public class TourController {
 
         log.info(this.getClass().getName() + ".goItda Start!");
 
-        String tourDay = CmmUtil.nvl(request.getParameter("nSeq"));
+        String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
         String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
         String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
 

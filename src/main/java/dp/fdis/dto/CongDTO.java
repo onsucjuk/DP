@@ -15,5 +15,6 @@ public class CongDTO {
     double congestion; // 혼잡도
     int congestionLevel; // 혼잡도 레벨 1: 여유, 2: 보통, 3: 혼잡, 4: 매우 혼잡
     String message; // 성공 여부
+    String index; // 번호
 
 }
