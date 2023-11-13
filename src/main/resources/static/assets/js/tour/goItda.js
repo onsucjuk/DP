@@ -22,7 +22,7 @@ $(document).ready(function () {
 
     $("#btnViewRoute").on("click", function () {
 
-            viewRoute()
+        viewRoute()
 
     })
 
@@ -430,52 +430,135 @@ function drawData(data) {
     }
 }
 
-/*
+function doEdit(seq) {
 
-function getRouteInfoForIndex(index) {
-    let nowLat = $("#nowLat").text();
-    let nowLon = $("#nowLon").text();
+    console.log("doEdit start! seq : " + seq)
 
-    let lathidden = $("#lathidden" + index).text();
-    let lonhidden = $("#lonhidden" + index).text();
+    let placeNick = encodeURIComponent($("#placeNick" + seq).text());
+    let placeName = encodeURIComponent($("#placename" + seq).text());
+    let placeAddr = encodeURIComponent($("#addrhidden" + seq).text());
+    let lat = encodeURIComponent($("#lathidden" + seq).text());
+    let lon = encodeURIComponent($("#lonhidden" + seq).text());
+    let memo = encodeURIComponent($("#memohidden" + seq).text());
+    let poi = encodeURIComponent($("#poihidden" + seq).text());
 
-    console.log(nowLon, nowLat, lathidden, lonhidden);
+    console.log("placeNick : " + placeNick)
+    console.log("placeName : " + placeName)
+    console.log("placeAddr : " + placeAddr)
+    console.log("lat : " + lat)
+    console.log("lon : " + lon)
+    console.log("memo : " + memo)
+    console.log("poi : " + poi)
 
-    $.ajax({
-        url: "/route/getRouteInfo",
-        type: "POST",
-        datatype: "JSON",
-        data: {
-            "sLat": nowLat,
-            "sLon": nowLon,
-            "eLat": lathidden,
-            "eLon": lonhidden
-        },
-        success: function (json) {
-            if (json.isEmpty) {
-                alert("JSON 값을 받아오지 못했습니다.");
-            } else {
-                let totalDistance = json.totalDistance;
-                let totalTime = json.totalTime;
+    // 새 창에서 tourPlaceEditForm 열기
+    window.open("/tour/tourPlaceEditForm?placeSeq=" + seq + "&placeNick=" + placeNick + "&placeName=" + placeName + "&placeAddr=" + placeAddr + "&lat=" + lat + "&lon=" + lon + "&memo=" + memo + "&poi=" + poi, "_blank");
 
-                $(`#plc_${index} [name="totalDistance"]`).text(totalDistance);
-                $(`#plc_${index} [name="totalTime"]`).text(totalTime);
+}
+
+function doDelete(seq) {
+
+    if (seq === "") {
+        alert("장소 번호에 문제가 있습니다. 정보를 확인해주세요.");
+    }
+
+    else if(confirm("여행 목적지를 삭제하시겠습니까?")) {
+
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+            url: "/tour/deleteTourPlaceOne",
+            type: "post",
+            datatype: "JSON",
+            data: { "pSeq" : seq },
+            success: function (json) {
+
+                if (json.result === 1) {
+                    alert(json.msg);
+                    location.href = "/user/login";
+
+                } else {
+                    alert(json.msg);
+                    location.reload();
+                }
             }
-        }
-    });
+        })
+    }
 }
 
-function doRotate() {
-    // Find all elements with the class 'plc'
-    $('[class^="plc_"]').each(function () {
-        // Get the index from the class name
-        let index = $(this).attr('class').replace('plc_', '');
-        // Call the function for each index
-        getRouteInfoForIndex(index);
-    });
-}
-*/
+function updateEndTime(seq) {
 
+    console.log("updateEndTime start! seq : " + seq)
+
+    let placeSeq = seq;
+    let placeNick = $("#placeNick" + seq).text();
+    let placeName = $("#placename" + seq).text();
+
+    console.log("placeNick : " + placeNick)
+    console.log("placeName : " + placeName)
+
+    if(confirm( placeName + "(" + placeNick + ")" + "목적지 방문을 완료하시겠습니까?")) {
+
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+            url: "/tour/updatePlaceEnd",
+            type: "post",
+            datatype: "JSON",
+            data: { "placeSeq" : placeSeq,
+                "placeNick" : placeNick,
+                "placeName" : placeName
+            },
+            success: function (json) {
+
+                if (json.result === 1) {
+                    alert(json.msg);
+                    location.href = "/user/login";
+
+                } else {
+                    alert(json.msg);
+                    location.reload();
+                }
+            }
+        })
+    }
+
+}
+
+function resetEndTime(seq) {
+
+    console.log("resetEndTime start! seq : " + seq)
+
+    let placeSeq = seq;
+    let placeNick = $("#placeNick" + seq).text();
+    let placeName = $("#placename" + seq).text();
+
+    console.log("placeNick : " + placeNick)
+    console.log("placeName : " + placeName)
+
+    if(confirm( placeName + "(" + placeNick + ")" + "목적지 방문 완료를 취소하시겠습니까?")) {
+
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+            url: "/tour/resetPlaceEnd",
+            type: "post",
+            datatype: "JSON",
+            data: { "placeSeq" : placeSeq,
+                    "placeNick" : placeNick,
+                    "placeName" : placeName
+            },
+            success: function (json) {
+
+                if (json.result === 1) {
+                    alert(json.msg);
+                    location.href = "/user/login";
+
+                } else {
+                    alert(json.msg);
+                    location.reload();
+                }
+            }
+        })
+    }
+
+}
 
 function doCong() {
 

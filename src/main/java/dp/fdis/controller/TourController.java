@@ -28,7 +28,7 @@ public class TourController {
     /**
      * 여행 정보 페이지로 이동
      */
-    
+
     @GetMapping(value = "tourInfo")
     public String tourInfo(ModelMap model, HttpSession session) throws Exception {
 
@@ -57,7 +57,7 @@ public class TourController {
 
         return "thymeleaf/tour/tourInfo";
     }
-    
+
     /**
      * 여행 등록 페이지로 이동
      */
@@ -90,7 +90,7 @@ public class TourController {
     public TourDTO getUserExists(HttpServletRequest request, HttpSession session) throws Exception {
         log.info(this.getClass().getName() + ".getTourNameExists Start!");
 
-        String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
         String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 여행명
 
         log.info("tourName : " + tourName);
@@ -107,9 +107,9 @@ public class TourController {
 
         return rDTO;
     }
-    
+
     /**
-     *   여행 정보 삭제
+     * 여행 정보 삭제
      **/
     @ResponseBody
     @PostMapping(value = "deleteTourInfo")
@@ -121,9 +121,9 @@ public class TourController {
         MsgDTO dto = null; // 결과 메시지 구조
 
         try {
-            
+
             String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 여행 번호(PK)
-            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("nSeq : " + nSeq);
             log.info("userId : " + userId);
@@ -156,8 +156,8 @@ public class TourController {
         return dto;
     }
 
-        /**
-     *   여행 종료일 수정
+    /**
+     * 여행 종료일 수정
      **/
     @ResponseBody
     @PostMapping(value = "updateTourEnd")
@@ -170,9 +170,9 @@ public class TourController {
 
         try {
 
-            String nSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String nSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
             String tourProcess = CmmUtil.nvl(request.getParameter("tourProcess")); // 여행 진행도
-            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("nSeq : " + nSeq);
             log.info("userId : " + userId);
@@ -205,8 +205,8 @@ public class TourController {
     }
 
     /**
-     *   여행 정보 수정
-     *   수정 할 수 있는 정보가 이름 뿐임
+     * 여행 정보 수정
+     * 수정 할 수 있는 정보가 이름 뿐임
      **/
     @ResponseBody
     @PostMapping(value = "updateTourName")
@@ -219,9 +219,9 @@ public class TourController {
 
         try {
 
-            String nSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String nSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
             String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 여행 이름(PK)
-            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("nSeq : " + nSeq);
             log.info("userId : " + userId);
@@ -253,9 +253,9 @@ public class TourController {
 
         return dto;
     }
-    
+
     /**
-     *  여행 요일 관리 페이지 이동
+     * 여행 요일 관리 페이지 이동
      **/
     @GetMapping(value = "tourDayList")
     public String tourDayList(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
@@ -288,7 +288,7 @@ public class TourController {
 
         if (existsYn.equals("N")) {
 
-                return "/tour/tourInfo";
+            return "/tour/tourInfo";
 
         } else {
 
@@ -330,7 +330,7 @@ public class TourController {
             TourDTO pDTO = new TourDTO();
             pDTO.setTourSeq(tourSeq);
 
-            if(tourSeq.length() > 0) {
+            if (tourSeq.length() > 0) {
                 tourInfoService.addTourDay(pDTO);
 
                 msg = "등록되었습니다.";
@@ -386,7 +386,7 @@ public class TourController {
         List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourPlace(pDTO))
                 .orElseGet(ArrayList::new);
 
-        if(rList.isEmpty()){
+        if (rList.isEmpty()) {
             session.setAttribute("SS_EXISTS_YN", "N");
         } else {
             session.setAttribute("SS_EXISTS_YN", "Y");
@@ -401,7 +401,7 @@ public class TourController {
 
 
     /**
-     *   여행 정보 삭제
+     * 여행 정보 삭제
      **/
     @ResponseBody
     @PostMapping(value = "deleteTourDay")
@@ -415,7 +415,7 @@ public class TourController {
         try {
 
             String tourDay = CmmUtil.nvl(request.getParameter("dSeq")); // 여행 일자
-            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
 
             log.info("tourDay : " + tourDay);
             log.info("tourSeq : " + tourSeq);
@@ -447,7 +447,6 @@ public class TourController {
 
         return dto;
     }
-
 
 
     /**
@@ -500,7 +499,6 @@ public class TourController {
         TourDTO pDTO = new TourDTO();
 
 
-
         pDTO.setPoi(poi);
         pDTO.setPlaceName(placeName);
         pDTO.setPlaceAddr(placeAddr);
@@ -542,7 +540,7 @@ public class TourController {
             pDTO.setUserId(userId);
             pDTO.setTourName(tourName);
 
-            if(userId.length() > 0) {
+            if (userId.length() > 0) {
                 tourInfoService.insertTourInfo(pDTO);
 
                 TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourSeq(pDTO)).orElseGet(TourDTO::new);
@@ -622,7 +620,7 @@ public class TourController {
             pDTO.setLon(lon);
             pDTO.setPoi(poi);
 
-            if(userId.length() > 0) {
+            if (userId.length() > 0) {
                 tourInfoService.insertTourPlace(pDTO);
 
                 msg = "등록되었습니다.";
@@ -702,7 +700,7 @@ public class TourController {
     }
 
     /**
-     *   목적지 수정
+     * 목적지 수정
      **/
     @ResponseBody
     @PostMapping(value = "updateTourPlace")
@@ -715,9 +713,9 @@ public class TourController {
 
         try {
 
-            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
-            String tourDay = CmmUtil.nvl((String)session.getAttribute("SS_DAY_SEQ"));
-            String placeSeq = CmmUtil.nvl((String)session.getAttribute("SS_PLACE_SEQ"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+            String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+            String placeSeq = CmmUtil.nvl((String) session.getAttribute("SS_PLACE_SEQ"));
             String placeNick = CmmUtil.nvl(request.getParameter("placeNick"));
             String placeName = CmmUtil.nvl(request.getParameter("placeName"));
             String placeAddr = CmmUtil.nvl(request.getParameter("placeAddr"));
@@ -779,7 +777,7 @@ public class TourController {
     }
 
     /**
-     *   목적지 정보 삭제
+     * 목적지 정보 삭제
      **/
     @ResponseBody
     @PostMapping(value = "deleteTourPlaceOne")
@@ -793,8 +791,8 @@ public class TourController {
         try {
 
             String placeSeq = CmmUtil.nvl(request.getParameter("pSeq"));
-            String tourDay = CmmUtil.nvl((String)session.getAttribute("SS_DAY_SEQ"));
-            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+            String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
 
             log.info("placeSeq : " + placeSeq);
             log.info("tourDay : " + tourDay);
@@ -856,8 +854,8 @@ public class TourController {
         log.info(this.getClass().getName() + ".goItda Start!");
 
         String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
-        String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
-        String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+        String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
         log.info("tourDay : " + tourDay);
         log.info("tourSeq : " + tourSeq);
@@ -872,7 +870,7 @@ public class TourController {
         List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourPlace(pDTO))
                 .orElseGet(ArrayList::new);
 
-        if(rList.isEmpty()){
+        if (rList.isEmpty()) {
             session.setAttribute("SS_EXISTS_YN", "N");
         } else {
             session.setAttribute("SS_EXISTS_YN", "Y");
@@ -883,9 +881,9 @@ public class TourController {
 
         session.setAttribute("SS_DAY_SEQ", tourDay);
 
-                log.info("rList 존재 여부 : " + (String)session.getAttribute("SS_EXISTS_YN"));
+        log.info("rList 존재 여부 : " + (String) session.getAttribute("SS_EXISTS_YN"));
 
-        if(dList.isEmpty()) {
+        if (dList.isEmpty()) {
             log.info("dList Empty");
         }
 
@@ -896,17 +894,17 @@ public class TourController {
                 .orElseGet(TourDTO::new);
 
 
-            model.addAttribute("rList", rList);
-            model.addAttribute("dList", dList);
-            model.addAttribute("rDTO", rDTO);
-            model.addAttribute("dDTO", dDTO);
+        model.addAttribute("rList", rList);
+        model.addAttribute("dList", dList);
+        model.addAttribute("rDTO", rDTO);
+        model.addAttribute("dDTO", dDTO);
 
         return "thymeleaf/tour/goItda";
 
     }
 
     /**
-     *   여행 시작
+     * 여행 시작
      **/
     @ResponseBody
     @PostMapping(value = "updateTourStart")
@@ -920,8 +918,8 @@ public class TourController {
         try {
 
             String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
-            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
-            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("tourSeq : " + tourSeq);
             log.info("userId : " + userId);
@@ -964,7 +962,7 @@ public class TourController {
     }
 
     /**
-     *   여행 시작
+     * 여행 시작 취소
      **/
     @ResponseBody
     @PostMapping(value = "resetTourStart")
@@ -978,8 +976,8 @@ public class TourController {
         try {
 
             String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
-            String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
-            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("tourSeq : " + tourSeq);
             log.info("userId : " + userId);
@@ -1000,7 +998,7 @@ public class TourController {
             } else {
 
                 tourInfoService.resetTourDaySt(pDTO);
-                msg = "여행을 취소되었습니다.";
+                msg = "여행이 취소되었습니다.";
 
             }
 
@@ -1015,6 +1013,107 @@ public class TourController {
             dto.setMsg(msg);
 
             log.info(this.getClass().getName() + ".resetTourStart End!");
+
+        }
+
+        return dto;
+    }
+
+
+    /**
+     * 여행 시작
+     **/
+    @ResponseBody
+    @PostMapping(value = "updatePlaceEnd")
+    public MsgDTO updatePlaceEnd(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".updatePlaceEnd Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+            String placeName =CmmUtil.nvl(request.getParameter("placeName"));
+            String placeNIck = CmmUtil.nvl(request.getParameter("placeNick"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+
+            log.info("placeSeq : " + placeSeq);
+            log.info("tourSeq : " + tourSeq);
+            log.info("tourDay : " + tourDay);
+
+            TourDTO pDTO = new TourDTO();
+            pDTO.setPlaceSeq(placeSeq);
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setTourDay(tourDay);
+
+            tourInfoService.updatePlaceEnd(pDTO);
+
+            msg = placeName + "(" + placeNIck + ")" + " 방문을 완료하셨습니다!";
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".updatePlaceEnd End!");
+
+        }
+
+        return dto;
+    }
+
+    /**
+     * 여행 시작 취소
+     **/
+    @ResponseBody
+    @PostMapping(value = "resetPlaceEnd")
+    public MsgDTO resetPlaceEnd(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".resetPlaceEnd Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+            String placeName =CmmUtil.nvl(request.getParameter("placeName"));
+            String placeNIck = CmmUtil.nvl(request.getParameter("placeNick"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+
+            log.info("placeSeq : " + placeSeq);
+            log.info("tourSeq : " + tourSeq);
+            log.info("tourDay : " + tourDay);
+
+            TourDTO pDTO = new TourDTO();
+            pDTO.setPlaceSeq(placeSeq);
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setTourDay(tourDay);
+
+            tourInfoService.resetPlaceEnd(pDTO);
+
+            msg = placeName + "(" + placeNIck + ")" + " 방문 완료를 취소하셨습니다.";
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".resetPlaceEnd End!");
 
         }
 

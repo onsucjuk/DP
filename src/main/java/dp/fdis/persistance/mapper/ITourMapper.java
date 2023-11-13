@@ -86,6 +86,10 @@ public interface ITourMapper {
     void insertTourPlace(TourDTO pDTO) throws Exception;
 
     void updateTourPlace(TourDTO pDTO) throws Exception;
+    void updatePlaceEnd(TourDTO pDTO) throws Exception;
+    void resetPlaceEnd(TourDTO pDTO) throws Exception;
+
+
 
 
 

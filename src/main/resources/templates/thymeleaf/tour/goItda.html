@@ -319,12 +319,15 @@
                       <thead>
                         <tr>
                           <th>여행지 번호</th>
-                          <th>여행지 명</th>
+                          <th>목적지</th>
+                          <th>별칭</th>
                           <th>거리</th>
                           <th>소요시간</th>
                           <th>혼잡도</th>
                           <th>진행도</th>
                           <th>기능</th>
+                          <th th:name = "addrhiddenTh" th:text="'여행지 주소'"></th>
+                          <th th:name = "memohiddenTh" th:text="'메모'"></th>
                           <th th:name = "lathiddenTh" th:text="'위도'"></th>
                           <th th:name = "lonhiddenTh" th:text="'경도'"></th>
                           <th th:name = "poihiddenTh" th:text="'poi'"></th>
@@ -335,6 +338,7 @@
                         <!-- 여행 시작했으면 -->
                         <tr th:if="${dDTO.dayStart}">
                           <td th:id = "'placeNum'+${dto.placeSeq}" th:name = "placeNum" th:text="${iterStat.index + 1}"></td>
+                          <td th:id = "'placename'+${dto.placeSeq}" th:name = "placenamehidden" th:text="${dto.placeName}"></td>
                           <td th:id = "'placeNick'+${dto.placeSeq}" th:name = "placeNick" th:text="${dto.placeNick}"></td>
                           <td th:id = "'totalDistance'+${dto.placeSeq}" th:name = "totalDistance"></td>
                           <!--th:function="doRoute([[${dto.placeSeq}]])"-->
@@ -354,6 +358,9 @@
                               </div>
                           </td>
 
+                          <td th:id = "'addrhidden'+${dto.placeSeq}" th:name = "addrhidden" th:text="${dto.placeAddr}"></td>
+                          <td th:id = "'memohidden'+${dto.placeSeq}" th:name = "memohidden" th:text="${dto.memo}"></td>
+
                           <td th:id = "'lathidden'+${dto.placeSeq}" th:name = "lathidden" th:text="${dto.lat}"></td>
                           <td th:id = "'lonhidden'+${dto.placeSeq}" th:name = "lonhidden" th:text="${dto.lon}"></td>
                           <td th:id = "'poihidden'+${dto.placeSeq}" th:name = "poihidden" th:text="${dto.poi}"></td>
@@ -363,7 +370,8 @@
                         <!-- 여행 시작 안했으면 -->
                         <tr th:unless="${dDTO.dayStart}">
                           <td th:name = "placeNum" th:text="${iterStat.index + 1}"></td>
-                          <td th:name = "placeNick" th:text="${dto.placeNick}"></td>
+                          <td th:id = "'placename'+${dto.placeSeq}" th:name = "placename" th:text="${dto.placeName}"></td>
+                          <td th:id = "'placeNick'+${dto.placeSeq}" th:name = "placeNick" th:text="${dto.placeNick}"></td>
                           <td class="font-weight-bold" th:colspan="3" th:name = "totalDistance"  th:text="'거리, 소요시간, 혼잡도 정보는 우측 상단의 여행 안내 시작 버튼을 통해 여행을 시작 후 제공 됩니다!'"></td>
                           <td class="font-weight-medium" th:if="${dto.tourYn} == 'Y'"><div class="badge badge-success">Completed</div></td>
                           <td class="font-weight-medium" th:unless="${dto.tourYn} == 'Y'"><div class="badge badge-warning" >Pending</div></td>
@@ -378,6 +386,10 @@
                               <p class="dropdown-item" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
                             </div>
                           </td>
+
+                          <td th:id = "'addrhidden'+${dto.placeSeq}" th:name = "addrhidden" th:text="${dto.placeAddr}"></td>
+                          <td th:id = "'memohidden'+${dto.placeSeq}" th:name = "memohidden" th:text="${dto.memo}"></td>
+
                           <td th:id = "'lathidden'+${dto.placeSeq}" th:name = "lathidden" th:text="${dto.lat}"></td>
                           <td th:id = "'lonhidden'+${dto.placeSeq}" th:name = "lonhidden" th:text="${dto.lon}"></td>
                           <td th:id = "'poihidden'+${dto.placeSeq}" th:name = "poihidden" th:text="${dto.poi}"></td>

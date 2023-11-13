@@ -338,4 +338,31 @@ public class TourInfoService implements ITourInfoService {
 
     }
 
+
+    // 장소 방문 완료, 취소
+
+    @Transactional
+    @Override
+    public void updatePlaceEnd(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".updatePlaceEnd start!");
+
+        tourMapper.updatePlaceEnd(pDTO);
+
+        log.info(this.getClass().getName() + ".updatePlaceEnd End!");
+
+    }
+
+    @Transactional
+    @Override
+    public void resetPlaceEnd(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".resetPlaceEnd start!");
+
+        tourMapper.resetPlaceEnd(pDTO);
+
+        log.info(this.getClass().getName() + ".resetPlaceEnd End!");
+
+    }
+
 }

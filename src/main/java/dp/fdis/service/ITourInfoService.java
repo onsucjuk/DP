@@ -87,6 +87,8 @@ public interface ITourInfoService {
 
     // 방문 완료 체크
     void updateTourDayYN(TourDTO pDTO) throws Exception;
+    void updatePlaceEnd(TourDTO pDTO) throws Exception;
+    void resetPlaceEnd(TourDTO pDTO) throws Exception;
 
     List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
 

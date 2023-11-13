@@ -216,7 +216,7 @@
 
     <!-- 여행 목적지 리스트 -->
     <select id="getTourPlace" parameterType="TourDTO" resultType="TourDTO">
-        SELECT PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, LAT, LON, POI, END_TIME, START_TIME
+        SELECT PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, TOUR_YN, MEMO, LAT, LON, POI, END_TIME, START_TIME
         FROM  TOUR_PLACE
         WHERE
             TOUR_DAY = #{tourDay}
@@ -281,4 +281,29 @@
             PLACE_SEQ = #{placeSeq}
     </delete>
 
+    <update id="updatePlaceEnd" parameterType="TourDTO">
+        UPDATE TOUR_PLACE
+        SET
+            END_TIME = now(),
+            TOUR_YN = 'Y'
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+          AND
+            PLACE_SEQ = #{placeSeq}
+    </update>
+
+    <update id="resetPlaceEnd" parameterType="TourDTO">
+        UPDATE TOUR_PLACE
+        SET
+            END_TIME = null,
+            TOUR_YN = 'N'
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+          AND
+            PLACE_SEQ = #{placeSeq}
+    </update>
 </mapper>

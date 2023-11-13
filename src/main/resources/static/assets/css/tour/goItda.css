@@ -2,11 +2,15 @@ td[name="lathidden"],
 td[name="lonhidden"],
 td[name="poihidden"],
 td[name="conghidden"],
+td[name="addrhidden"],
+td[name="memohidden"],
 table[name="nowTable"],
 
 th[name="lathiddenTh"],
 th[name="lonhiddenTh"],
 th[name="poihiddenTh"],
+th[name="addrhiddenTh"],
+th[name="memohiddenTh"],
 th[name="conghiddenTh"]
 {
     display: none;
