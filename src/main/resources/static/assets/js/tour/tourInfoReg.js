@@ -12,6 +12,11 @@ $(document).ready(function () {
 
     })
 
+    $("#btnback").on("click", function () {
+        history.back();
+
+    })
+
     if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
         alert("로그인 해주세요.");
         location.href = "/user/login";
@@ -72,6 +77,11 @@ function doSubmit() {
         f.tourName.focus();
         return;
     }
+    if (f.startTime.value === "") {
+        alert("날짜를 입력하시기 바랍니다.");
+        f.startTime.focus();
+        return;
+    }
     if (calBytes(f.tourName.value) > 240) {
         alert("최대 240Bytes까지 입력 가능합니다.");
         f.tourName.focus();
@@ -102,3 +112,14 @@ function doSubmit() {
         }
     )
 }
+
+$(function(){
+    $('#startTime').datepicker({
+        lang:'ko',
+        dateFormat: 'yy-mm-dd',
+        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트
+        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 Tooltip
+        dayNamesMin: ['일','월','화','수','목','금','토'], //달력의 요일 텍스트
+        dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+    });
+})

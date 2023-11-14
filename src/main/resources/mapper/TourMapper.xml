@@ -13,7 +13,7 @@
     </select>
 
     <select id="getTourSeq" parameterType = "TourDTO" resultType="TourDTO">
-        SELECT TOUR_SEQ, TOUR_NAME, TOUR_PROCESS
+        SELECT TOUR_SEQ, TOUR_NAME, TOUR_PROCESS, START_TIME
         FROM TOUR_INFO
         WHERE USER_ID = #{userId}
         AND
@@ -22,11 +22,11 @@
 
     <insert id="insertTourInfo" parameterType="TourDTO">
         INSERT INTO TOUR_INFO (
-            TOUR_SEQ, TOUR_NAME, USER_ID, TOUR_PROCESS
+            TOUR_SEQ, TOUR_NAME, USER_ID, TOUR_PROCESS, START_TIME
                     )
         VALUES (
             COALESCE((SELECT MAX(A.TOUR_SEQ) FROM TOUR_INFO A), 0) + 1,
-                #{tourName}, #{userId}, -1
+                #{tourName}, #{userId}, -1, #{startTime}
                )
     </insert>
 
@@ -57,7 +57,8 @@
     <update id="updateTourName" parameterType="TourDTO">
         UPDATE TOUR_INFO
         SET
-            TOUR_NAME = #{tourName}
+            TOUR_NAME = #{tourName},
+            START_TIME = CAST(#{startTime} AS DATE))
         WHERE
             TOUR_SEQ = #{tourSeq}
             AND
@@ -65,7 +66,7 @@
     </update>
 
     <!-- 여행 시작일 수정 쿼리 -->
-    <update id="updateTourStart" parameterType="TourDTO">
+<!--    <update id="updateTourStart" parameterType="TourDTO">
         UPDATE TOUR_INFO
         SET
             START_TIME = now()
@@ -73,7 +74,7 @@
             TOUR_SEQ = #{tourSeq}
             AND
             USER_ID = #{userId}
-    </update>
+    </update>-->
 
     <update id="resetTourStart" parameterType="TourDTO">
         UPDATE TOUR_INFO
@@ -139,7 +140,7 @@
     <update id="updateTourDaySt" parameterType="TourDTO">
         UPDATE TOUR_DAY
         SET
-            DAY_START = now()
+            START_TIME = now()
         WHERE
             TOUR_SEQ = #{tourSeq}
           AND
@@ -149,7 +150,7 @@
     <update id="resetTourDaySt" parameterType="TourDTO">
         UPDATE TOUR_DAY
         SET
-            DAY_START = null
+            START_TIME = null
         WHERE
             TOUR_SEQ = #{tourSeq}
           AND
@@ -158,18 +159,28 @@
 
     <insert id="addTourDay" parameterType="TourDTO">
         INSERT INTO TOUR_DAY (
-            TOUR_SEQ, TOUR_DAY
+            TOUR_SEQ, TOUR_DAY, START_TIME
         )
         VALUES (
                    #{tourSeq},
-                   (SELECT COALESCE(MAX(A.TOUR_DAY), 0) FROM TOUR_DAY A WHERE A.TOUR_SEQ = #{tourSeq}) + 1
+                   (SELECT COALESCE(MAX(A.TOUR_DAY), 0) FROM TOUR_DAY A WHERE A.TOUR_SEQ = #{tourSeq}) + 1 ,
+                   (
+                       SELECT
+                           CASE
+                               WHEN MAX(A.START_TIME) IS NULL THEN CAST(#{startTime} AS DATE)
+                               ELSE DATE_FORMAT(DATE_ADD(MAX(A.START_TIME), INTERVAL 1 DAY), '%Y-%m-%d')
+                               END
+                       FROM TOUR_DAY A
+                       WHERE A.TOUR_SEQ = #{tourSeq}
+
+                   )
                )
     </insert>
 
     <!-- COALESCE((SELECT MAX(A.PLACE_SEQ) FROM TOUR_DAY A WHERE A.TOUR_DAY = #{tourDay}), 0) + 1 place 추가시 사용 -->
 
     <select id="getTourDayInfo" parameterType = "TourDTO" resultType="TourDTO">
-        SELECT TOUR_SEQ, TOUR_DAY, DAY_START
+        SELECT TOUR_SEQ, TOUR_DAY, START_TIME
         FROM TOUR_DAY
         WHERE TOUR_SEQ = #{tourSeq}
         AND   TOUR_DAY = #{tourDay}
@@ -177,7 +188,7 @@
 
     <!-- 해당 Day에 맞는 정보 들고오기-->
     <select id="getTourDay" parameterType = "TourDTO" resultType="TourDTO">
-        SELECT TOUR_SEQ, TOUR_DAY, DAY_START
+        SELECT TOUR_SEQ, TOUR_DAY, START_TIME
         FROM TOUR_DAY
         WHERE TOUR_SEQ = #{tourSeq}
           AND   TOUR_DAY = #{tourDay}
@@ -193,7 +204,7 @@
     <!-- tourDayList -->
 
     <select id="getTourDayList" parameterType = "TourDTO" resultType="TourDTO">
-        SELECT A.TOUR_SEQ AS TOUR_SEQ, A.TOUR_DAY AS TOUR_DAY, A.DAY_START AS DAY_START, COUNT(CASE WHEN B.TOUR_YN = 'Y' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_Y, COUNT(CASE WHEN B.TOUR_YN = 'N' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_N
+        SELECT A.TOUR_SEQ AS TOUR_SEQ, A.TOUR_DAY AS TOUR_DAY, A.START_TIME AS START_TIME, COUNT(CASE WHEN B.TOUR_YN = 'Y' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_Y, COUNT(CASE WHEN B.TOUR_YN = 'N' AND A.TOUR_DAY = B.TOUR_DAY THEN 1 ELSE NULL END) AS TOUR_N
         FROM TOUR_DAY A
         LEFT JOIN TOUR_PLACE B ON A.TOUR_SEQ = B.TOUR_SEQ AND A.TOUR_DAY = B.TOUR_DAY
         WHERE A.TOUR_SEQ = #{tourSeq}

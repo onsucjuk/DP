@@ -12,7 +12,6 @@ public class TourDTO {
     private String tourSeq; // 여행 번호
     private String tourName; // 여행명
     private String tourProcess; // 여행 진행도
-    private String tourStart; // 여행 시작일자
     private String tourEnd; // 여행 종료일자
     private String userId; // 아이디
 
@@ -24,8 +23,6 @@ public class TourDTO {
     private String placeSeq; // 여행 방문지 순서 번호
     // 위 2개는 매퍼에서 자동 생성(mxa()+1)
     private String tourDay; // 여행 일자 <- 이건 일자 직접 등록 Day1(1), Day2(2) ...
-
-    private String dayStart;
 
     //--------------------------------------------------------------- TOUR_PLACE
 

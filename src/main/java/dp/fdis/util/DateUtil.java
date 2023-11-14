@@ -24,7 +24,7 @@ public class DateUtil {
      * @return 기본값은 년.월.일
      */
     public static String getDateTime() {
-        return getDateTime("yyyy.MM.dd");
+        return getDateTime("yyyy-MM-dd");
 
     }
 }

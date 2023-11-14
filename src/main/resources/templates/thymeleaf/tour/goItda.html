@@ -26,7 +26,8 @@
   <link rel="shortcut icon" href="/itda/images/favicon.png" />
   <script th:inline="javascript">
       const dSeq = [[${session.SS_DAY_SEQ}]];
-      const daySt = [[${dDTO.dayStart}]];
+      const startTime = [[${session.SS_STARTTIME_YN}]];
+      const startTimeMn = [[${session.SS_STARTTIME_MN}]];
   </script>
 </head>
 <body>
@@ -249,7 +250,7 @@
                 <div class="col-12 col-xl-4">
                  <div class="justify-content-end d-flex">
 
-                  <div class="dropdown flex-md-grow-1 flex-xl-grow-0" th:unless="${dDTO.dayStart}">
+                  <div class="dropdown flex-md-grow-1 flex-xl-grow-0" th:unless="${session.SS_STARTTIME_YN}=='Y'">
                     <button class="btn btn-sm btn-light bg-white" type="button" id="btnTourStart">
                       <i class="mdi mdi-calendar"></i> 여행 안내 시작
                     </button>
@@ -261,7 +262,7 @@
                     </div>
                   </div>
 
-                  <div class="dropdown flex-md-grow-1 flex-xl-grow-0" th:if="${dDTO.dayStart}">
+                  <div class="dropdown flex-md-grow-1 flex-xl-grow-0" th:if="${session.SS_STARTTIME_YN}=='Y'">
                     <button class="btn btn-sm btn-light bg-white" type="button" id="btnTourStop">
                       <i class="mdi mdi-calendar"></i> 여행 안내 취소
                     </button>
@@ -336,7 +337,8 @@
                       </thead>
                       <tbody th:each="dto, iterStat : ${rList}" th:id="'plc_'+ ${dto.placeSeq}">
                         <!-- 여행 시작했으면 -->
-                        <tr th:if="${dDTO.dayStart}">
+                        <!--<tr th:if="${dDTO.startTime}">-->
+                        <tr th:if="${session.SS_STARTTIME_YN}=='Y'">
                           <td th:id = "'placeNum'+${dto.placeSeq}" th:name = "placeNum" th:text="${iterStat.index + 1}"></td>
                           <td th:id = "'placename'+${dto.placeSeq}" th:name = "placenamehidden" th:text="${dto.placeName}"></td>
                           <td th:id = "'placeNick'+${dto.placeSeq}" th:name = "placeNick" th:text="${dto.placeNick}"></td>
@@ -368,7 +370,8 @@
                         </tr>
 
                         <!-- 여행 시작 안했으면 -->
-                        <tr th:unless="${dDTO.dayStart}">
+                        <!--<tr th:unless="${dDTO.startTime}">-->
+                        <tr th:unless="${session.SS_STARTTIME_YN}=='Y'">
                           <td th:name = "placeNum" th:text="${iterStat.index + 1}"></td>
                           <td th:id = "'placename'+${dto.placeSeq}" th:name = "placename" th:text="${dto.placeName}"></td>
                           <td th:id = "'placeNick'+${dto.placeSeq}" th:name = "placeNick" th:text="${dto.placeNick}"></td>

@@ -4,8 +4,29 @@ $(document).ready(function () {
 
         if(confirm("여행을 시작하시겠습니까?")) {
 
-            updateStart()
-            location.reload()
+            let startMn = "Y"
+
+            $.ajax({
+                url: "/tour/setSessionMn",
+                type: "POST",
+                datatype: "JSON",
+                data: {
+                    "startMn" : startMn
+                },
+                success: function (json) {
+
+                    if (json.result === 1) {
+                        alert(json.msg);
+                        location.href = "/user/login";
+
+                    } else {
+
+                        location.reload();
+                    }
+
+                }
+            })
+
 
         }
     })
@@ -14,8 +35,29 @@ $(document).ready(function () {
 
         if(confirm("여행을 취소하시겠습니까?")) {
 
-            resetStart()
-            location.reload()
+            let startMn = "N"
+
+            $.ajax({
+                url: "/tour/setSessionMn",
+                type: "POST",
+                datatype: "JSON",
+                data: {
+                    "startMn" : startMn
+                },
+                success: function (json) {
+
+                    if (json.result === 1) {
+                        alert(json.msg);
+                        location.href = "/user/login";
+
+                    } else {
+
+                        location.reload();
+                    }
+
+                }
+            })
+
 
         }
     })
@@ -28,9 +70,19 @@ $(document).ready(function () {
 
 
 
-    if(daySt){
+    if(startTime==='Y'){
+
+        alert("여행을 시작합시다!");
         doRotate();
-        doCong()
+        doCong();
+    } else if(startTimeMn==='Y') {
+
+        alert("수동으로 여행 안내를 시작합니다!");
+
+    } else {
+
+        alert("여행일자가 아닙니다. 여행 정보를 보시려면 우측 상단 여행 안내 시작을 수동으로 눌러서 시작해주세요.")
+
     }
 
 
@@ -669,7 +721,7 @@ function doCong() {
 }
 
 
-
+/*
 function updateStart(){
 
     $.ajax({
@@ -690,7 +742,9 @@ function updateStart(){
     })
 
 
-}
+}*/
+/*
+
 function resetStart(){
 
     $.ajax({
@@ -712,3 +766,4 @@ function resetStart(){
 
 }
 
+*/

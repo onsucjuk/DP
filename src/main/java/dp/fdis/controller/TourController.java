@@ -4,6 +4,7 @@ import dp.fdis.dto.MsgDTO;
 import dp.fdis.dto.TourDTO;
 import dp.fdis.service.ITourInfoService;
 import dp.fdis.util.CmmUtil;
+import dp.fdis.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -209,10 +210,10 @@ public class TourController {
      * 수정 할 수 있는 정보가 이름 뿐임
      **/
     @ResponseBody
-    @PostMapping(value = "updateTourName")
-    public MsgDTO updateTourName(HttpServletRequest request, HttpSession session) {
+    @PostMapping(value = "updateTourInfo")
+    public MsgDTO updateTourInfo(HttpServletRequest request, HttpSession session) {
 
-        log.info(this.getClass().getName() + ".updateTourName Start!");
+        log.info(this.getClass().getName() + ".updateTourInfo Start!");
 
         String msg = ""; // 메시지 내용
         MsgDTO dto = null; // 결과 메시지 구조
@@ -221,21 +222,24 @@ public class TourController {
 
             String nSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
             String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 여행 이름(PK)
+            String startTime = CmmUtil.nvl(request.getParameter("startTime")); // 여행 이름(PK)
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("nSeq : " + nSeq);
             log.info("userId : " + userId);
             log.info("tourName : " + tourName);
+            log.info("startTime : " + startTime);
 
             TourDTO pDTO = new TourDTO();
             pDTO.setTourSeq(nSeq);
             pDTO.setUserId(userId);
             pDTO.setTourName(tourName);
+            pDTO.setStartTime(startTime);
 
 
             tourInfoService.updateTourName(pDTO);
 
-            msg = "여행명 수정되었습니다.";
+            msg = "여행 정보 수정되었습니다.";
 
         } catch (Exception e) {
             msg = "실패하였습니다. : " + e.getMessage();
@@ -247,7 +251,7 @@ public class TourController {
             dto = new MsgDTO();
             dto.setMsg(msg);
 
-            log.info(this.getClass().getName() + ".updateTourName End!");
+            log.info(this.getClass().getName() + ".updateTourInfo End!");
 
         }
 
@@ -521,7 +525,7 @@ public class TourController {
     @PostMapping(value = "insertTourInfo")
     public MsgDTO insertTourInfo(HttpServletRequest request, HttpSession session) {
 
-        log.info(this.getClass().getName() + ".insertTourInfo Start!");
+        log.info(this.getClass().getName() + ".insertTourInfoReg Start!");
 
         String msg = ""; // 메시지 내용
 
@@ -531,19 +535,32 @@ public class TourController {
 
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 로그인 아이디
             String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 제목
+            String startTime = CmmUtil.nvl(request.getParameter("startTime")); // 제목
 
             log.info("session user_id : " + userId);
             log.info("tourName : " + tourName);
+            log.info("startTime : " + startTime);
 
 
             TourDTO pDTO = new TourDTO();
             pDTO.setUserId(userId);
             pDTO.setTourName(tourName);
+            pDTO.setStartTime(startTime);
 
             if (userId.length() > 0) {
                 tourInfoService.insertTourInfo(pDTO);
 
                 TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourSeq(pDTO)).orElseGet(TourDTO::new);
+
+                String tourSeq = rDTO.getTourSeq();
+                String rtourName = rDTO.getTourName();
+                String tourProcess = rDTO.getTourProcess();
+                String rstartTime = rDTO.getStartTime();
+
+                log.info("여행 번호 : " + tourSeq);
+                log.info("여행 이름 : " + rtourName);
+                log.info("여행 진행도 여부 : " + tourProcess);
+                log.info("여행 시작일 : " + rstartTime);
 
                 tourInfoService.addTourDay(rDTO);
 
@@ -566,7 +583,7 @@ public class TourController {
             dto = new MsgDTO();
             dto.setMsg(msg);
 
-            log.info(this.getClass().getName() + ".insertTourInfo End!");
+            log.info(this.getClass().getName() + ".insertTourInfoReg End!");
         }
 
         return dto;
@@ -856,10 +873,12 @@ public class TourController {
         String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
         String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String startTimeMn = CmmUtil.nvl((String) session.getAttribute("SS_STARTTIME_MN"));
 
         log.info("tourDay : " + tourDay);
         log.info("tourSeq : " + tourSeq);
         log.info("userId : " + userId);
+        log.info("startTimeMn : " + startTimeMn);
 
         TourDTO pDTO = new TourDTO();
 
@@ -893,6 +912,23 @@ public class TourController {
         TourDTO dDTO = Optional.ofNullable(tourInfoService.getTourDayInfo(pDTO))
                 .orElseGet(TourDTO::new);
 
+        // 수동 조작 StartTime (안내시작 클릭시 Y로 바뀜)
+
+
+
+
+
+        if (rDTO.getStartTime().equals(DateUtil.getDateTime()) || startTimeMn.equals("Y")) {
+
+            session.setAttribute("SS_STARTTIME_YN", "Y");
+
+        } else {
+
+            session.setAttribute("SS_STARTTIME_YN", "N");
+
+        }
+
+        log.info("SS_STARTTIME_YN : " + CmmUtil.nvl((String)session.getAttribute("SS_STARTTIME_YN")));
 
         model.addAttribute("rList", rList);
         model.addAttribute("dList", dList);
@@ -1114,6 +1150,42 @@ public class TourController {
             dto.setMsg(msg);
 
             log.info(this.getClass().getName() + ".resetPlaceEnd End!");
+
+        }
+
+        return dto;
+    }
+
+    @ResponseBody
+    @PostMapping(value="setSessionMn")
+    MsgDTO setSessionMn(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".setSessionMn Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String startMn = CmmUtil.nvl(request.getParameter("startMn"));
+
+            log.info("placeSeq : " + startMn);
+
+            session.setAttribute("SS_STARTTIME_MN", startMn);
+
+            msg = "SS_STARTTIME_MN 설정 완료 : " + startMn;
+
+        } catch (Exception e) {
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".setSessionMn End!");
 
         }
 

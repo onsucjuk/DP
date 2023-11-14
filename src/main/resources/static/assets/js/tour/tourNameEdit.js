@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     })
 
-    $("#btnInfo").on("click", function () {
+    $("#btnback").on("click", function () {
          history.back();
 
     })
@@ -74,6 +74,11 @@ function doEdit() {
         f.tourName.focus();
         return;
     }
+    if (f.startTime1.value === "") {
+        alert("날짜를 입력하시기 바랍니다.");
+        f.startTime1.focus();
+        return;
+    }
     if (calBytes(f.tourName.value) > 240) {
         alert("최대 240Bytes까지 입력 가능합니다.");
         f.tourName.focus();
@@ -87,7 +92,7 @@ function doEdit() {
 
     // Ajax 호출해서 글 등록하기
     $.ajax({
-            url: "/tour/updateTourName",
+            url: "/tour/updateTourInfo",
             type: "post", // 전송방식은 Post
             // contentType: "application/json",
             dataType: "JSON", // 전송 결과는 JSON으로 받기
@@ -103,3 +108,14 @@ function doEdit() {
         }
     )
 }
+
+$(function(){
+    $('#startTime1').datepicker({
+        lang:'ko',
+        dateFormat: 'yy-mm-dd',
+        monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트
+        monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 Tooltip
+        dayNamesMin: ['일','월','화','수','목','금','토'], //달력의 요일 텍스트
+        dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 Tooltip
+    });
+})
