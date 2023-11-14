@@ -90,6 +90,9 @@ public interface ITourInfoService {
     void updatePlaceEnd(TourDTO pDTO) throws Exception;
     void resetPlaceEnd(TourDTO pDTO) throws Exception;
 
-    List<TourDTO> getTourYn(TourDTO pDTO) throws Exception;
+    TourDTO getTourDayYn(TourDTO pDTO) throws Exception;
+
+/*    TourDTO getTourYn(TourDTO pDTO) throws Exception;*/
+
 
 }

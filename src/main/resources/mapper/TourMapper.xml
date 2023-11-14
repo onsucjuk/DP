@@ -6,10 +6,22 @@
 
     <!-- 여행 리스트 쿼리 -->
     <select id="getTourList" parameterType = "TourDTO" resultType="TourDTO">
-        SELECT TOUR_SEQ, TOUR_NAME, TOUR_PROCESS
-        FROM TOUR_INFO
-        WHERE USER_ID = #{userId}
-        ORDER BY TOUR_SEQ
+        SELECT
+            TI.TOUR_SEQ,
+            TI.TOUR_NAME,
+            TI.TOUR_PROCESS,
+            COUNT(CASE WHEN TP.TOUR_YN = 'Y' THEN 1 END) AS TOUR_Y,
+            COUNT(CASE WHEN TP.TOUR_YN = 'N' THEN 1 END) AS TOUR_N
+        FROM
+            TOUR_INFO TI
+                LEFT JOIN
+            TOUR_PLACE TP ON TI.TOUR_SEQ = TP.TOUR_SEQ
+        WHERE
+            TI.USER_ID = #{userId}
+        GROUP BY
+            TI.TOUR_SEQ
+        ORDER BY
+            TI.TOUR_SEQ;
     </select>
 
     <select id="getTourSeq" parameterType = "TourDTO" resultType="TourDTO">
@@ -65,8 +77,9 @@
             USER_ID = #{userId}
     </update>
 
-    <!-- 여행 시작일 수정 쿼리 -->
-<!--    <update id="updateTourStart" parameterType="TourDTO">
+<!--
+    여행 시작일 수정 쿼리
+    <update id="updateTourStart" parameterType="TourDTO">
         UPDATE TOUR_INFO
         SET
             START_TIME = now()
@@ -74,7 +87,8 @@
             TOUR_SEQ = #{tourSeq}
             AND
             USER_ID = #{userId}
-    </update>-->
+    </update>
+-->
 
     <update id="resetTourStart" parameterType="TourDTO">
         UPDATE TOUR_INFO
@@ -194,13 +208,6 @@
           AND   TOUR_DAY = #{tourDay}
     </select>
 
-    <select id="getTourYn" parameterType = "TourDTO" resultType="TourDTO">
-        SELECT TOUR_SEQ, TOUR_DAY, COUNT(CASE WHEN TOUR_YN = 'Y' THEN 1 ELSE NULL END) AS TOUR_Y, COUNT(CASE WHEN TOUR_YN = 'N' THEN 1 ELSE NULL END) AS TOUR_N
-        FROM TOUR_PLACE
-        WHERE TOUR_SEQ = #{tourSeq}
-        GROUP BY TOUR_SEQ, TOUR_DAY
-    </select>
-
     <!-- tourDayList -->
 
     <select id="getTourDayList" parameterType = "TourDTO" resultType="TourDTO">
@@ -224,6 +231,25 @@
     </delete>
 
     <!-- 여기서부터 Tour_Place 매퍼 || 여행 일수, 진행도 가져오기-->
+    <!-- |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||-->
+
+    <!-- TourYn의 갯수 여행 번호 기준 아직 쓸일 없음 -->
+<!--    <select id="getTourYn" parameterType = "TourDTO" resultType="TourDTO">
+        SELECT TOUR_SEQ, COUNT(CASE WHEN TOUR_YN = 'Y' THEN 1 ELSE NULL END) AS TOUR_Y, COUNT(CASE WHEN TOUR_YN = 'N' THEN 1 ELSE NULL END) AS TOUR_N
+        FROM TOUR_PLACE
+        WHERE TOUR_SEQ = #{tourSeq}
+        GROUP BY TOUR_SEQ
+    </select>-->
+
+    <!-- Day 통합 TourYn의 갯수 여행 번호 기준 -->
+    <select id="getTourDayYn" parameterType = "TourDTO" resultType="TourDTO">
+        SELECT TOUR_SEQ, COUNT(CASE WHEN TOUR_YN = 'Y' THEN 1 ELSE NULL END) AS TOUR_Y, COUNT(CASE WHEN TOUR_YN = 'N' THEN 1 ELSE NULL END) AS TOUR_N
+        FROM TOUR_PLACE
+        WHERE TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+        GROUP BY TOUR_SEQ
+    </select>
 
     <!-- 여행 목적지 리스트 -->
     <select id="getTourPlace" parameterType="TourDTO" resultType="TourDTO">

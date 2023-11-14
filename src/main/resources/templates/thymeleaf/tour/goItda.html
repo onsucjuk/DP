@@ -205,7 +205,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="/tour/goItda/">
+            <a class="nav-link" href="#">
               <i class="icon-grid menu-icon"></i>
               <span class="menu-title">Do Itda</span>
             </a>
@@ -245,14 +245,15 @@
               <div class="row">
                 <div class="col-12 col-xl-8 mb-4 mb-xl-0">
                   <h3 class="font-weight-bold" th:text="${rDTO.tourName} + ' Day' + ${session.SS_DAY_SEQ}  "></h3>
-<!--                  <h6 class="font-weight-normal mb-0">All systems are running smoothly! You have <span class="text-primary">3 unread alerts!</span></h6>-->
+                  <h4 class="font-weight-normal mb-0" th:unless="${session.SS_STARTTIME_YN}=='Y'" th:text="'여행 시작 예정일 '+${dDTO.startTime}"></h4>
+                  <h4 class="font-weight-normal mb-0" th:if="${session.SS_STARTTIME_YN}=='Y'" th:text="'여행 시작! '+${dDTO.startTime}"></h4>
                 </div>
                 <div class="col-12 col-xl-4">
                  <div class="justify-content-end d-flex">
 
                   <div class="dropdown flex-md-grow-1 flex-xl-grow-0" th:unless="${session.SS_STARTTIME_YN}=='Y'">
                     <button class="btn btn-sm btn-light bg-white" type="button" id="btnTourStart">
-                      <i class="mdi mdi-calendar"></i> 여행 안내 시작
+                      <i class="mdi mdi-format-title"></i> 여행 안내 시작
                     </button>
                     <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                      <i class="mdi mdi-calendar"></i> 여행 일자 보기
@@ -264,7 +265,7 @@
 
                   <div class="dropdown flex-md-grow-1 flex-xl-grow-0" th:if="${session.SS_STARTTIME_YN}=='Y'">
                     <button class="btn btn-sm btn-light bg-white" type="button" id="btnTourStop">
-                      <i class="mdi mdi-calendar"></i> 여행 안내 취소
+                      <i class="mdi mdi-format-strikethrough"></i> 여행 안내 취소
                     </button>
                     <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                       <i class="mdi mdi-calendar"></i> 여행 일자 보기
@@ -285,16 +286,33 @@
               <div class="card position-relative">
 
                 <div class="card-body">
-<!--                  여기에 지도 넣기-->
+
                   <button class="btn btn-sm btn-light bg-white border-dark" style="margin-bottom: 5px;" type="button" id="btnViewRoute">
                     <i class="mdi mdi-bus"></i> 여행 루트 확인
                   </button>
-                  <div id="map_div"></div>
+                    <!--여기에 지도 넣기-->
+                    <div id="map_div"></div>
 
                 </div>
               </div>
             </div>
           </div>
+
+          <!-- 여행 진행도-->
+          <div class="tourGraph">
+            <p>
+              <i class="mdi mdi-compass"></i> 현재 진행도
+            </p>
+            <div class="progress" style="height : 10px;">
+              <div class="progress-bar bg-success" role="progressbar" th:style="'width : ' + ${#numbers.formatInteger(('' + cDTO.tourY * 100 / (cDTO.tourY + cDTO.tourN)), 1)} + '%'" th:if="${cDTO.tourY + cDTO.tourN}>0"
+                   th:aria-valuenow="${#numbers.formatInteger(('' + cDTO.tourY * 100 / (cDTO.tourY + cDTO.tourN)), 1)}" th:aria-valuemin="0" th:aria-valuemax="100">
+              </div>
+              <div class="progress-bar bg-success" role="progressbar" th:unless="${cDTO.tourY + cDTO.tourN}>0" style="width: 0%"
+                   th:aria-valuenow="0" th:aria-valuemin="0" th:aria-valuemax="100">
+              </div>
+            </div>
+          </div>
+
           <div class="row">
             <table th:name =  "'nowTable'" >
               <thead>
@@ -346,8 +364,8 @@
                           <!--th:function="doRoute([[${dto.placeSeq}]])"-->
                           <td class="font-weight-bold" th:id = "'totalTime'+${dto.placeSeq}" th:name = "totalTime"></td>
                           <td class="font-weight-bold" th:name = "congestion" ><div th:id = "'congestion'+${dto.placeSeq}"></div></td>
-                          <td class="font-weight-medium" th:name = "tourYn" th:if="${dto.tourYn} == 'Y'"><div class="badge badge-success">Completed</div></td>
-                          <td class="font-weight-medium" th:name = "tourYn" th:unless="${dto.tourYn} == 'Y'"><div class="badge badge-warning" >Pending</div></td>
+                          <td class="font-weight-medium" th:if="${dto.tourYn} == 'Y'" th:id="'tourTd'+${dto.placeSeq}"><div class="badge badge-success" th:id="'tourYn'+${dto.placeSeq}" th:text="'Completed'"></div></td>
+                          <td class="font-weight-medium" th:unless="${dto.tourYn} == 'Y'" th:id="'tourTd'+${dto.placeSeq}"><div class="badge badge-warning" th:id="'tourYn'+${dto.placeSeq}" th:text="'Pending'"></div></td>
                           <td>
                             <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate4" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                               <i class="mdi mdi-brightness-5"></i>
@@ -355,8 +373,8 @@
                               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuDate2">
                                   <p class="dropdown-item" th:onclick="doEdit([[${dto.placeSeq}]])">수정</p>
                                   <p class="dropdown-item" th:onclick="doDelete([[${dto.placeSeq}]])">삭제</p>
-                                  <p class="dropdown-item" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
-                                  <p class="dropdown-item" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
+                                  <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
+                                  <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
                               </div>
                           </td>
 
@@ -376,8 +394,8 @@
                           <td th:id = "'placename'+${dto.placeSeq}" th:name = "placename" th:text="${dto.placeName}"></td>
                           <td th:id = "'placeNick'+${dto.placeSeq}" th:name = "placeNick" th:text="${dto.placeNick}"></td>
                           <td class="font-weight-bold" th:colspan="3" th:name = "totalDistance"  th:text="'거리, 소요시간, 혼잡도 정보는 우측 상단의 여행 안내 시작 버튼을 통해 여행을 시작 후 제공 됩니다!'"></td>
-                          <td class="font-weight-medium" th:if="${dto.tourYn} == 'Y'"><div class="badge badge-success">Completed</div></td>
-                          <td class="font-weight-medium" th:unless="${dto.tourYn} == 'Y'"><div class="badge badge-warning" >Pending</div></td>
+                          <td class="font-weight-medium" th:if="${dto.tourYn} == 'Y'" th:id="'tourTd'+${dto.placeSeq}"><div class="badge badge-success" th:id="'tourYn'+${dto.placeSeq}" th:text="'Completed'"></div></td>
+                          <td class="font-weight-medium" th:unless="${dto.tourYn} == 'Y'" th:id="'tourTd'+${dto.placeSeq}"><div class="badge badge-warning" th:id="'tourYn'+${dto.placeSeq}" th:text="'Pending'"></div></td>
                           <td>
                             <button class="btn btn-sm btn-light bg-white dropdown-toggle" type="button" id="dropdownMenuDate5" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                               <i class="mdi mdi-brightness-5"></i>
@@ -385,8 +403,8 @@
                             <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuDate2">
                               <p class="dropdown-item" th:onclick="doEdit([[${dto.placeSeq}]])">수정</p>
                               <p class="dropdown-item" th:onclick="doDelete([[${dto.placeSeq}]])">삭제</p>
-                              <p class="dropdown-item" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
-                              <p class="dropdown-item" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
+                              <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
+                              <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
                             </div>
                           </td>
 

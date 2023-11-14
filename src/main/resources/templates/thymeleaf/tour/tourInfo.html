@@ -211,12 +211,6 @@
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
         <li class="nav-item">
-          <a class="nav-link" href="/tour/goItda/">
-            <i class="icon-grid menu-icon"></i>
-            <span class="menu-title">Do Itda</span>
-          </a>
-        </li>
-        <li class="nav-item">
           <a class="nav-link" href="/tour/tourInfo" aria-expanded="false" aria-controls="ui-basic">
             <i class="icon-layout menu-icon"></i>
             <span class="menu-title">여행 관리</span>
@@ -270,7 +264,10 @@
                       <td class="table-borderless" name = "tourProcess" th:style="'text-align: center;'" th:text="'여행 준비 중입니다.'"></td>
                     </tr>
                     <tr th:unless="${dto.tourProcess=='-1'}">
-                      <td class="table-borderless" name = "tourProcess" th:text="${dto.tourProcess}"></td>
+                      <td class="table-borderless" name = "tourProcess" th:if="(${dto.tourY}+${dto.tourN})>0"
+                          th:text="'진행도 ' + ${#numbers.formatInteger(('' + dto.tourY * 100 / (dto.tourY + dto.tourN)), 1)} + '%'"></td>
+                      <td class="table-borderless" name = "tourProcess" th:unless="(${dto.tourY}+${dto.tourN})>0"
+                          th:text="'진행도 0'+'%'"></td>
                     </tr>
                   </table>
                 </div>

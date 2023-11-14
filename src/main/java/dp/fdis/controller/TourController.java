@@ -266,25 +266,25 @@ public class TourController {
 
         log.info(this.getClass().getName() + ".tourDayList Start!");
 
-        String nSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 여행 번호(PK)
-        String ssUserId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); //
+        String tourSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 여행 번호(PK)
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); //
 
-        session.setAttribute("SS_TOUR_SEQ", nSeq);
-        session.setAttribute("SS_USER_ID", ssUserId);
+        session.setAttribute("SS_TOUR_SEQ", tourSeq);
+        session.setAttribute("SS_USER_ID", userId);
 
-        String ssSeq = (String) session.getAttribute("SS_TOUR_SEQ");
+        String sstourSeq = (String) session.getAttribute("SS_TOUR_SEQ");
 
-        log.info("nSeq : " + nSeq);
-        log.info("ssSeq : " + ssSeq);
-        log.info("ssUserId : " + ssUserId);
+        log.info("tourSeq : " + tourSeq);
+        log.info("sstourSeq : " + sstourSeq);
+        log.info("userId : " + userId);
 
         /*
          * 값 전달은 반드시 DTO 객체를 이용해서 처리함 전달 받은 값을 DTO 객체에 넣는다.
          */
         TourDTO pDTO = new TourDTO();
 
-        pDTO.setTourSeq(nSeq);
-        pDTO.setUserId(ssUserId);
+        pDTO.setTourSeq(tourSeq);
+        pDTO.setUserId(userId);
 
         String existsYn = tourInfoService.tourSeqExists(pDTO).getExistsYn();
 
@@ -299,8 +299,18 @@ public class TourController {
             List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourDayList(pDTO))
                     .orElseGet(ArrayList::new);
 
+            TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourInfo(pDTO))
+                    .orElseGet(TourDTO::new);
+
             // 조회된 리스트 결과값 넣어주기
             model.addAttribute("rList", rList);
+
+            session.setAttribute("SS_TOUR_NAME", rDTO.getTourName());
+
+            String tourName = (String) session.getAttribute("SS_TOUR_NAME");
+
+            log.info("sstourName : " + tourName);
+
 
 
             log.info(this.getClass().getName() + ".tourDayList End!");
@@ -535,7 +545,7 @@ public class TourController {
 
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID")); // 로그인 아이디
             String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 제목
-            String startTime = CmmUtil.nvl(request.getParameter("startTime")); // 제목
+            String startTime = CmmUtil.nvl(request.getParameter("startTime")); // 여행시작일
 
             log.info("session user_id : " + userId);
             log.info("tourName : " + tourName);
@@ -912,19 +922,36 @@ public class TourController {
         TourDTO dDTO = Optional.ofNullable(tourInfoService.getTourDayInfo(pDTO))
                 .orElseGet(TourDTO::new);
 
-        // 수동 조작 StartTime (안내시작 클릭시 Y로 바뀜)
+        log.info("Day 시작일자 : " + dDTO.getStartTime());
+
+        // Day에 해당하는 TOUR_PLACE의 TOUR_YN값 축출 : cDTO(count)
+        TourDTO cDTO = Optional.ofNullable(tourInfoService.getTourDayYn(pDTO))
+                .orElseGet(TourDTO::new);
+
+        int cTourY = cDTO.getTourY();
+        int cTourN = cDTO.getTourN();
+
+        log.info("cDTO : TourY " + cTourY );
+        log.info("cDTO : TourN " + cTourN );
 
 
-
-
-
-        if (rDTO.getStartTime().equals(DateUtil.getDateTime()) || startTimeMn.equals("Y")) {
+        if (rDTO.getStartTime().equals(DateUtil.getDateTime()) || CmmUtil.nvl(startTimeMn).equals("Y")) {
 
             session.setAttribute("SS_STARTTIME_YN", "Y");
+
+            // 여행 시작 여부에 따라 TourInfo페이지에서 진행도 표시 여부 확인용 체크사항 변경
+            // 0이면 여행시작 -> 진행도 표시
+            pDTO.setTourProcess("0");
+            tourInfoService.updateTourProcess(pDTO);
 
         } else {
 
             session.setAttribute("SS_STARTTIME_YN", "N");
+
+            // 여행 시작 여부에 따라 TourInfo페이지에서 진행도 표시 여부 확인용 체크사항 변경
+            // -1이면 여행 준비중 -> '여행 준비 중입니다 표시'
+            pDTO.setTourProcess("-1");
+            tourInfoService.updateTourProcess(pDTO);
 
         }
 
@@ -934,6 +961,7 @@ public class TourController {
         model.addAttribute("dList", dList);
         model.addAttribute("rDTO", rDTO);
         model.addAttribute("dDTO", dDTO);
+        model.addAttribute("cDTO", cDTO);
 
         return "thymeleaf/tour/goItda";
 
@@ -1070,10 +1098,10 @@ public class TourController {
 
         try {
 
-            String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
             String placeName =CmmUtil.nvl(request.getParameter("placeName"));
             String placeNIck = CmmUtil.nvl(request.getParameter("placeNick"));
-            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
             String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
 
             log.info("placeSeq : " + placeSeq);
@@ -1088,6 +1116,7 @@ public class TourController {
             tourInfoService.updatePlaceEnd(pDTO);
 
             msg = placeName + "(" + placeNIck + ")" + " 방문을 완료하셨습니다!";
+
 
         } catch (Exception e) {
             msg = "실패하였습니다. : " + e.getMessage();
@@ -1165,15 +1194,38 @@ public class TourController {
         String msg = ""; // 메시지 내용
         MsgDTO dto = null; // 결과 메시지 구조
 
+        TourDTO pDTO = new TourDTO();
+
+        String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+        String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+
+        log.info("tourSeq : " + tourSeq);
+        log.info("userId : " + userId);
+
+        pDTO.setTourSeq(tourSeq);
+        pDTO.setUserId(userId);
+
         try {
 
             String startMn = CmmUtil.nvl(request.getParameter("startMn"));
 
-            log.info("placeSeq : " + startMn);
+            log.info("startMn : " + startMn);
+
+            if (startMn.equals("Y")) {
+
+                msg = "여행 안내를 수동으로 시작하셨습니다.";
+
+
+            } else if (startMn.equals("N")) {
+
+                msg = "여행 수동 안내를 취소하셨습니다.";
+
+            } else {
+
+                msg = "알 수 없는 문제가 발생했습니다. 로그아웃 후 다시 실행해주세요.";
+            }
 
             session.setAttribute("SS_STARTTIME_MN", startMn);
-
-            msg = "SS_STARTTIME_MN 설정 완료 : " + startMn;
 
         } catch (Exception e) {
             msg = "실패하였습니다. : " + e.getMessage();

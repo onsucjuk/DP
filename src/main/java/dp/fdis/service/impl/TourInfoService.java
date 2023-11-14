@@ -163,13 +163,15 @@ public class TourInfoService implements ITourInfoService {
     /**
      *  여기서부터 TOUR_DAY SERVICE
      */
+/*
     @Transactional
     @Override
-    public List<TourDTO> getTourYn(TourDTO pDTO) throws Exception {
+    public TourDTO getTourYn(TourDTO pDTO) throws Exception {
         log.info(this.getClass().getName() + ".getTourYn start!");
 
         return tourMapper.getTourYn(pDTO);
     }
+*/
 
     @Transactional
     @Override
@@ -363,6 +365,15 @@ public class TourInfoService implements ITourInfoService {
 
         log.info(this.getClass().getName() + ".resetPlaceEnd End!");
 
+    }
+
+    @Transactional
+    @Override
+    public TourDTO getTourDayYn(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourDayYn start!");
+
+        return tourMapper.getTourDayYn(pDTO);
     }
 
 }

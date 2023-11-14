@@ -72,17 +72,8 @@ $(document).ready(function () {
 
     if(startTime==='Y'){
 
-        alert("여행을 시작합시다!");
-        doRotate();
-        doCong();
-    } else if(startTimeMn==='Y') {
-
-        alert("수동으로 여행 안내를 시작합니다!");
-
-    } else {
-
-        alert("여행일자가 아닙니다. 여행 정보를 보시려면 우측 상단 여행 안내 시작을 수동으로 눌러서 시작해주세요.")
-
+/*        doRotate();
+        doCong();*/
     }
 
 
@@ -543,35 +534,53 @@ function updateEndTime(seq) {
     let placeSeq = seq;
     let placeNick = $("#placeNick" + seq).text();
     let placeName = $("#placename" + seq).text();
+    let tourYn = $("#tourYn" + seq).text();
 
     console.log("placeNick : " + placeNick)
     console.log("placeName : " + placeName)
+    console.log("tourYn : " + tourYn)
 
-    if(confirm( placeName + "(" + placeNick + ")" + "목적지 방문을 완료하시겠습니까?")) {
+    if(tourYn==="Pending") {
 
-        // Ajax 호출해서 회원가입하기
-        $.ajax({
-            url: "/tour/updatePlaceEnd",
-            type: "post",
-            datatype: "JSON",
-            data: { "placeSeq" : placeSeq,
-                "placeNick" : placeNick,
-                "placeName" : placeName
-            },
-            success: function (json) {
+        if (confirm(placeName + "(" + placeNick + ")" + "목적지 방문을 완료하시겠습니까?")) {
 
-                if (json.result === 1) {
-                    alert(json.msg);
-                    location.href = "/user/login";
+            // Ajax 호출해서 회원가입하기
+            $.ajax({
+                url: "/tour/updatePlaceEnd",
+                type: "post",
+                datatype: "JSON",
+                data: {
+                    "placeSeq": placeSeq,
+                    "placeNick": placeNick,
+                    "placeName": placeName
+                },
+                success: function (json) {
 
-                } else {
-                    alert(json.msg);
-                    location.reload();
+                    if (json.result === 1) {
+                        alert(json.msg);
+                        location.href = "/user/login";
+
+                    } else {
+                        alert(json.msg);
+
+                        /*$("#tourTd" + seq).load(Location.href + " #tourTd" + seq);
+                        $("#tourYn" + seq).load(Location.href + " #tourYn" + seq);*/
+
+                        location.reload();
+
+                    }
                 }
-            }
-        })
-    }
+            })
+        }
+    } else if (tourYn==="Completed") {
 
+            alert("이미 방문을 완료항 상태입니다.")
+
+    } else {
+
+        alert("알 수 없는 문제가 발생했습니다. 확인해주세요.")
+
+    }
 }
 
 function resetEndTime(seq) {
@@ -581,33 +590,52 @@ function resetEndTime(seq) {
     let placeSeq = seq;
     let placeNick = $("#placeNick" + seq).text();
     let placeName = $("#placename" + seq).text();
+    let tourYn = $("#tourYn" + seq).text();
 
     console.log("placeNick : " + placeNick)
     console.log("placeName : " + placeName)
+    console.log("tourYn : " + tourYn)
 
-    if(confirm( placeName + "(" + placeNick + ")" + "목적지 방문 완료를 취소하시겠습니까?")) {
+    if(tourYn==="Completed") {
 
-        // Ajax 호출해서 회원가입하기
-        $.ajax({
-            url: "/tour/resetPlaceEnd",
-            type: "post",
-            datatype: "JSON",
-            data: { "placeSeq" : placeSeq,
-                    "placeNick" : placeNick,
-                    "placeName" : placeName
-            },
-            success: function (json) {
+            if (confirm(placeName + "(" + placeNick + ")" + "목적지 방문 완료를 취소하시겠습니까?")) {
+                // Ajax 호출해서 회원가입하기
 
-                if (json.result === 1) {
-                    alert(json.msg);
-                    location.href = "/user/login";
+                $.ajax({
+                    url: "/tour/resetPlaceEnd",
+                    type: "post",
+                    datatype: "JSON",
+                    data: {
+                        "placeSeq": placeSeq,
+                        "placeNick": placeNick,
+                        "placeName": placeName
+                    },
+                    success: function (json) {
 
-                } else {
-                    alert(json.msg);
-                    location.reload();
-                }
+                        if (json.result === 1) {
+                            alert(json.msg);
+                            location.href = "/user/login";
+
+                        } else {
+
+                            /*$("#tourTd" + seq).load(Location.href + " #tourTd" + seq);
+                            $("#tourYn" + seq).load(Location.href + " #tourYn" + seq);*/
+
+                            location.reload();
+
+                        }
+                    }
+                })
             }
-        })
+
+    } else if (tourYn==="Pending") {
+
+        alert("아직 방문하지 않은 상태입니다.")
+
+    } else {
+
+        alert("알 수 없는 문제가 발생했습니다. 확인해주세요.")
+
     }
 
 }
@@ -721,49 +749,7 @@ function doCong() {
 }
 
 
-/*
-function updateStart(){
-
-    $.ajax({
-        url: "/tour/updateTourStart",
-        type: "post",
-        datatype: "JSON",
-        data: { "dSeq" : dSeq },
-        success: function (json) {
-
-            if (json.result === 1) {
-                alert(json.msg);
-                location.href = "/user/login";
-
-            } else {
-                alert(json.msg);
-            }
-        }
-    })
 
 
-}*/
-/*
 
-function resetStart(){
 
-    $.ajax({
-        url: "/tour/resetTourStart",
-        type: "post",
-        datatype: "JSON",
-        data: { "dSeq" : dSeq },
-        success: function (json) {
-
-            if (json.result === 1) {
-                alert(json.msg);
-                location.href = "/user/login";
-
-            } else {
-                alert(json.msg);
-            }
-        }
-    })
-
-}
-
-*/

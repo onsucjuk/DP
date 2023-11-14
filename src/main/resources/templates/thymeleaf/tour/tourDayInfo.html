@@ -210,12 +210,7 @@
     <!-- partial:partials/_sidebar.html -->
     <nav class="sidebar sidebar-offcanvas" id="sidebar">
       <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link" href="/tour/goItda/">
-            <i class="icon-grid menu-icon"></i>
-            <span class="menu-title">Do Itda</span>
-          </a>
-        </li>
+
         <li class="nav-item">
           <a class="nav-link" href="/tour/tourInfo" aria-expanded="false" aria-controls="ui-basic">
             <i class="icon-layout menu-icon"></i>
@@ -250,15 +245,29 @@
           <div class="col-md-12 grid-margin">
             <div class="row">
               <div class="col-12 col-xl-8 mb-4 mb-xl-0">
-                <h3 class="font-weight-bold" th:text="Day+${session.SS_DAY_SEQ} + ' 목적지 목록'"></h3>
+                <h3 class="font-weight-bold" th:text="${session.SS_TOUR_NAME}+ ' '+ Day+${session.SS_DAY_SEQ} + ' 목적지 목록'"></h3>
                 <!--                  <h6 class="font-weight-normal mb-0">All systems are running smoothly! You have <span class="text-primary">3 unread alerts!</span></h6>-->
               </div>
 
             </div>
           </div>
         </div>
+
+        <div class="px-4 my-6">
+          <button
+                  id="btnGoItda"
+                  class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                  type="button"
+          >
+            <div class="w-full">
+              <span class="ml-2" aria-hidden="true"><i class="icon-grid menu-icon"></i></span>
+              <span class="px-4 py-3 text-sm font-semibold" >Do Itda !</span>
+            </div>
+          </button>
+        </div>
+
         <div class="row">
-          <div class="card position-relative h-25">
+          <div class="card position-relative h-25" style="margin-left: 35px;">
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
               <div class="w-full overflow-x-auto">
 
@@ -390,18 +399,7 @@
                   </div>
                 </button>
               </div>
-              <div class="px-4 my-6">
-                <button
-                        id="btnGoItda"
-                        class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                        type="button"
-                >
-                  <div class="w-full">
-                    <span class="px-4 py-3 text-sm font-semibold" >Go Itda !</span>
-                    <span class="ml-2" aria-hidden="true">-</span>
-                  </div>
-                </button>
-              </div>
+
             </div>
           </div>
         </div>
