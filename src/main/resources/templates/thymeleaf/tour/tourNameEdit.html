@@ -37,7 +37,7 @@
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">여행명</span>
-            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="tourName" placeholder="여행명을 입력해주세요.">
+            <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="tourName" placeholder="여행명을 입력해주세요." th:value="${rDTO.tourName}">
             <button id="btnTourName" class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
                     type="button" > 여행명 중복체크 </button>
           </label>
@@ -45,7 +45,7 @@
         <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
           <label class="block text-sm">
             <span class="text-gray-700 dark:text-gray-400">날짜</span>
-            <input class="ts block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="startTime1" id="startTime1" autocomplete="off" placeholder="클릭해서 날짜를 선택하세요.">
+            <input class="ts block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="startTime" id="startTime" autocomplete="off" placeholder="클릭해서 날짜를 선택하세요." th:value = "${rDTO.startTime}">
           </label>
         </div>
 

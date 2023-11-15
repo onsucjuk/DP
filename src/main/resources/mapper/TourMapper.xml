@@ -70,25 +70,25 @@
         UPDATE TOUR_INFO
         SET
             TOUR_NAME = #{tourName},
-            START_TIME = CAST(#{startTime} AS DATE))
+            START_TIME = CAST(#{startTime} AS DATE)
         WHERE
             TOUR_SEQ = #{tourSeq}
             AND
             USER_ID = #{userId}
     </update>
 
-<!--
-    여행 시작일 수정 쿼리
-    <update id="updateTourStart" parameterType="TourDTO">
-        UPDATE TOUR_INFO
+
+    <!-- 여행 정보 Day 수정시 여행 일자 Day 수정 -->
+    <update id="updateTourDays" parameterType="TourDTO">
+        UPDATE TOUR_DAY
         SET
-            START_TIME = now()
+            START_TIME = DATE_ADD(CAST(#{startTime} AS DATE), INTERVAL #{count} DAY)
         WHERE
             TOUR_SEQ = #{tourSeq}
-            AND
-            USER_ID = #{userId}
+          AND TOUR_DAY = #{tourDay};
     </update>
--->
+
+
 
     <update id="resetTourStart" parameterType="TourDTO">
         UPDATE TOUR_INFO
@@ -148,13 +148,36 @@
               USER_ID = #{userId}
     </select>
 
+    <select id="getTourEditExists" parameterType="TourDTO" resultType="TourDTO">
+        <!-- SELECT DECODE(COUNT(1),0,'N','Y') AS EXISTS_YN -->
+        SELECT
+        CASE
+        WHEN COUNT(1) = 0 THEN 'N'
+        ELSE 'Y'
+        END AS EXISTS_YN
+        FROM TOUR_INFO
+        WHERE TOUR_NAME = #{tourName}
+        AND
+        TOUR_SEQ != #{tourSeq}
+        AND
+        USER_ID = #{userId};
+    </select>
+
 
     <!-- 여기서부터 Tour_day 매퍼 || 여행 일수, 진행도 가져오기-->
+
+    <select id="countDay" parameterType="TourDTO" resultType="int">
+        SELECT COUNT(*)
+        FROM TOUR_DAY
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+    </select>
+
 
     <update id="updateTourDaySt" parameterType="TourDTO">
         UPDATE TOUR_DAY
         SET
-            START_TIME = now()
+            START_TIME = CAST(#{startTime} AS DATE)
         WHERE
             TOUR_SEQ = #{tourSeq}
           AND

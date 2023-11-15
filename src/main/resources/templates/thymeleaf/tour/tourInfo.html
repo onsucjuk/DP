@@ -255,7 +255,7 @@
           <div class="card position-relative w-full">
             <form>
               <div class="slide slide_wrap">
-                <div th:if="${session.SS_EXISTS_YN} == 'Y'" class="slide_item w-full" th:each="dto : ${rList}" th:onclick="doDetail([[${dto.tourSeq}]])">
+                <div class="slide_item w-full" th:each="dto : ${rList}" th:if="${session.SS_EXISTS_YN} == 'Y'" th:onclick="doDetail([[${dto.tourSeq}]])">
                   <table>
                     <tr>
                       <th class="table-borderless" name = "tourName" th:style="'text-align: center;'" th:text="${dto.tourName}"></th>
@@ -263,7 +263,7 @@
                     <tr th:if="${dto.tourProcess=='-1'}">
                       <td class="table-borderless" name = "tourProcess" th:style="'text-align: center;'" th:text="'여행 준비 중입니다.'"></td>
                     </tr>
-                    <tr th:unless="${dto.tourProcess=='-1'}">
+                    <tr th:if="${dto.tourProcess=='0'}">
                       <td class="table-borderless" name = "tourProcess" th:if="(${dto.tourY}+${dto.tourN})>0"
                           th:text="'진행도 ' + ${#numbers.formatInteger(('' + dto.tourY * 100 / (dto.tourY + dto.tourN)), 1)} + '%'"></td>
                       <td class="table-borderless" name = "tourProcess" th:unless="(${dto.tourY}+${dto.tourN})>0"

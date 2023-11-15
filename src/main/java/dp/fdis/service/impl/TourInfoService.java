@@ -102,13 +102,13 @@ public class TourInfoService implements ITourInfoService {
 
     @Transactional
     @Override
-    public void updateTourStart(TourDTO pDTO) throws Exception {
+    public void updateTourDays(TourDTO pDTO) throws Exception {
 
-        log.info(this.getClass().getName() + ".updateTourStart start!");
+        log.info(this.getClass().getName() + ".updateTourDays start!");
 
-        tourMapper.updateTourStart(pDTO);
+        tourMapper.updateTourDays(pDTO);
 
-        log.info(this.getClass().getName() + ".updateTourStart End!");
+        log.info(this.getClass().getName() + ".updateTourDays End!");
 
     }
 
@@ -231,6 +231,18 @@ public class TourInfoService implements ITourInfoService {
 
         log.info(this.getClass().getName() + ".resetTourDaySt End!");
 
+    }
+
+    @Transactional
+    @Override
+    public TourDTO getTourEditExists(TourDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + "getTourEditExists Start!");
+
+        TourDTO rDTO = tourMapper.getTourEditExists(pDTO);
+
+        log.info(this.getClass().getName() + "getTourEditExists End!");
+
+        return rDTO;
     }
 
     @Transactional
@@ -374,6 +386,14 @@ public class TourInfoService implements ITourInfoService {
         log.info(this.getClass().getName() + ".getTourDayYn start!");
 
         return tourMapper.getTourDayYn(pDTO);
+    }
+
+    @Override
+    public int countDay(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".countDay start!");
+
+        return tourMapper.countDay(pDTO);
     }
 
 }

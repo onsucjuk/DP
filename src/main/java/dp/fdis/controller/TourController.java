@@ -75,9 +75,28 @@ public class TourController {
      * 여행 수정 페이지로 이동
      */
     @GetMapping(value = "tourNameEdit")
-    public String tourNameEdit(HttpSession session) throws Exception {
+    public String tourNameEdit(HttpSession session, ModelMap model) throws Exception {
 
         log.info(this.getClass().getName() + ".tourNameEdit Start!");
+
+        String userId =((String) session.getAttribute("SS_USER_ID"));
+        String tourSeq =((String) session.getAttribute("SS_TOUR_SEQ"));
+
+        log.info("userId : " + userId);
+        log.info("tourSeq : " + tourSeq);
+
+        TourDTO pDTO = new TourDTO();
+
+        pDTO.setUserId(userId);
+        pDTO.setTourSeq(tourSeq);
+
+        TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourInfo(pDTO))
+                .orElseGet(TourDTO::new);
+
+        log.info("tourName : " + rDTO.getTourName());
+        log.info("startTime : " + rDTO.getStartTime());
+
+        model.addAttribute("rDTO", rDTO);
 
         return "thymeleaf/tour/tourNameEdit";
 
@@ -220,24 +239,37 @@ public class TourController {
 
         try {
 
-            String nSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ")); // 여행 번호(PK)
             String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 여행 이름(PK)
             String startTime = CmmUtil.nvl(request.getParameter("startTime")); // 여행 이름(PK)
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
-            log.info("nSeq : " + nSeq);
+            log.info("tourSeq : " + tourSeq);
             log.info("userId : " + userId);
             log.info("tourName : " + tourName);
             log.info("startTime : " + startTime);
 
             TourDTO pDTO = new TourDTO();
-            pDTO.setTourSeq(nSeq);
+            pDTO.setTourSeq(tourSeq);
             pDTO.setUserId(userId);
             pDTO.setTourName(tourName);
             pDTO.setStartTime(startTime);
 
 
             tourInfoService.updateTourName(pDTO);
+
+            int n = tourInfoService.countDay(pDTO);
+
+            log.info("Day num : " + n);
+
+            for (int i = 0; i < n; i++){
+
+                pDTO.setCount(i);
+                pDTO.setTourDay(String.valueOf(i+1));
+                tourInfoService.updateTourDays(pDTO);
+
+            }
+
 
             msg = "여행 정보 수정되었습니다.";
 
@@ -413,6 +445,34 @@ public class TourController {
 
     }
 
+    /**
+     * 수정전 여행지 이름 중복체크하기
+     */
+    @ResponseBody
+    @PostMapping(value = "getTourEditExists")
+    public TourDTO getTourEditExists(HttpServletRequest request, HttpSession session) throws Exception {
+        log.info(this.getClass().getName() + ".getTourEditExists Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        String tourName = CmmUtil.nvl(request.getParameter("tourName")); // 여행명
+        String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+
+        log.info("tourName : " + tourName);
+        log.info("userId : " + userId);
+        log.info("tourSeq : " + tourSeq);
+
+        TourDTO pDTO = new TourDTO();
+        pDTO.setTourName(tourName);
+        pDTO.setUserId(userId);
+        pDTO.setTourSeq(tourSeq);
+
+        //회원아이디를 통해 중복된 아이디인지 조회
+        TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourEditExists(pDTO)).orElseGet(TourDTO::new);
+
+        log.info(this.getClass().getName() + ".getTourEditExists End!");
+
+        return rDTO;
+    }
 
     /**
      * 여행 정보 삭제
@@ -934,8 +994,10 @@ public class TourController {
         log.info("cDTO : TourY " + cTourY );
         log.info("cDTO : TourN " + cTourN );
 
+        log.info("rDTO.getStartTime()" + dDTO.getStartTime());
+        log.info("DateUtil.getDateTime()" + DateUtil.getDateTime());
 
-        if (rDTO.getStartTime().equals(DateUtil.getDateTime()) || CmmUtil.nvl(startTimeMn).equals("Y")) {
+        if (dDTO.getStartTime().equals(DateUtil.getDateTime()) || CmmUtil.nvl(startTimeMn).equals("Y")) {
 
             session.setAttribute("SS_STARTTIME_YN", "Y");
 
@@ -994,19 +1056,8 @@ public class TourController {
             pDTO.setUserId(userId);
             pDTO.setTourDay(tourDay);
 
-            if (tourDay.equals("1")) {
-
-                tourInfoService.updateTourStart(pDTO);
-                tourInfoService.updateTourDaySt(pDTO);
-
                 msg = "여행을 시작합니다.";
 
-            } else {
-
-                tourInfoService.updateTourDaySt(pDTO);
-                msg = "여행을 시작합니다.";
-
-            }
 
         } catch (Exception e) {
             msg = "실패하였습니다. : " + e.getMessage();

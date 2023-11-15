@@ -5,6 +5,7 @@ $(document).ready(function () {
     })
 
     $("#btnTourName").on("click", function () {
+
         tourNameExists(f)
 
     })
@@ -47,7 +48,7 @@ function tourNameExists(f) {
     }
 
     $.ajax({
-            url: "/tour/getTourNameExists",
+            url: "/tour/getTourEditExists",
             type: "post",
             dataType: "JSON",
             data: $("#f").serialize(),
@@ -74,9 +75,9 @@ function doEdit() {
         f.tourName.focus();
         return;
     }
-    if (f.startTime1.value === "") {
+    if (f.startTime.value === "") {
         alert("날짜를 입력하시기 바랍니다.");
-        f.startTime1.focus();
+        f.startTime.focus();
         return;
     }
     if (calBytes(f.tourName.value) > 240) {
@@ -110,7 +111,7 @@ function doEdit() {
 }
 
 $(function(){
-    $('#startTime1').datepicker({
+    $('#startTime').datepicker({
         lang:'ko',
         dateFormat: 'yy-mm-dd',
         monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'], //달력의 월 부분 텍스트

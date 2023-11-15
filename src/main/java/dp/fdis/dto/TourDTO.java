@@ -24,6 +24,8 @@ public class TourDTO {
     // 위 2개는 매퍼에서 자동 생성(mxa()+1)
     private String tourDay; // 여행 일자 <- 이건 일자 직접 등록 Day1(1), Day2(2) ...
 
+    private int count; // Day 수
+
     //--------------------------------------------------------------- TOUR_PLACE
 
     private String placeNick; // 사용자 설정 목적지명

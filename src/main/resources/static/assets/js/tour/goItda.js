@@ -1,5 +1,12 @@
 $(document).ready(function () {
 
+    $("#btnViewNow").on("click", function () {
+
+      sessionStorage.setItem("SS_ROUTE_GD", "");
+      location.reload()
+
+    })
+
     $("#btnTourStart").on("click", function () {
 
         if(confirm("여행을 시작하시겠습니까?")) {
@@ -22,6 +29,7 @@ $(document).ready(function () {
                     } else {
 
                         location.reload();
+                        viewRoute()
                     }
 
                 }
@@ -68,15 +76,15 @@ $(document).ready(function () {
 
     })
 
-
+    if(sessionStorage.getItem("SS_ROUTE_GD")==="Y"){
+        viewRoute()
+    }
 
     if(startTime==='Y'){
 
-/*        doRotate();
-        doCong();*/
+        doRotate();
+        doCong();
     }
-
-
 })
 
 if (dSeq) {
@@ -98,14 +106,14 @@ function viewRoute() {
 
     let nowLat = $("#nowLat").text();
     let nowLon = $("#nowLon").text();
-    let locIndex = 1;
+    let locIndex = 0;
 
     console.log("현재 위도 : " + nowLat)
     console.log("현재 경도 : " + nowLon)
     console.log("길안내 순서 : " + locIndex)
 
     // 시작
-    addMarker("llStart",nowLon,nowLat,locIndex++);
+    addMarker("llStart",nowLon,nowLat,locIndex, locIndex++);
 
     // 시작지점 분류 하기
 
@@ -120,18 +128,21 @@ function viewRoute() {
 
         let lathidden = $("#lathidden" + index).text();
         let lonhidden = $("#lonhidden" + index).text();
+        let tourYn = $("#tourYn" + index).text();
 
-        console.info("plc_" + index +  " lathidden : " + lathidden);
-        console.info("plc_" + index +  " lonhidden : " + lonhidden);
+            console.info("plc_" + index + " lathidden : " + lathidden);
+            console.info("plc_" + index + " lonhidden : " + lonhidden);
+            console.info("plc_" + index + " tourYn : " + tourYn);
 
-        let data = {
+            let data = {
 
-            lathidden: lathidden,
-            lonhidden: lonhidden
+                lathidden: lathidden,
+                lonhidden: lonhidden,
+                tourYn: tourYn
 
-        };
+            };
 
-        totalTimesMap.set(index, data)
+            totalTimesMap.set(index, data)
 
     })
 
@@ -144,6 +155,7 @@ function viewRoute() {
 
         let lathidden = data.lathidden;
         let lonhidden = data.lonhidden;
+        let tourYn = data.tourYn;
 
         if (idx < sortedTotalTimesArray.length - 1) {
 
@@ -158,8 +170,13 @@ function viewRoute() {
             console.log("경유지 경도 : " + lonhidden)
             console.log("길안내 순서 : " + locIndex)
 
-            // 중간 값일 때 경유지
-            addMarker("llPass", lonhidden, lathidden, locIndex++);
+            if (tourYn==="Pending") {
+                // 중간 값일 때 경유지
+                addMarker("llPass", lonhidden, lathidden, locIndex, locIndex++);
+            }
+            else {
+                addMarker("cpPass", lonhidden, lathidden, locIndex, locIndex++);
+            }
 
         } else {
 
@@ -167,13 +184,21 @@ function viewRoute() {
             console.log("도착지 경도 : " + lathidden)
             console.log("길안내 순서 : " + locIndex)
 
-            // 마지막 값일 때 도착
-            addMarker("llEnd", lonhidden, lathidden, locIndex++);
+            if (tourYn==="Pending") {
+                // 마지막 값일 때 도착
+                addMarker("llEnd", lonhidden, lathidden, locIndex, locIndex++);
+            }
+            else {
+                addMarker("cpPass", lonhidden, lathidden, locIndex, locIndex++);
+            }
 
             eLat += lathidden;
             eLon += lonhidden;
 
         }
+
+        sessionStorage.setItem("SS_ROUTE_GD", "Y");
+
     });
 
     console.log("경유지 정보 : " + passL)
@@ -319,7 +344,7 @@ function viewRoute() {
         }
     }
 
-    function addMarker(status, lon, lat, tag) {
+    function addMarker(status, lon, lat, index, tag) {
         //출도착경유구분
         //이미지 파일 변경.
         var markerLayer;
@@ -328,10 +353,16 @@ function viewRoute() {
                 imgURL = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png';
                 break;
             case "llPass":
-                imgURL = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png';
+                imgURL = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_${index}.png`;
+                break;
+            case "cpPass":
+                imgURL = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_${index}.png`;
                 break;
             case "llEnd":
-                imgURL = 'http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png';
+                imgURL = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_${index}.png`;
+                break;
+            case "cpEnd":
+                imgURL = `http://tmapapi.sktelecom.com/upload/tmap/marker/pin_g_m_${index}.png`;
                 break;
             default:
         };
@@ -355,8 +386,29 @@ function viewRoute() {
 }
 
 function doDetail(seq) {
-    /*location.href = "/tour/tourDayInfo?nSeq="*/
-    location.href = "/tour/goItda?dSeq=" + seq;
+
+    let startMn = "N"
+
+    $.ajax({
+        url: "/tour/setSessionMn",
+        type: "POST",
+        datatype: "JSON",
+        data: {
+            "startMn" : startMn
+        },
+        success: function (json) {
+
+            if (json.result === 1) {
+                alert(json.msg);
+                location.href = "/user/login";
+
+            } else {
+
+                location.href = "/tour/goItda?dSeq=" + seq;
+            }
+
+        }
+    })
 }
 
 function doRotate() {
@@ -374,39 +426,48 @@ function doRotate() {
 
         let lathidden = $("#lathidden" + index).text();
         let lonhidden = $("#lonhidden" + index).text();
+        let tourYn = $("#tourYn" + index).text();
 
         console.log(nowLon, nowLat, lathidden, lonhidden, index)
+        console.log("tourYn = " + tourYn)
         /*let poihidden = $(this).find('[th\\:name="poihidden"]').text();*/
 
+        if (tourYn === "Pending") {
 
-                    $.ajax({
-                        url: "/route/getRouteInfo",
-                        type: "POST",
-                        datatype: "JSON",
-                        data: { "sLat" : nowLat,
-                                "sLon" : nowLon,
-                                "eLat" : lathidden,
-                                "eLon" : lonhidden,
-                                "index": index},
-                        success: function (json) {
+            $.ajax({
+                url: "/route/getRouteInfo",
+                type: "POST",
+                datatype: "JSON",
+                data: {
+                    "sLat": nowLat,
+                    "sLon": nowLon,
+                    "eLat": lathidden,
+                    "eLon": lonhidden,
+                    "index": index
+                },
+                success: function (json) {
 
-                            if (json.isEmpty) {
-                                alert("JSON 값을 받아오지 못했습니다.");
+                    if (json.isEmpty) {
+                        alert("JSON 값을 받아오지 못했습니다.");
 
-                            } else {
+                    } else {
 
-                                let totalDistance = json.totalDistance;
-                                let totalTime = json.totalTime;
-                                let index = json.index;
+                        let totalDistance = json.totalDistance;
+                        let totalTime = json.totalTime;
+                        let index = json.index;
 
-                                console.log(totalDistance, totalTime, index)
+                        console.log(totalDistance, totalTime, index)
 
-                                $(`#totalDistance${index}`).text(parseInt(totalDistance/100)+'km');
-                                $(`#totalTime${index}`).text('약' + parseInt(totalTime/60) + '분 소요 예정');
+                        $(`#totalDistance${index}`).text(parseInt(totalDistance / 100) + 'km');
+                        $(`#totalTime${index}`).text('약' + parseInt(totalTime / 60) + '분 소요 예정');
 
-                            }
-                        }
-                    })
+                    }
+                }
+            })
+        } else {
+            $(`#totalDistance${index}`).text('방문 완료했습니다.');
+            $(`#totalTime${index}`).text('');
+        }
     })
 };
 
@@ -652,66 +713,70 @@ function doCong() {
             let lathidden = $("#lathidden" + index).text();
             let lonhidden = $("#lonhidden" + index).text();
             let poihidden = $("#poihidden" + index).text();
+            let tourYn = $("#tourYn" + index).text();
 
             console.log(lathidden, lonhidden, poihidden, index)
+            console.log("tourYn : " + tourYn)
             /*let poihidden = $(this).find('[th\\:name="poihidden"]').text();*/
 
+            if (tourYn==="Pending") {
 
-            $.ajax({
+                $.ajax({
 
-                url: "/cong/getCongestion",
-                type: "GET",
-                datatype: "JSON",
-                data: {
-                    "poi" : poihidden,
-                    "lat" : lathidden,
-                    "lon" : lonhidden,
-                    "index": index
-                },
-                success: function (json) {
+                    url: "/cong/getCongestion",
+                    type: "GET",
+                    datatype: "JSON",
+                    data: {
+                        "poi": poihidden,
+                        "lat": lathidden,
+                        "lon": lonhidden,
+                        "index": index
+                    },
+                    success: function (json) {
 
-                    if (json.isEmpty) {
-                        alert("JSON 값을 받아오지 못했습니다.");
-
-                    } else {
-
-                        let congestion = json.congestion;
-                        let congestionLevel = json.congestionLevel;
-                        let type = json.type;
-                        let index = json.index;
-
-                        console.log(congestion, congestionLevel, type, index)
-
-                        if (congestionLevel===1) {
-
-                            $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-success");
-                            $(`#congestion${index}`).text("여유");
-
-                        } else if(congestionLevel===2) {
-
-                            $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-warning");
-                            $(`#congestion${index}`).text("보통");
-
-                        } else if(congestionLevel===3) {
-
-                            $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-realWarning");
-                            $(`#congestion${index}`).text("약간 붐빔");
-
-                        } else if(congestionLevel===4) {
-
-                            $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-danger");
-                            $(`#congestion${index}`).text("붐빔");
+                        if (json.isEmpty) {
+                            alert("JSON 값을 받아오지 못했습니다.");
 
                         } else {
-                            $(`#congestion${index}`).text("혼잡도 정보를 받아 올 수 없습니다.");
+
+                            let congestion = json.congestion;
+                            let congestionLevel = json.congestionLevel;
+                            let type = json.type;
+                            let index = json.index;
+
+                            console.log(congestion, congestionLevel, type, index)
+
+                            if (congestionLevel === 1) {
+
+                                $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-success");
+                                $(`#congestion${index}`).text("여유");
+
+                            } else if (congestionLevel === 2) {
+
+                                $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-warning");
+                                $(`#congestion${index}`).text("보통");
+
+                            } else if (congestionLevel === 3) {
+
+                                $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-realWarning");
+                                $(`#congestion${index}`).text("약간 붐빔");
+
+                            } else if (congestionLevel === 4) {
+
+                                $(`#congestion${index}`).attr("class", "font-weight-bold badge badge-danger");
+                                $(`#congestion${index}`).text("붐빔");
+
+                            } else {
+                                $(`#congestion${index}`).text("혼잡도 정보를 받아 올 수 없습니다.");
+                            }
+
+
+                            $(`#conghidden${index}`).text(congestion);
+
                         }
-
-
-                        $(`#conghidden${index}`).text(congestion);
-
                     }
-                }
-            })
+                })
+            }
         })
 
     function addMarker(status, lon, lat, tag) {
@@ -747,9 +812,3 @@ function doCong() {
         return marker;
     }
 }
-
-
-
-
-
-

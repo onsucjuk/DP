@@ -25,7 +25,7 @@ public interface ITourInfoService {
     void updateTourName(TourDTO pDTO) throws Exception;
 
     //여행 시작
-    void updateTourStart(TourDTO pDTO) throws Exception;
+    void updateTourDays(TourDTO pDTO) throws Exception;
 
     void resetTourStart(TourDTO pDTO) throws Exception;
 
@@ -57,6 +57,7 @@ public interface ITourInfoService {
 
     void resetTourDaySt(TourDTO pDTO) throws Exception;
 
+    TourDTO getTourEditExists(TourDTO pDTO) throws Exception;
 
     void deleteTourDayAll(TourDTO pDTO) throws Exception;
 
@@ -92,7 +93,9 @@ public interface ITourInfoService {
 
     TourDTO getTourDayYn(TourDTO pDTO) throws Exception;
 
-/*    TourDTO getTourYn(TourDTO pDTO) throws Exception;*/
+    int countDay(TourDTO pDTO) throws Exception;
+
+    /*    TourDTO getTourYn(TourDTO pDTO) throws Exception;*/
 
 
 }

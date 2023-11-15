@@ -25,7 +25,7 @@ public interface ITourMapper {
     void updateTourName(TourDTO pDTO) throws Exception;
 
     //여행 시작
-    void updateTourStart(TourDTO pDTO) throws Exception;
+    void updateTourDays(TourDTO pDTO) throws Exception;
 
     void resetTourStart(TourDTO pDTO) throws Exception;
 
@@ -42,7 +42,8 @@ public interface ITourMapper {
      *  여기서부터 TourDay Mapper
      */
 
-
+    // Day 숫자 Count
+    int countDay(TourDTO pDTO) throws Exception;
 
     // 여행 진행도 장소 방문 완료 수
     /*    TourDTO getTourYn(TourDTO pDTO) throws Exception;*/
@@ -55,6 +56,8 @@ public interface ITourMapper {
     TourDTO getTourDayInfo(TourDTO pDTO) throws Exception;
 
     TourDTO getTourNameExists(TourDTO pDTO) throws Exception;
+
+    TourDTO getTourEditExists(TourDTO pDTO) throws Exception;
 
     //여행 일자 등록
     void addTourDay(TourDTO pDTO) throws Exception;
