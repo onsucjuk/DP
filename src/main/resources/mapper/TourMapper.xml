@@ -276,7 +276,8 @@
 
     <!-- 여행 목적지 리스트 -->
     <select id="getTourPlace" parameterType="TourDTO" resultType="TourDTO">
-        SELECT PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, TOUR_YN, MEMO, LAT, LON, POI, END_TIME, START_TIME
+        SELECT PLACE_SEQ, PLACE_NICK, PLACE_NAME, PLACE_ADDR, TOUR_YN, MEMO, TRIM(TRAILING '0' FROM LAT) AS LAT,
+               TRIM(TRAILING '0' FROM LON) AS LON, POI, END_TIME, START_TIME
         FROM  TOUR_PLACE
         WHERE
             TOUR_DAY = #{tourDay}
@@ -286,7 +287,8 @@
 
     <!-- 여행 목적지 하나 들고 오기 -->
     <select id="getTourPlaceOne" parameterType="TourDTO" resultType="TourDTO">
-        SELECT PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, LAT, LON, POI, END_TIME, START_TIME
+        SELECT PLACE_NICK, PLACE_NAME, PLACE_ADDR, MEMO, TRIM(TRAILING '0' FROM LAT) AS LAT,
+               TRIM(TRAILING '0' FROM LON) AS LON, POI, END_TIME, START_TIME
         FROM  TOUR_PLACE
         WHERE
             TOUR_DAY = #{tourDay}
