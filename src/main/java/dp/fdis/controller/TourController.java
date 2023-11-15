@@ -379,7 +379,7 @@ public class TourController {
             if (tourSeq.length() > 0) {
                 tourInfoService.addTourDay(pDTO);
 
-                msg = "등록되었습니다.";
+                msg = "";
 
             } else {
 

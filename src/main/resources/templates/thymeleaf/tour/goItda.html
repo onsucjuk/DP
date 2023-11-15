@@ -376,6 +376,7 @@
                               <i class="mdi mdi-brightness-5"></i>
                             </button>
                               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuDate2">
+                                  <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="doGuide([[${dto.placeSeq}]])">T Map 길안내</p>
                                   <p class="dropdown-item" th:onclick="doEdit([[${dto.placeSeq}]])">수정</p>
                                   <p class="dropdown-item" th:onclick="doDelete([[${dto.placeSeq}]])">삭제</p>
                                   <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
@@ -410,6 +411,7 @@
                               <p class="dropdown-item" th:onclick="doDelete([[${dto.placeSeq}]])">삭제</p>
                               <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
                               <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
+                              <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="doGuide([[${dto.placeSeq}]])">T Map 길안내</p>
                             </div>
                           </td>
 
@@ -488,6 +490,7 @@
       var new_Click_polyLine = [];
 
        if (navigator.geolocation) {
+
       navigator.geolocation.getCurrentPosition(
               function (position) {
 
@@ -515,7 +518,7 @@
                   map: map
                 });
 
-                if(sessionStorage.getItem("SS_ROUTE_GD")!="Y") {
+                if (sessionStorage.getItem("SS_ROUTE_GD") != "Y") {
 
                   map.setCenter(new Tmapv2.LatLng(lat, lon));
                   map.setZoom(15);

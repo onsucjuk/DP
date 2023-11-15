@@ -25,7 +25,10 @@ function doAdd() {
                     data: {"nSeq": nSeq}, // form 태그 내 input 등 객체를 자동으로 전송할 형태로 변경하기
                     success:
                         function (json) {
-                            alert(json.msg); // 메시지 띄우기
+
+                            if(json.msg!="") {
+                                alert(json.msg); // 메시지 띄우기
+                            }
                             location.reload();//
                         }
                 }

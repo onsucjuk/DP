@@ -812,3 +812,16 @@ function doCong() {
         return marker;
     }
 }
+
+function doGuide(placeSeq) {
+
+    let lathidden = $("#lathidden" + placeSeq).text();
+    let lonhidden = $("#lonhidden" + placeSeq).text();
+    let placename = $("#placename" + placeSeq).text();
+
+
+    location.href = `https://apis.openapi.sk.com/tmap/app/routes?appKey=B06BWPIrhC5CJXueAhPi7hG3V6avEXn8edbvjar9&name=${placename}&lon=${lonhidden}&lat=${lathidden}`
+
+
+
+}
