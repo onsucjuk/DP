@@ -458,7 +458,7 @@ function doRotate() {
 
                         console.log(totalDistance, totalTime, index)
 
-                        $(`#totalDistance${index}`).text(parseInt(totalDistance / 100) + 'km');
+                        $(`#totalDistance${index}`).text(parseInt(totalDistance / 1000) + 'km');
                         $(`#totalTime${index}`).text('약' + parseInt(totalTime / 60) + '분 소요 예정');
 
                     }
