@@ -6,14 +6,16 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.amazonaws.services.s3.model.*;
 import dp.fdis.dto.ImgDTO;
 import dp.fdis.service.IImgService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.io.File;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -28,7 +30,7 @@ public class ImgService implements IImgService {
 
 
     @Override
-    public void upLoadImg(ImgDTO pDTO) throws Exception {
+    public void upLoadImg(MultipartFile multipartFile, ImgDTO pDTO) throws Exception {
 
 
         // S3 client
@@ -37,16 +39,29 @@ public class ImgService implements IImgService {
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
 
-        String bucketName = "imgdb";
+        String bucketName = "imgdb"+"/img";
 
 // upload local file
 
-        String objectName = pDTO.getUploadFileName(); // 업로드 할 때 파일 이름
-        String filePath = pDTO.getUploadFilePath(); // 업로드 되는 파일 위치[ FilePaht + "/" + OriginalFileName ]
+        String objectName = UUID.randomUUID() + "-" + multipartFile.getOriginalFilename(); // 업로드 할 때 파일 이름
+        ObjectMetadata objMeta = new ObjectMetadata();
+        objMeta.setContentLength(multipartFile.getInputStream().available());
+
+
+        log.info("objectName : " + objectName);
+
+        String ext = objectName.substring(objectName.lastIndexOf(".") + 1);
+
+        log.info("ext : " + ext);
+
+        String imgType = "image/" + ext;
+
+        objMeta.setContentType(imgType);
+
 
         try {
-            s3.putObject(bucketName, objectName, new File(filePath));
-            System.out.format("Object %s has been created.\n", objectName);
+            s3.putObject( new PutObjectRequest(bucketName, objectName, multipartFile.getInputStream(), objMeta).withCannedAcl(CannedAccessControlList.PublicRead));
+            log.info("Object " + objectName + " has been created");
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
         } catch(SdkClientException e) {
@@ -63,7 +78,7 @@ public class ImgService implements IImgService {
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(accessKey, secretKey)))
                 .build();
 
-        String bucketName = "imgdb";
+        String bucketName = "imgdb"+"/img";
         String objectName = pDTO.getUploadFileName();
 
 // delete object
