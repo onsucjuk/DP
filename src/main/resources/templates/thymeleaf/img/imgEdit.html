@@ -30,6 +30,13 @@
       <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="title" placeholder="제목을 입력해주세요." th:value="${rDTO.title}">
     </label>
 
+    <span  class = "imgbtn" id='View_area' style='position:relative; color: black; border: 0px solid black; margin-left: 10px; margin-top: 10px;'>
+            <img th:src="${rDTO.imgURL}" style="width: 100px; height: 100px;" />
+    </span>
+    <label class="imgbtn">
+      <input type="checkbox"  th:id="noEditImg" th:name="noEditImg" th:value="noEditImg" /> 이미지 수정 안 할 시 체크
+    </label>
+    <br>
     <input class = "filebtn" id = "file" type="file" name="file" style="margin-top: 10px"/>
     <button class="filebtn flex items-left justify-between w-1/15 px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
             type="button" id="checkYn" style="margin-top: 10px; margin-left: 10px"/>
@@ -67,7 +74,7 @@
               type="reset"
       >
         <div class="w-full">
-          <span class="px-3 py-1 text-sm font-semibold">다시 작성</span>
+          <span class="px-2 py-1 text-sm font-semibold">다시 작성</span>
           <span class="ml-2" aria-hidden="true">)</span>
         </div>
       </button>

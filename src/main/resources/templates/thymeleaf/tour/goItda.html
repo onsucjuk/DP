@@ -317,7 +317,6 @@
               </div>
             </div>
           </div>
-
           <div class="row">
             <table th:name =  "'nowTable'" >
               <thead>
@@ -332,12 +331,13 @@
                   <td th:id = "nowLon" th:text="''"></td>
                 </tr>
               </tbody>
-
             </table>
+
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card">
                 <div class="card-body">
                   <p class="card-title mb-0" th:text="'나의 목적지'"></p>
+                  <hr>
                   <div class="table-responsive">
                     <table class="table table-striped table-borderless"  id="tourTable" th:if="${session.SS_EXISTS_YN} == 'Y'">
                       <thead>
@@ -382,7 +382,7 @@
                                   <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
                                   <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
                                   <p class="dropdown-item" th:unless="${dto.imgURL}" th:onclick="regImg([[${dto.placeSeq}]])">사진 등록</p>
-                                  <p class="dropdown-item" th:if="${dto.imgURL}" th:onclick="editImg([[${dto.placeSeq}]])">사진 수정</p>
+                                  <p class="dropdown-item" th:if="${dto.imgURL}" th:onclick="editImg([[${dto.placeSeq}]])">사진 수정·삭제</p>
                               </div>
                           </td>
 

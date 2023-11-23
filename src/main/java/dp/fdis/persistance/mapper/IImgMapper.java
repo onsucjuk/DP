@@ -10,6 +10,7 @@ public interface IImgMapper {
     void insertTourImg(ImgDTO pDTO) throws Exception;
     void updatePlaceImg(ImgDTO pDTO) throws Exception;
     void updateTourImg(ImgDTO pDTO) throws Exception;
+    void updateTourImgInfo(ImgDTO pDTO) throws Exception;
 
     /* 이미지 등록되어있는지 확인 */
 

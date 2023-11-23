@@ -60,10 +60,10 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu m-0">
-                                <a href="/user/login" class="dropdown-item">Login</a>
+                                <a th:unless="${session.SS_USER_ID}" href="/user/login" class="dropdown-item">Login</a>
                                 <a href="/user/userRegForm" class="dropdown-item">Create Account</a>
                                 <a href="/user/myPage" class="dropdown-item">MyPage</a>
-                                <a href="/user/userLogOut" class="dropdown-item">Log Out</a>
+                                <a th:if="${session.SS_USER_ID}"href="/user/userLogOut" class="dropdown-item">Log Out</a>
                             </div>
                         </div>
                         <div class="nav-item dropdown">

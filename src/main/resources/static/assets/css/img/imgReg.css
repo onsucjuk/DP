@@ -4,6 +4,9 @@
 .filebtn{
     display :inline-block;
 }
+.imgbtn{
+    display :inline-block;
+}
 
 .space-x-1{
     display :inline-block;

@@ -150,6 +150,16 @@ public class ImgService implements IImgService {
 
     @Transactional
     @Override
+    public void updateTourImgInfo(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".updateTourImgInfo start!");
+
+        imgMapper.updateTourImgInfo(pDTO);
+
+    }
+
+    @Transactional
+    @Override
     public ImgDTO getTourImgOne(ImgDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".getTourImgOne start!");

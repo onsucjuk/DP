@@ -67,46 +67,83 @@ function doEdit() {
         return;
     }
 
-    let fileCheck = $("#file").val();
+    let checkbox = document.getElementById('noEditImg');
 
-    if(!fileCheck){
+    if (checkbox.checked) {
 
-        alert("파일을 첨부해 주세요");
-        return;
+        let form = $("#f")[0];
+        let formData = new FormData(form);
 
-    }
+        console.log(formData);
 
-    if (CEHCK_YN === "N") {
-        alert("사진 유효성 검사를 수행해주세요.")
-        return;
-    }
-
-    let form = $("#f")[0];
-    let formData = new FormData(form);
-
-    console.log(formData);
-
-    // Ajax 호출해서 글 등록하기
-    $.ajax({
-            url: "/img/editImg",
-            enctype:'multipart/form-data',
-            type: "post", // 전송방식은 Post
-            // contentType: "application/json",
-            dataType : "JSON",
-            data : formData,
-            contentType : false,
-            processData : false,
-            cache:false,
-            success: function (json) {
-                alert(json.msg);
-                if(json.msg==="로그인 해주세요."){
-                    location.href = "/user/login";
-                } else {
-                    window.close();
+        // Ajax 호출해서 글 등록하기
+        $.ajax({
+                url: "/img/editWithoutImg",
+                enctype:'multipart/form-data',
+                type: "post", // 전송방식은 Post
+                // contentType: "application/json",
+                dataType : "JSON",
+                data : formData,
+                contentType : false,
+                processData : false,
+                cache:false,
+                success: function (json) {
+                    alert(json.msg);
+                    if(json.msg==="로그인 해주세요."){
+                        location.href = "/user/login";
+                    } else {
+                        window.close();
+                    }
                 }
             }
+        )
+
+
+
+    } else {
+
+        let fileCheck = $("#file").val();
+
+        if(!fileCheck){
+
+            alert("파일을 첨부해 주세요");
+            return;
+
         }
-    )
+
+        if (CEHCK_YN === "N") {
+            alert("사진 유효성 검사를 수행해주세요.")
+            return;
+        }
+
+        let form = $("#f")[0];
+        let formData = new FormData(form);
+
+        console.log(formData);
+
+        // Ajax 호출해서 글 등록하기
+        $.ajax({
+                url: "/img/editImg",
+                enctype:'multipart/form-data',
+                type: "post", // 전송방식은 Post
+                // contentType: "application/json",
+                dataType : "JSON",
+                data : formData,
+                contentType : false,
+                processData : false,
+                cache:false,
+                success: function (json) {
+                    alert(json.msg);
+                    if(json.msg==="로그인 해주세요."){
+                        location.href = "/user/login";
+                    } else {
+                        window.close();
+                    }
+                }
+            }
+        )
+
+    }
 }
 
 

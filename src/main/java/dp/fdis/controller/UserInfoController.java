@@ -580,7 +580,7 @@ public class UserInfoController {
 
         session.invalidate();
 
-        return "thymeleaf/user/login";
+        return "/index/index";
     }
 
 }

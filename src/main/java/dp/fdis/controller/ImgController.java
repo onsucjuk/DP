@@ -361,6 +361,70 @@ public class ImgController {
     }
 
 
+    @PostMapping("/editWithoutImg")
+    @ResponseBody
+    public MsgDTO editWithoutImg(HttpSession session,
+                          HttpServletRequest request) throws Exception {
+
+        log.info(this.getClass().getName() + ".editImg Start!");
+
+        String msg = ""; // 메시지 내용
+
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            ImgDTO pDTO = new ImgDTO();
+
+            String title = CmmUtil.nvl(request.getParameter("title"));
+            String contents = CmmUtil.nvl(request.getParameter("contents"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+            String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+            String placeSeq = CmmUtil.nvl((String) session.getAttribute("SS_PLACE_SEQ"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+            log.info("title : " + title);
+            log.info("contents : " + contents);
+            log.info("tourSeq : " + tourSeq);
+            log.info("tourDay : " + tourDay);
+            log.info("placeSeq : " + placeSeq);
+            log.info("userId : " + userId);
+
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setTourDay(tourDay);
+            pDTO.setPlaceSeq(placeSeq);
+            pDTO.setUserId(userId);
+
+            pDTO.setTitle(title);
+            pDTO.setContents(contents);
+
+            iImgService.updateTourImgInfo(pDTO);
+
+            msg = "여행 사진 수정에 성공했습니다.";
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".editImg End!");
+        }
+
+        session.removeAttribute("SS_PLACE_SEQ");
+        session.removeAttribute("SS_IMG_LAT");
+        session.removeAttribute("SS_IMG_LON");
+        session.removeAttribute("SS_CHECK_LAT");
+        session.removeAttribute("SS_CHECK_LON");
+        session.removeAttribute("SS_PLACE_NICK");
+
+        return dto;
+    }
 
 
 }

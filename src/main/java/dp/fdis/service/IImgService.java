@@ -15,6 +15,7 @@ public interface IImgService {
     void insertTourImg(ImgDTO pDTO) throws Exception;
     void updatePlaceImg(ImgDTO pDTO) throws Exception;
     void updateTourImg(ImgDTO pDTO) throws Exception;
+    void updateTourImgInfo(ImgDTO pDTO) throws Exception;
 
     ImgDTO getTourImgOne(ImgDTO pDTO) throws Exception;
 

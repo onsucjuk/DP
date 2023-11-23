@@ -58,4 +58,18 @@
             PLACE_SEQ = #{placeSeq}
     </update>
 
+    <update id="updateTourImgInfo" parameterType="ImgDTO">
+        UPDATE TOUR_IMG
+        SET
+            TITLE = #{title},
+            CONTENTS = #{contents},
+            CHG_ID = #{chgId},
+            CHG_DT = NOW()
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+          AND
+            PLACE_SEQ = #{placeSeq}
+    </update>
 </mapper>
