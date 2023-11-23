@@ -50,5 +50,11 @@ public class TourDTO {
     private String totalDistance;
     private String totalTime;
 
+    //--------------------------------------------------------- IMG
+
+    private double imgLat;
+    private double imgLon;
+    private String imgURL;
+
 
 }

@@ -381,8 +381,8 @@
                                   <p class="dropdown-item" th:onclick="doDelete([[${dto.placeSeq}]])">삭제</p>
                                   <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
                                   <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
-                                  <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="regIMG([[${dto.placeSeq}]])">사진 등록</p>
-                                  <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="regIMG([[${dto.placeSeq}]])">사진 등록</p>
+                                  <p class="dropdown-item" th:unless="${dto.imgURL}" th:onclick="regImg([[${dto.placeSeq}]])">사진 등록</p>
+                                  <p class="dropdown-item" th:if="${dto.imgURL}" th:onclick="editImg([[${dto.placeSeq}]])">사진 수정</p>
                               </div>
                           </td>
 
@@ -414,8 +414,6 @@
                               <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
                               <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
                               <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="doGuide([[${dto.placeSeq}]])">T Map 길안내</p>
-                              <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="regIMG([[${dto.placeSeq}]])">사진 등록</p>
-                              <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="regIMG([[${dto.placeSeq}]])">사진 등록</p>
                             </div>
                           </td>
 

@@ -24,8 +24,8 @@ public class ImgDTO {
     private String chgDt;
     private int likeCnt;
     // 메타 데이터 확인용 lat, lon
-    private double lat;
-    private double lon;
+    private double imgLat;
+    private double imgLon;
     private String imgURL;
 
     // 장소 사진 등록 여부 1이상이면 존재

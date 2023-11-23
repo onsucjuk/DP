@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface IImgMapper {
 
     void insertTourImg(ImgDTO pDTO) throws Exception;
+    void updatePlaceImg(ImgDTO pDTO) throws Exception;
 
     /* 이미지 등록되어있는지 확인 */
     ImgDTO imgYn(ImgDTO pDTO) throws Exception;

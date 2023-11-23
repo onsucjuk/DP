@@ -188,13 +188,14 @@ public class ImgController {
 
             pDTO.setTitle(title);
             pDTO.setContents(contents);
-            pDTO.setLat(lat);
-            pDTO.setLon(lon);
+            pDTO.setImgLat(lat);
+            pDTO.setImgLon(lon);
             pDTO.setImgURL(imgURL);
 
             /* 이미지 정보 삽입 mapper 만들기 */
 
             iImgService.insertTourImg(pDTO);
+            iImgService.updatePlaceImg(pDTO);
 
             msg = "여행 사진 업로드 성공했습니다.";
 

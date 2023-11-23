@@ -13,6 +13,7 @@ public interface IImgService {
     void deleteImg(ImgDTO pDTO) throws Exception;
 
     void insertTourImg(ImgDTO pDTO) throws Exception;
+    void updatePlaceImg(ImgDTO pDTO) throws Exception;
 
     ImgDTO imgYn(ImgDTO pDTO) throws Exception;
 

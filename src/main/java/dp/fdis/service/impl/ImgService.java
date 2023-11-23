@@ -124,6 +124,14 @@ public class ImgService implements IImgService {
     }
 
     @Override
+    public void updatePlaceImg(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".updatePlaceImg start!");
+
+        imgMapper.updatePlaceImg(pDTO);
+    }
+
+    @Override
     public ImgDTO imgYn(ImgDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".imgYn start!");

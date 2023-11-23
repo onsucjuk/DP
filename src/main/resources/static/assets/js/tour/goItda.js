@@ -826,7 +826,7 @@ function doGuide(placeSeq) {
 
 }
 
-function regIMG(seq) {
+function regImg(seq) {
 
     $('[id^="plc_"]').each(function () {
         // 현재 요소의 id 값을 가져옴 (예: plc_123)
