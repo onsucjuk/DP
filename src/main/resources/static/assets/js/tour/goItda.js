@@ -825,3 +825,30 @@ function doGuide(placeSeq) {
 
 
 }
+
+function regIMG(seq) {
+
+    $('[id^="plc_"]').each(function () {
+        // 현재 요소의 id 값을 가져옴 (예: plc_123)
+        let id = $(this).attr('id');
+
+        // id에서 plc_를 제외한 숫자 부분만 추출 (예: 123)
+        let index = id.replace('plc_', '');
+
+        let lat = '';
+        let lon = '';
+
+
+        if (index === seq) {
+
+            lat = encodeURIComponent($("#lathidden" + index).text());
+            lon = encodeURIComponent($("#lonhidden" + index).text());
+
+            console.log("regIMG start! seq : " + seq + "lat : " + lat + "lon : " + lon)
+
+            // 새 창에서 tourPlaceEditForm 열기
+            window.open("/img/imgReg?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon);
+
+        }
+    })
+}

@@ -5,7 +5,13 @@ $(document).ready(function () {
     })
 
     $("#checkYn").on("click", function () {
+
         doCheck();
+    })
+
+    $("#file").on("click", function () {
+
+        CEHCK_YN = "N";
     })
 
     if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
@@ -55,9 +61,22 @@ function doSubmit() {
         f.contents.focus();
         return;
     }
+
+    let fileCheck = $("#file").val();
+
+    if(!fileCheck){
+
+        alert("파일을 첨부해 주세요");
+        return;
+
+    }
+
     if (CEHCK_YN === "N") {
         alert("사진 유효성 검사를 수행해주세요.")
+        return;
     }
+
+
 
 
     let form = $("#f")[0];
@@ -81,7 +100,7 @@ function doSubmit() {
                 if(json.msg==="로그인 해주세요."){
                     location.href = "/user/login";
                 } else {
-                    location.href = "/tour/tourInfo";
+                    window.close();
                 }
             }
         }
@@ -120,8 +139,10 @@ function doCheck() {
                 alert(json.msg);
                 if(json.msg==="로그인 해주세요."){
                     location.href = "/user/login";
+                } else if(json.msg==="등록 가능한 사진입니다.") {
+                    CEHCK_YN = "Y"
                 } else {
-                    /*location.href = "/tour/tourInfo";*/
+                    CEHCK_YN = "N"
                 }
             }
         }
