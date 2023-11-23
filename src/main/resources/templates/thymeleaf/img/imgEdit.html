@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
-  <title>사진 등록</title>
+  <title>사진 수정</title>
   <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
@@ -12,7 +12,7 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="/itda/css/vertical-layout-light/style.css">
   <script src="/assets/js/init-alpine.js"></script>
-  <script src="/assets/js/img/imgReg.js"></script>
+  <script src="/assets/js/img/imgEdit.js"></script>
   <link rel="stylesheet" href="/assets/css/img/imgReg.css" />
   <script th:inline="javascript">
     let SS_USER_ID = [[${session.SS_USER_ID}]];
@@ -20,26 +20,26 @@
   </script>
 </head>
 <body>
-<h3 class="font-weight-bold" th:text="'Day' + ${session.SS_DAY_SEQ} + ' ' +${session.SS_PLACE_NICK} +' 사진 등록'" STYLE="margin : 10px; margin-left: 25px"></h3>
+<h3 class="font-weight-bold" th:text="'Day' + ${session.SS_DAY_SEQ} + ' ' + ${session.SS_PLACE_NICK} + ' 사진 수정'" STYLE="margin : 10px; margin-left: 25px"></h3>
 <!--<form method="post" th:action="@{/upload}" enctype="multipart/form-data">-->
 <form name="f" id="f">
 
   <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
     <label class="block text-sm">
       <span class="text-gray-700 dark:text-gray-400" style="font-size : 20px;">제목</span>
-      <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="title" placeholder="제목을 입력해주세요.">
+      <input class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input" type="text" name="title" placeholder="제목을 입력해주세요." th:value="${rDTO.title}">
     </label>
 
     <input class = "filebtn" id = "file" type="file" name="file" style="margin-top: 10px"/>
     <button class="filebtn flex items-left justify-between w-1/15 px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
             type="button" id="checkYn" style="margin-top: 10px; margin-left: 10px"/>
-      <div class="w-full">
-        <span class="px-3 py-1 text-sm font-semibold">유효성 검사</span>
-      </div>
+    <div class="w-full">
+      <span class="px-3 py-1 text-sm font-semibold">유효성 검사</span>
+    </div>
     </button>
 
     <label class="block mt-4 text-sm">
-      <textarea class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" name="contents" style="height: 400px" rows="3" placeholder="본문 내용을 입력해주세요."></textarea>
+      <textarea class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-textarea focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray" name="contents" style="height: 400px" rows="3" placeholder="본문 내용을 입력해주세요." th:text="${rDTO.contents}"></textarea>
     </label>
   </div>
 
@@ -52,8 +52,8 @@
               type="button"
       >
         <div class="w-full">
-          <span class="px-3 py-1 text-sm font-semibold">등록</span>
-          <span class="ml-2" aria-hidden="true">+</span>
+          <span class="px-3 py-1 text-sm font-semibold">수정</span>
+          <span class="ml-2" aria-hidden="true">*</span>
         </div>
       </button>
     </div>
@@ -88,7 +88,6 @@
       </button>
     </div>
   </div>
-
 </form>
 </body>
 </html>

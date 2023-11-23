@@ -123,6 +123,10 @@ public class ImgService implements IImgService {
 
     }
 
+    /**
+     *  TOUR_PLACE DB의 IMG_LAT, IMG_LON, IMG_URL 업데이트
+     */
+    @Transactional
     @Override
     public void updatePlaceImg(ImgDTO pDTO) throws Exception {
 
@@ -131,12 +135,27 @@ public class ImgService implements IImgService {
         imgMapper.updatePlaceImg(pDTO);
     }
 
+    /**
+     *  TOUR_IMG DB의 CONTENTS, TITLE, CHG_ID, CHG_DT, IMG_LAT, IMG_LON, IMG_URL 업데이트
+     */
+    @Transactional
     @Override
-    public ImgDTO imgYn(ImgDTO pDTO) throws Exception {
+    public void updateTourImg(ImgDTO pDTO) throws Exception {
 
-        log.info(this.getClass().getName() + ".imgYn start!");
+        log.info(this.getClass().getName() + ".updateTourImg start!");
 
-        return imgMapper.imgYn(pDTO);
+        imgMapper.updateTourImg(pDTO);
+
     }
+
+    @Transactional
+    @Override
+    public ImgDTO getTourImgOne(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourImgOne start!");
+
+        return imgMapper.getTourImgOne(pDTO);
+    }
+
 
 }

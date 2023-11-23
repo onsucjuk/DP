@@ -12,6 +12,7 @@ import dp.fdis.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -20,6 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RequestMapping(value = "/img")
@@ -34,20 +37,67 @@ public class ImgController {
 
         log.info(this.getClass().getName() + "./imgReg Start!");
 
-        String placeSeq = request.getParameter("placeSeq");
-        String lat = request.getParameter("lat");
-        String lon = request.getParameter("lon");
+        String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+        String lat = CmmUtil.nvl(request.getParameter("lat"));
+        String lon = CmmUtil.nvl(request.getParameter("lon"));
+        String placeNick = CmmUtil.nvl(request.getParameter("placeNick"));
 
         log.info("placeSeq : " + placeSeq);
         log.info("lat : " + lat);
         log.info("lon : " + lon);
+        log.info("placeNick : " + placeNick);
 
         session.setAttribute("SS_PLACE_SEQ", placeSeq);
         session.setAttribute("SS_CHECK_LAT", lat);
         session.setAttribute("SS_CHECK_LON", lon);
+        session.setAttribute("SS_PLACE_NICK", placeNick);
 
         return "thymeleaf/img/imgReg";
     }
+
+    @GetMapping("/imgEdit")
+    public String imgEdit(HttpSession session, HttpServletRequest request, ModelMap model) throws Exception{
+
+        log.info(this.getClass().getName() + "./imgEdit Start!");
+
+        String tourSeq = CmmUtil.nvl((String)session.getAttribute("SS_TOUR_SEQ"));
+        String tourDay = CmmUtil.nvl((String)session.getAttribute("SS_DAY_SEQ"));
+        String placeSeq = CmmUtil.nvl(request.getParameter("placeSeq"));
+        String lat = CmmUtil.nvl(request.getParameter("lat"));
+        String lon = CmmUtil.nvl(request.getParameter("lon"));
+        String placeNick = CmmUtil.nvl(request.getParameter("placeNick"));
+
+
+        log.info("tourSeq : " + tourSeq);
+        log.info("tourDay : " + tourDay);
+        log.info("placeSeq : " + placeSeq);
+        log.info("lat : " + lat);
+        log.info("lon : " + lon);
+        log.info("placeNick : " + placeNick);
+
+
+        session.setAttribute("SS_PLACE_SEQ", placeSeq);
+        session.setAttribute("SS_CHECK_LAT", lat);
+        session.setAttribute("SS_CHECK_LON", lon);
+        session.setAttribute("SS_PLACE_NICK", placeNick);
+
+        ImgDTO pDTO = new ImgDTO();
+
+
+        pDTO.setTourSeq(tourSeq);
+        pDTO.setTourDay(tourDay);
+        pDTO.setPlaceSeq(placeSeq);
+
+        ImgDTO rDTO = Optional.ofNullable(iImgService.getTourImgOne(pDTO))
+                .orElseGet(ImgDTO::new);
+
+        model.addAttribute("rDTO", rDTO);
+
+        log.info("rDTO.contents : " + rDTO.getContents());
+
+        return "thymeleaf/img/imgEdit";
+    }
+
 
     @ResponseBody
     @PostMapping("/imgGPS")
@@ -71,7 +121,9 @@ public class ImgController {
 
             Metadata metadata = ImageMetadataReader.readMetadata(file);
 
-            GpsDirectory gpsDirectory = metadata.getFirstDirectoryOfType(GpsDirectory.class);
+            GpsDirectory gpsDirectory = Optional.ofNullable(metadata.getFirstDirectoryOfType(GpsDirectory.class))
+                    .orElseGet(GpsDirectory::new);
+
             if(!(gpsDirectory.isEmpty())) {
 
                 double longitude = gpsDirectory.getGeoLocation().getLongitude();
@@ -79,8 +131,8 @@ public class ImgController {
 
                 log.info("위도 : " + latitude + ", 경도 : " + longitude);
 
-                double checkLat = Double.parseDouble((String) session.getAttribute("SS_CHECK_LAT"));
-                double checkLon = Double.parseDouble((String) session.getAttribute("SS_CHECK_LON"));
+                double checkLat = Double.parseDouble(CmmUtil.nvl((String) session.getAttribute("SS_CHECK_LAT")));
+                double checkLon = Double.parseDouble(CmmUtil.nvl((String) session.getAttribute("SS_CHECK_LON")));
 
                 double minLat = checkLat - 0.003;
                 double maxLat = checkLat + 0.003;
@@ -107,7 +159,7 @@ public class ImgController {
                 }
 
 
-            } else if (gpsDirectory == null || gpsDirectory.isEmpty()) {
+            } else if (gpsDirectory.isEmpty()) {
 
                 msg = "위치 정보를 활성화하고 찍은 사진만 업로드 가능합니다.";
 
@@ -153,12 +205,12 @@ public class ImgController {
             ImgDTO pDTO = new ImgDTO();
 
             MultipartFile multipartFile = mRequest.getFile("file");
-            String title = request.getParameter("title");
-            String contents = request.getParameter("contents");
-            String tourSeq = (String) session.getAttribute("SS_TOUR_SEQ");
-            String tourDay = (String) session.getAttribute("SS_DAY_SEQ");
-            String placeSeq = (String) session.getAttribute("SS_PLACE_SEQ");
-            String userId = (String) session.getAttribute("SS_USER_ID");
+            String title = CmmUtil.nvl(request.getParameter("title"));
+            String contents = CmmUtil.nvl(request.getParameter("contents"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+            String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+            String placeSeq = CmmUtil.nvl((String) session.getAttribute("SS_PLACE_SEQ"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
 
             log.info("multipartFile : " + multipartFile);
@@ -174,7 +226,8 @@ public class ImgController {
             pDTO.setPlaceSeq(placeSeq);
             pDTO.setUserId(userId);
 
-            ImgDTO rDTO = iImgService.upLoadImg(multipartFile, pDTO);
+            ImgDTO rDTO = Optional.ofNullable(iImgService.upLoadImg(multipartFile, pDTO))
+                    .orElseGet(ImgDTO::new);
 
             /* 이미지 업로드 후 이미지 게시글 삽입 */
 
@@ -191,8 +244,6 @@ public class ImgController {
             pDTO.setImgLat(lat);
             pDTO.setImgLon(lon);
             pDTO.setImgURL(imgURL);
-
-            /* 이미지 정보 삽입 mapper 만들기 */
 
             iImgService.insertTourImg(pDTO);
             iImgService.updatePlaceImg(pDTO);
@@ -216,11 +267,98 @@ public class ImgController {
         session.removeAttribute("SS_PLACE_SEQ");
         session.removeAttribute("SS_IMG_LAT");
         session.removeAttribute("SS_IMG_LON");
+        session.removeAttribute("SS_CHECK_LAT");
+        session.removeAttribute("SS_CHECK_LON");
+        session.removeAttribute("SS_PLACE_NICK");
 
         return dto;
     }
 
+    @PostMapping("/editImg")
+    @ResponseBody
+    public MsgDTO editImg(HttpSession session,
+                                    HttpServletRequest request, MultipartHttpServletRequest mRequest) throws Exception {
 
+        log.info(this.getClass().getName() + ".editImg Start!");
+
+        String msg = ""; // 메시지 내용
+
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            ImgDTO pDTO = new ImgDTO();
+
+            MultipartFile multipartFile = mRequest.getFile("file");
+            String title = CmmUtil.nvl(request.getParameter("title"));
+            String contents = CmmUtil.nvl(request.getParameter("contents"));
+            String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+            String tourDay = CmmUtil.nvl((String) session.getAttribute("SS_DAY_SEQ"));
+            String placeSeq = CmmUtil.nvl((String) session.getAttribute("SS_PLACE_SEQ"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+
+            log.info("multipartFile : " + multipartFile);
+            log.info("title : " + title);
+            log.info("contents : " + contents);
+            log.info("tourSeq : " + tourSeq);
+            log.info("tourDay : " + tourDay);
+            log.info("placeSeq : " + placeSeq);
+            log.info("userId : " + userId);
+
+            pDTO.setTourSeq(tourSeq);
+            pDTO.setTourDay(tourDay);
+            pDTO.setPlaceSeq(placeSeq);
+            pDTO.setUserId(userId);
+
+            ImgDTO rDTO = Optional.ofNullable(iImgService.upLoadImg(multipartFile, pDTO))
+                    .orElseGet(ImgDTO::new);
+
+            /* 이미지 업로드 후 이미지 게시글 삽입 */
+
+            double lat = (double) session.getAttribute("SS_IMG_LAT");
+            double lon = (double) session.getAttribute("SS_IMG_LON");
+            String imgURL = rDTO.getImgURL();
+
+            log.info("lat : " + lat);
+            log.info("lon : " + lon);
+            log.info("imgURL : " + imgURL);
+
+            pDTO.setTitle(title);
+            pDTO.setContents(contents);
+            pDTO.setImgLat(lat);
+            pDTO.setImgLon(lon);
+            pDTO.setImgURL(imgURL);
+
+            iImgService.updateTourImg(pDTO);
+            iImgService.updatePlaceImg(pDTO);
+
+
+            msg = "여행 사진 수정에 성공했습니다.";
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".editImg End!");
+        }
+
+        session.removeAttribute("SS_PLACE_SEQ");
+        session.removeAttribute("SS_IMG_LAT");
+        session.removeAttribute("SS_IMG_LON");
+        session.removeAttribute("SS_CHECK_LAT");
+        session.removeAttribute("SS_CHECK_LON");
+        session.removeAttribute("SS_PLACE_NICK");
+
+        return dto;
+    }
 
 
 

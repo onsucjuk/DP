@@ -837,17 +837,47 @@ function regImg(seq) {
 
         let lat = '';
         let lon = '';
+        let placeNick = '';
 
 
         if (index === seq) {
 
             lat = encodeURIComponent($("#lathidden" + index).text());
             lon = encodeURIComponent($("#lonhidden" + index).text());
+            placeNick = encodeURIComponent($("#placeNick" + index).text());
 
-            console.log("regIMG start! seq : " + seq + "lat : " + lat + "lon : " + lon)
+            console.log("regIMG start! seq : " + seq + "lat : " + lat + "lon : " + lon + "placeNick : " + placeNick)
 
             // 새 창에서 tourPlaceEditForm 열기
-            window.open("/img/imgReg?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon);
+            window.open("/img/imgReg?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon + "&placeNick=" + placeNick);
+
+        }
+    })
+}
+
+function editImg(seq) {
+
+    $('[id^="plc_"]').each(function () {
+        // 현재 요소의 id 값을 가져옴 (예: plc_123)
+        let id = $(this).attr('id');
+
+        // id에서 plc_를 제외한 숫자 부분만 추출 (예: 123)
+        let index = id.replace('plc_', '');
+
+        let lat = '';
+        let lon = '';
+        let placeNick = '';
+
+        if (index === seq) {
+
+            lat = encodeURIComponent($("#lathidden" + index).text());
+            lon = encodeURIComponent($("#lonhidden" + index).text());
+            placeNick = encodeURIComponent($("#placeNick" + index).text());
+
+            console.log("regIMG start! seq : " + seq + "lat : " + lat + "lon : " + lon + "placeNick : " + placeNick)
+
+            // 새 창에서 tourPlaceEditForm 열기
+            window.open("/img/imgEdit?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon + "&placeNick=" + placeNick);
 
         }
     })

@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     $("#btnSend").on("click", function () {
-        doSubmit();
+        doEdit();
     })
 
     $("#checkYn").on("click", function () {
@@ -41,7 +41,7 @@ function calBytes(str) {
     return tcount;
 }
 
-function doSubmit() {
+function doEdit() {
 
     let f = document.getElementById("f"); // form 태그
 
@@ -81,9 +81,6 @@ function doSubmit() {
         return;
     }
 
-
-
-
     let form = $("#f")[0];
     let formData = new FormData(form);
 
@@ -91,7 +88,7 @@ function doSubmit() {
 
     // Ajax 호출해서 글 등록하기
     $.ajax({
-            url: "/img/upload",
+            url: "/img/editImg",
             enctype:'multipart/form-data',
             type: "post", // 전송방식은 Post
             // contentType: "application/json",
