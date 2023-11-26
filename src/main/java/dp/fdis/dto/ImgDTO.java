@@ -28,8 +28,4 @@ public class ImgDTO {
     private double imgLon;
     private String imgURL;
 
-    // 장소 사진 등록 여부 1이상이면 존재
-    private int existCnt;
-
-
 }

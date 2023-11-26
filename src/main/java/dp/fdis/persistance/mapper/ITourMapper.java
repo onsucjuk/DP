@@ -30,7 +30,8 @@ public interface ITourMapper {
     void resetTourStart(TourDTO pDTO) throws Exception;
 
     //여행 종료
-    void updateTourEnd(TourDTO pDTO) throws Exception;
+    void updateTourEndAdd(TourDTO pDTO) throws Exception;
+    void updateTourEndSub(TourDTO pDTO) throws Exception;
 
     //진행도 갱신
     void updateTourProcess(TourDTO pDTO) throws Exception;
@@ -83,6 +84,7 @@ public interface ITourMapper {
 
     TourDTO getTourPlaceOne(TourDTO pDTO) throws Exception;
 
+    void deleteDayPlace(TourDTO pDTO) throws Exception;
     void deleteTourPlace(TourDTO pDTO) throws Exception;
 
     void deleteTourPlaceOne(TourDTO pDTO) throws Exception;

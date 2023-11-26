@@ -17,6 +17,7 @@
   <script th:inline="javascript">
     let SS_USER_ID = [[${session.SS_USER_ID}]];
     let CEHCK_YN = "N";
+    let ImgSrc = [[${rDTO.imgURL}]];
   </script>
 </head>
 <body>
@@ -61,6 +62,20 @@
         <div class="w-full">
           <span class="px-3 py-1 text-sm font-semibold">수정</span>
           <span class="ml-2" aria-hidden="true">*</span>
+        </div>
+      </button>
+    </div>
+  </div>
+  <div class="flex space-x-1">
+    <div class="px-6 my-6">
+      <button
+              id="btnDelete"
+              class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+              type="button"
+      >
+        <div class="w-full">
+          <span class="px-3 py-1 text-sm font-semibold" >삭제</span>
+          <span class="ml-2" aria-hidden="true">-</span>
         </div>
       </button>
     </div>

@@ -13,7 +13,6 @@
   <link rel="stylesheet" href="/itda/vendors/mdi/css/materialdesignicons.min.css">
   <link rel="stylesheet" href="/itda/pages/icons/mdi.html">
   <script src="/js/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="/assets/css/tour/goItda.css">
   <!-- endinject -->
   <!-- Plugin css for this page -->
   <link rel="stylesheet" href="/itda/vendors/datatables.net-bs4/dataTables.bootstrap4.css">
@@ -22,12 +21,30 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="/itda/css/vertical-layout-light/style.css">
+  <link rel="stylesheet" href="/assets/css/tour/goItda.css">
   <!-- endinject -->
   <link rel="shortcut icon" href="/itda/images/favicon.png" />
   <script th:inline="javascript">
       const dSeq = [[${session.SS_DAY_SEQ}]];
       const startTime = [[${session.SS_STARTTIME_YN}]];
       const startTimeMn = [[${session.SS_STARTTIME_MN}]];
+      const tourSeq = [[${session.SS_TOUR_SEQ}]];
+      const existsYn = [[${session.SS_EXISTS_YN}]]
+
+      if (tourSeq == null || tourSeq === '') {
+
+        alert("비정상적인 접근입니다.")
+        location.href = "/index/index"
+      }
+      if (existsYn === "N") {
+
+        if (confirm("Itda 서비스를 이용하시려면 여행지를 먼저 등록해주세요." + "Day " + dSeq + " 의 목적지를 등록하시겠습니까?")) {
+          location.href = "/tour/tourDayInfo?nSeq=" + dSeq;
+        } else {
+          history.back();
+        }
+      }
+
   </script>
 </head>
 <body>
@@ -247,7 +264,7 @@
                   <h3 class="font-weight-bold" th:text="${rDTO.tourName} + ' Day' + ${session.SS_DAY_SEQ}  "></h3>
                   <h4 class="font-weight-normal mb-0" th:unless="${session.SS_STARTTIME_YN}=='Y'" th:text="'여행 시작 예정일 '+${dDTO.startTime}"></h4>
                   <h4 class="font-weight-normal mb-0" th:if="${session.SS_STARTTIME_YN}=='Y'" th:text="'여행 시작! '+${dDTO.startTime}"></h4>
-                  <h4 class="font-weight-bold mb-0" id = "complete" th:if="${#numbers.formatInteger(('' + cDTO.tourY * 100 / (cDTO.tourY + cDTO.tourN)), 1)} eq 100" th:text="' Day' + ${session.SS_DAY_SEQ} + ' Complete !'" style="margin-top: 10px"></h4>
+                  <h4 class="font-weight-bold mb-0" id = "complete"  th:if="${session.SS_EXISTS_YN} == 'Y' and ${#numbers.formatInteger(('' + cDTO.tourY * 100 / (cDTO.tourY + cDTO.tourN)), 1)} eq 100" th:text="' Day' + ${session.SS_DAY_SEQ} + ' Complete !'" style="margin-top: 10px"></h4>
                 </div>
                 <div class="col-12 col-xl-4">
                  <div class="justify-content-end d-flex">
@@ -282,7 +299,7 @@
             </div>
           </div>
         </div>
-          <div class="row">
+          <div class="row"  th:if="${session.SS_EXISTS_YN} == 'Y'">
             <div class="col-md-12 grid-margin stretch-card">
               <div class="card position-relative">
 
@@ -304,9 +321,11 @@
           </div>
 
           <!-- 여행 진행도-->
-          <div class="tourGraph">
-            <p>
-              <i class="mdi mdi-compass"></i> 현재 진행도
+          <div class="tourGraph"  th:if="${session.SS_EXISTS_YN} == 'Y'">
+            <p class="nowProcess">
+              <i class="mdi mdi-compass"></i>
+              <div class="nowProcess" style="margin-left: 10px;" th:text="'현재진행도 : ' + ${#numbers.formatInteger(('' + cDTO.tourY * 100 / (cDTO.tourY + cDTO.tourN)), 1)} + '%'">
+              </div>
             </p>
             <div class="progress" style="height : 10px;">
               <div class="progress-bar bg-success" role="progressbar" th:style="'width : ' + ${#numbers.formatInteger(('' + cDTO.tourY * 100 / (cDTO.tourY + cDTO.tourN)), 1)} + '%'" th:if="${cDTO.tourY + cDTO.tourN}>0"
@@ -377,7 +396,7 @@
                             </button>
                               <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuDate2">
                                   <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="doGuide([[${dto.placeSeq}]])">T Map 길안내</p>
-                                  <p class="dropdown-item" th:onclick="doEdit([[${dto.placeSeq}]])">수정</p>
+                                  <p class="dropdown-item" th:unless="${dto.imgURL}" th:onclick="doEdit([[${dto.placeSeq}]])">수정</p>
                                   <p class="dropdown-item" th:onclick="doDelete([[${dto.placeSeq}]])">삭제</p>
                                   <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
                                   <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>
@@ -409,7 +428,7 @@
                               <i class="mdi mdi-brightness-5"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-left" aria-labelledby="dropdownMenuDate2">
-                              <p class="dropdown-item" th:onclick="doEdit([[${dto.placeSeq}]])">수정</p>
+                              <p class="dropdown-item" th:unless="${dto.imgURL}" th:onclick="doEdit([[${dto.placeSeq}]])">수정</p>
                               <p class="dropdown-item" th:onclick="doDelete([[${dto.placeSeq}]])">삭제</p>
                               <p class="dropdown-item" th:if="${dto.tourYn} == 'Y'" th:onclick="resetEndTime([[${dto.placeSeq}]])">방문 취소</p>
                               <p class="dropdown-item" th:unless="${dto.tourYn} == 'Y'" th:onclick="updateEndTime([[${dto.placeSeq}]])">방문 완료</p>

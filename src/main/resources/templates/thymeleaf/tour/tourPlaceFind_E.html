@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <title>목적지 찾기</title>
   <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
-  <!--<link rel="stylesheet" href="/assets/css/tour/tourPlaceFind.css" />-->
-  <link rel="stylesheet" href="/assets/css/tour/_tmap_preview_right.css" />
   <link rel="stylesheet" href="/assets/css/tour/_tmap_overlay.css" />
-  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=B06BWPIrhC5CJXueAhPi7hG3V6avEXn8edbvjar9"></script>
+  <link rel="stylesheet" href="/assets/css/tour/_tmap_preview_right.css" />
+  <!--<link rel="stylesheet" href="/assets/css/tour/tourPlaceFind.css" />-->
   <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=B06BWPIrhC5CJXueAhPi7hG3V6avEXn8edbvjar9"></script>
   <script th:inline="javascript">
     const SS_USER_ID = [[${session.SS_USER_ID}]];
     const SS_PLACE_NICK = [[${session.SS_PLACE_NICK}]];
@@ -89,15 +89,16 @@
 
   var map = new Tmapv2.Map("map_div", { // 지도가 생성될 div
     center: new Tmapv2.LatLng(37.570028, 126.986072),    // 지도의 중심좌표
-    width : "750px", // 지도의 넓이
-    height : "750px", // 지도의 높이
+    width : "600px", // 지도의 넓이
+    height : "600px", // 지도의 높이
     zoom : 15, // 지도의 줌레벨
     httpsMode: true,    // https모드 설정
 
   });
 </script>
 <script src="/assets/js/tour/tourPlaceFind_E.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <!--<script src="/assets/js/tour/preview_tmap.bundle.js"></script>-->
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
 </body>
 </html>

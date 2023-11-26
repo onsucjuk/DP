@@ -3,6 +3,8 @@ package dp.fdis.service;
 import dp.fdis.dto.ImgDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface IImgService {
 
     String endPoint  = "https://kr.object.ncloudstorage.com";
@@ -10,7 +12,7 @@ public interface IImgService {
 
     ImgDTO upLoadImg(MultipartFile multipartFile, ImgDTO pDTO) throws Exception;
 
-    void deleteImg(ImgDTO pDTO) throws Exception;
+    void deleteCloudImg(ImgDTO pDTO) throws Exception;
 
     void insertTourImg(ImgDTO pDTO) throws Exception;
     void updatePlaceImg(ImgDTO pDTO) throws Exception;
@@ -18,8 +20,11 @@ public interface IImgService {
     void updateTourImgInfo(ImgDTO pDTO) throws Exception;
 
     ImgDTO getTourImgOne(ImgDTO pDTO) throws Exception;
-
-
-
+    List<ImgDTO> getTourDayImg(ImgDTO pDTO) throws Exception;
+    List<ImgDTO> getTourImgAll(ImgDTO pDTO) throws Exception;
+    void deleteImgOne(ImgDTO pDTO) throws Exception;
+    void deleteDayImg(ImgDTO pDTO) throws Exception;
+    void deleteTourImg(ImgDTO pDTO) throws Exception;
+    void initialTourImgInfo(ImgDTO pDTO) throws Exception;
 
 }

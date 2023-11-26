@@ -1,7 +1,6 @@
 package dp.fdis.service;
 
 import dp.fdis.dto.TourDTO;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,7 +29,8 @@ public interface ITourInfoService {
     void resetTourStart(TourDTO pDTO) throws Exception;
 
     //여행 종료
-    void updateTourEnd(TourDTO pDTO) throws Exception;
+    void updateTourEndAdd(TourDTO pDTO) throws Exception;
+    void updateTourEndSub(TourDTO pDTO) throws Exception;
 
     //진행도 갱신
     void updateTourProcess(TourDTO pDTO) throws Exception;
@@ -77,6 +77,8 @@ public interface ITourInfoService {
 
     // 여행 목적지 삭제
     void deleteTourPlace(TourDTO pDTO) throws Exception;
+
+    void deleteDayPlace(TourDTO pDTO) throws Exception;
 
     void deleteTourPlaceOne(TourDTO pDTO) throws Exception;
 

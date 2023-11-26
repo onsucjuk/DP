@@ -4,6 +4,11 @@ $(document).ready(function () {
         doEdit();
     })
 
+    $("#btnDelete").on("click", function () {
+        doDelete();
+    })
+
+
     $("#checkYn").on("click", function () {
 
         doCheck();
@@ -18,12 +23,19 @@ $(document).ready(function () {
 
         CEHCK_YN = "N";
     })
-
-    if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
-        alert("로그인 해주세요.");
-        location.href = "/user/login";
-    }
 })
+
+if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
+    alert("로그인 해주세요.");
+    location.href = "/user/login";
+}
+
+if (ImgSrc == null || ImgSrc === "") {
+
+    alert("비정상적인 접근입니다.")
+    location.href = "/index/index";
+}
+
 
 function calBytes(str) {
     let tcount = 0;
@@ -143,6 +155,32 @@ function doEdit() {
             }
         )
 
+    }
+}
+
+
+function doDelete() {
+
+    if(confirm("동록된 사진 정보를 삭제하시겠습니까?")) {
+
+        // Ajax 호출해서 회원가입하기
+        $.ajax({
+            url: "/img/deleteImgOne",
+            type: "post",
+            datatype: "JSON",
+            data: { "imgURL" : ImgSrc},
+            success: function (json) {
+
+                if (json.result === 1) {
+                    alert(json.msg);
+                    location.href = "/user/login";
+
+                } else {
+                    alert(json.msg);
+                    window.close();
+                }
+            }
+        })
     }
 }
 

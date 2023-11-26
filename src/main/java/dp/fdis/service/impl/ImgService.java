@@ -17,6 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -92,7 +95,7 @@ public class ImgService implements IImgService {
     }
 
     @Override
-    public void deleteImg(ImgDTO pDTO) throws Exception {
+    public void deleteCloudImg(ImgDTO pDTO) throws Exception {
         // S3 client
         final AmazonS3 s3 = AmazonS3ClientBuilder.standard()
                 .withEndpointConfiguration(new AwsClientBuilder.EndpointConfiguration(endPoint, regionName))
@@ -105,7 +108,7 @@ public class ImgService implements IImgService {
 // delete object
         try {
             s3.deleteObject(bucketName, objectName);
-            System.out.format("Object %s has been deleted.\n", objectName);
+            log.info("Object" + objectName + " has been deleted.");
         } catch (AmazonS3Exception e) {
             e.printStackTrace();
         } catch(SdkClientException e) {
@@ -166,6 +169,65 @@ public class ImgService implements IImgService {
 
         return imgMapper.getTourImgOne(pDTO);
     }
+
+    @Transactional
+    @Override
+    public List<ImgDTO> getTourDayImg(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourDayImg start!");
+
+        return imgMapper.getTourDayImg(pDTO);
+    }
+
+    @Transactional
+    @Override
+    public List<ImgDTO> getTourImgAll(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourImgAll start!");
+
+        return imgMapper.getTourImgAll(pDTO);
+    }
+
+    @Transactional
+    @Override
+    public void deleteImgOne(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteImgOne start!");
+
+        imgMapper.deleteImgOne(pDTO);
+
+    }
+
+    @Transactional
+    @Override
+    public void deleteDayImg(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDayImg start!");
+
+        imgMapper.deleteDayImg(pDTO);
+
+    }
+
+    @Transactional
+    @Override
+    public void deleteTourImg(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteTourImg start!");
+
+        imgMapper.deleteTourImg(pDTO);
+
+    }
+
+    @Transactional
+    @Override
+    public void initialTourImgInfo(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".initialTourImgInfo start!");
+
+        imgMapper.initialTourImgInfo(pDTO);
+
+    }
+
 
 
 }

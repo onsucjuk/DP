@@ -1,7 +1,9 @@
 package dp.fdis.controller;
 
+import dp.fdis.dto.ImgDTO;
 import dp.fdis.dto.MsgDTO;
 import dp.fdis.dto.TourDTO;
+import dp.fdis.service.IImgService;
 import dp.fdis.service.ITourInfoService;
 import dp.fdis.util.CmmUtil;
 import dp.fdis.util.DateUtil;
@@ -9,7 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,7 +30,7 @@ import java.util.Optional;
 public class TourController {
 
     private final ITourInfoService tourInfoService;
-
+    private final IImgService iImgService;
     /**
      * 여행 정보 페이지로 이동
      */
@@ -40,7 +45,6 @@ public class TourController {
         String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
         log.info("SS_USER_ID : " + userId);
-
 
         pDTO.setUserId(userId);
 
@@ -152,6 +156,38 @@ public class TourController {
             pDTO.setTourSeq(nSeq);
             pDTO.setUserId(userId);
 
+            ImgDTO iDTO = new ImgDTO();
+
+            iDTO.setTourSeq(nSeq);
+
+            List<ImgDTO> rList = Optional.ofNullable(iImgService.getTourImgAll(iDTO))
+                    .orElseGet(ArrayList::new);
+
+            System.out.println(rList);
+
+            for (ImgDTO imgDTO : rList) {
+
+                log.info("이미지 삭제 시작!");
+
+                String imgURL = imgDTO.getImgURL();
+
+                log.info("imgURL : " + imgURL);
+
+                String uploadFileName = imgURL.substring(imgURL.lastIndexOf("/") + 1);
+
+                iDTO.setUploadFileName(uploadFileName);
+
+                log.info("uploadFileName : " + uploadFileName);
+
+                iImgService.deleteCloudImg(iDTO);
+
+                log.info(uploadFileName+" : 삭제 완료");
+
+            }
+
+            iImgService.deleteTourImg(iDTO);
+
+
             // 여행 정보 삭제하기 DB
             tourInfoService.deleteTourInfo(pDTO);
             tourInfoService.deleteTourDayAll(pDTO);
@@ -175,15 +211,13 @@ public class TourController {
 
         return dto;
     }
+/*
 
-    /**
-     * 여행 종료일 수정
-     **/
     @ResponseBody
-    @PostMapping(value = "updateTourEnd")
-    public MsgDTO updateTourEnd(HttpServletRequest request, HttpSession session) {
+    @PostMapping(value = "updateTourEndAdd")
+    public MsgDTO updateTourEndAdd(HttpServletRequest request, HttpSession session) {
 
-        log.info(this.getClass().getName() + ".updateTourEnd Start!");
+        log.info(this.getClass().getName() + ".updateTourEndAdd Start!");
 
         String msg = ""; // 메시지 내용
         MsgDTO dto = null; // 결과 메시지 구조
@@ -203,7 +237,7 @@ public class TourController {
             pDTO.setUserId(userId);
             pDTO.setTourProcess(tourProcess);
 
-            tourInfoService.updateTourEnd(pDTO);
+            tourInfoService.updateTourEndAdd(pDTO);
 
             msg = "여행 시작일이 수정되었습니다.";
 
@@ -217,12 +251,13 @@ public class TourController {
             dto = new MsgDTO();
             dto.setMsg(msg);
 
-            log.info(this.getClass().getName() + ".updateTourEnd End!");
+            log.info(this.getClass().getName() + ".updateTourEndAdd End!");
 
         }
 
         return dto;
     }
+*/
 
     /**
      * 여행 정보 수정
@@ -255,10 +290,11 @@ public class TourController {
             pDTO.setTourName(tourName);
             pDTO.setStartTime(startTime);
 
+            int n = tourInfoService.countDay(pDTO);
+
+            pDTO.setCount(n-1);
 
             tourInfoService.updateTourName(pDTO);
-
-            int n = tourInfoService.countDay(pDTO);
 
             log.info("Day num : " + n);
 
@@ -334,16 +370,16 @@ public class TourController {
             TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourInfo(pDTO))
                     .orElseGet(TourDTO::new);
 
+
             // 조회된 리스트 결과값 넣어주기
             model.addAttribute("rList", rList);
+
 
             session.setAttribute("SS_TOUR_NAME", rDTO.getTourName());
 
             String tourName = (String) session.getAttribute("SS_TOUR_NAME");
 
             log.info("sstourName : " + tourName);
-
-
 
             log.info(this.getClass().getName() + ".tourDayList End!");
 
@@ -370,14 +406,19 @@ public class TourController {
         try {
 
             String tourSeq = CmmUtil.nvl(request.getParameter("nSeq")); // 여행 번호(PK)
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("tourSeq : " + tourSeq);
+            log.info("userId : " + userId);
 
             TourDTO pDTO = new TourDTO();
             pDTO.setTourSeq(tourSeq);
+            pDTO.setUserId(userId);
 
             if (tourSeq.length() > 0) {
+
                 tourInfoService.addTourDay(pDTO);
+                tourInfoService.updateTourEndAdd(pDTO);
 
                 msg = "";
 
@@ -426,6 +467,7 @@ public class TourController {
 
         TourDTO pDTO = new TourDTO();
 
+        pDTO.setUserId(userId);
         pDTO.setTourSeq(tourSeq);
         pDTO.setTourDay(tourDay);
 
@@ -438,7 +480,18 @@ public class TourController {
             session.setAttribute("SS_EXISTS_YN", "Y");
         }
 
-        // 조회된 리스트 결과값 넣어주기
+
+        TourDTO rDTO = new TourDTO();
+
+        List<TourDTO> dList = Optional.ofNullable(tourInfoService.getTourDayList(pDTO))
+                .orElseGet(ArrayList::new);
+
+        int dayCount = dList.size();
+
+        log.info("Day 수 : " + dayCount);
+
+        rDTO.setCount(dayCount);
+        model.addAttribute("rDTO", rDTO);
         model.addAttribute("rList", rList);
 
         return "thymeleaf/tour/tourDayInfo";
@@ -490,18 +543,53 @@ public class TourController {
 
             String tourDay = CmmUtil.nvl(request.getParameter("dSeq")); // 여행 일자
             String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
 
             log.info("tourDay : " + tourDay);
             log.info("tourSeq : " + tourSeq);
+            log.info("userId : " + userId);
 
             TourDTO pDTO = new TourDTO();
             pDTO.setTourDay(tourDay);
             pDTO.setTourSeq(tourSeq);
+            pDTO.setUserId(userId);
 
+            ImgDTO iDTO = new ImgDTO();
 
-            // 여행 일자 삭제하기 DB
+            iDTO.setTourSeq(tourSeq);
+            iDTO.setTourDay(tourDay);
 
+            List<ImgDTO> rList = Optional.ofNullable(iImgService.getTourDayImg(iDTO))
+                    .orElseGet(ArrayList::new);
+
+            System.out.println(rList);
+
+            for (ImgDTO imgDTO : rList) {
+
+                log.info("이미지 삭제 시작!");
+
+                String imgURL = imgDTO.getImgURL();
+
+                log.info("imgURL : " + imgURL);
+
+                String uploadFileName = imgURL.substring(imgURL.lastIndexOf("/") + 1);
+
+                iDTO.setUploadFileName(uploadFileName);
+
+                log.info("uploadFileName : " + uploadFileName);
+
+                iImgService.deleteCloudImg(iDTO);
+
+                log.info(uploadFileName+" : 삭제 완료");
+
+            }
+
+            iImgService.deleteDayImg(iDTO);
+
+            // 여행 일자, 해당 장소 삭제하기 DB
             tourInfoService.deleteTourDay(pDTO);
+            tourInfoService.deleteDayPlace(pDTO);
+            tourInfoService.updateTourEndSub(pDTO);
 
             msg = "삭제되었습니다.";
 
@@ -615,6 +703,7 @@ public class TourController {
             TourDTO pDTO = new TourDTO();
             pDTO.setUserId(userId);
             pDTO.setTourName(tourName);
+
             pDTO.setStartTime(startTime);
 
             if (userId.length() > 0) {
@@ -894,11 +983,44 @@ public class TourController {
                 pDTO.setTourDay(tourDay);
                 pDTO.setPlaceSeq(placeSeq);
 
+                TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourPlaceOne(pDTO))
+                        .orElseGet(TourDTO::new);
+                String imgURL = rDTO.getImgURL();
+
+                ImgDTO iDTO = new ImgDTO();
+
+                iDTO.setTourSeq(tourSeq);
+                iDTO.setTourDay(tourDay);
+                iDTO.setPlaceSeq(placeSeq);
 
                 // 목적지 한 개 삭제하기 DB
                 tourInfoService.deleteTourPlaceOne(pDTO);
 
-                msg = "삭제되었습니다.";
+                if (imgURL.length() > 0) {
+
+                    log.info("이미지 삭제 시작!");
+
+
+                    log.info("imgURL : " + imgURL);
+
+                    String uploadFileName = imgURL.substring(imgURL.lastIndexOf("/") + 1);
+
+                    iDTO.setUploadFileName(uploadFileName);
+
+                    log.info("uploadFileName : " + uploadFileName);
+
+                    iImgService.deleteCloudImg(iDTO);
+
+                    log.info(uploadFileName + " : 삭제 완료");
+
+                    iImgService.deleteImgOne(iDTO);
+
+                    msg = "삭제되었습니다.";
+
+                } else {
+
+                    msg = "등록된 이미지가 없습니다.";
+                }
 
             } else {
 
@@ -994,10 +1116,14 @@ public class TourController {
         log.info("cDTO : TourY " + cTourY );
         log.info("cDTO : TourN " + cTourN );
 
-        log.info("rDTO.getStartTime()" + dDTO.getStartTime());
-        log.info("DateUtil.getDateTime()" + DateUtil.getDateTime());
+        log.info("rDTO.getStartTime() : " + CmmUtil.nvl(dDTO.getStartTime()));
+        log.info("DateUtil.getDateTime() : " + DateUtil.getDateTime());
 
-        if (dDTO.getStartTime().equals(DateUtil.getDateTime()) || CmmUtil.nvl(startTimeMn).equals("Y")) {
+        log.info("테스트1 : " + CmmUtil.nvl(dDTO.getStartTime()).equals(DateUtil.getDateTime()));
+        log.info("테스트2 : " + CmmUtil.nvl(startTimeMn).equals("Y"));
+
+
+        if (CmmUtil.nvl(dDTO.getStartTime()).equals(DateUtil.getDateTime()) || CmmUtil.nvl(startTimeMn).equals("Y")) {
 
             session.setAttribute("SS_STARTTIME_YN", "Y");
 

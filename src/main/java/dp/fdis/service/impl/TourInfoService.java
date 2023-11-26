@@ -126,13 +126,25 @@ public class TourInfoService implements ITourInfoService {
 
     @Transactional
     @Override
-    public void updateTourEnd(TourDTO pDTO) throws Exception {
+    public void updateTourEndAdd(TourDTO pDTO) throws Exception {
 
-        log.info(this.getClass().getName() + ".updateTourEnd start!");
+        log.info(this.getClass().getName() + ".updateTourEndAdd start!");
 
-        tourMapper.updateTourEnd(pDTO);
+        tourMapper.updateTourEndAdd(pDTO);
 
-        log.info(this.getClass().getName() + ".updateTourEnd End!");
+        log.info(this.getClass().getName() + ".updateTourEndAdd End!");
+
+    }
+
+    @Override
+    public void updateTourEndSub(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".updateTourEndSub start!");
+
+        tourMapper.updateTourEndSub(pDTO);
+
+        log.info(this.getClass().getName() + ".updateTourEndSub End!");
+
 
     }
 
@@ -324,6 +336,18 @@ public class TourInfoService implements ITourInfoService {
         tourMapper.deleteTourPlace(pDTO);
 
         log.info(this.getClass().getName() + ".deleteTourPlace End!");
+
+    }
+
+    @Transactional
+    @Override
+    public void deleteDayPlace(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteDayPlace start!");
+
+        tourMapper.deleteDayPlace(pDTO);
+
+        log.info(this.getClass().getName() + ".deleteDayPlace End!");
 
     }
 

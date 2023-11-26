@@ -87,7 +87,7 @@ function doDel(pSeq) {
         location.reload();
     }
 
-    else if(confirm("계획한 여행을 삭제하시겠습니까?")) {
+    else if(confirm("등록한 장소를 삭제하시겠습니까?")) {
 
         // Ajax 호출해서 회원가입하기
         $.ajax({
@@ -118,26 +118,34 @@ function doDelete(dSeq) {
         location.href = "/tour/tourInfo";
     }
 
-    else if(confirm("계획한 여행을 삭제하시겠습니까?")) {
+    if(dSeq === dayCount) {
 
-        // Ajax 호출해서 회원가입하기
-        $.ajax({
-            url: "/tour/deleteTourDay",
-            type: "post",
-            datatype: "JSON",
-            data: { "dSeq" : dSeq },
-            success: function (json) {
+        if (confirm( "Day" + dSeq + "을 삭제하시겠습니까?")) {
 
-                if (json.result === 1) {
-                    alert(json.msg);
-                    location.href = "/user/login";
+            // Ajax 호출해서 회원가입하기
+            $.ajax({
+                url: "/tour/deleteTourDay",
+                type: "post",
+                datatype: "JSON",
+                data: { "dSeq" : dSeq },
+                success: function (json) {
 
-                } else {
-                    alert(json.msg);
-                    location.href = "/tour/tourDayList?nSeq=" + nSeq;
+                    if (json.result === 1) {
+                        alert(json.msg);
+                        location.href = "/user/login";
+
+                    } else {
+                        alert(json.msg);
+                        location.href = "/tour/tourDayList?nSeq=" + nSeq;
+                    }
                 }
-            }
-        })
+            })
+        }
+    } else if (dSeq < dayCount) {
+        alert("마지막 날짜부터 삭제해주세요.");
+    } else {
+        alert("비정상적인 접근입니다.");
+        location.href = "/index/index"
     }
 }
 

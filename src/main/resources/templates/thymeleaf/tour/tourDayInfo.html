@@ -34,6 +34,7 @@
   <script th:inline="javascript">
     const nSeq = [[${session.SS_TOUR_SEQ}]];
     const dSeq = [[${session.SS_DAY_SEQ}]];
+    const dayCount = "[[${rDTO.count}]]";
   </script>
 </head>
 <body>
@@ -253,7 +254,7 @@
           </div>
         </div>
 
-        <div class="px-4 my-6">
+        <div class="px-4 my-6" th:if="${session.SS_EXISTS_YN} == 'Y'">
           <button
                   id="btnGoItda"
                   class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
@@ -267,7 +268,7 @@
         </div>
 
         <div class="row">
-          <div class="card position-relative h-25" style="margin-left: 35px;">
+          <div class="card position-relative h-25" style="margin-left: 35px; width: 50%">
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
               <div class="w-full overflow-x-auto">
 
@@ -387,7 +388,7 @@
                   </div>
                 </button>
               </div>
-              <div class="px-4 my-6">
+              <div class="px-4 my-6" th:if="${session.SS_DAY_SEQ}>1 and ${session.SS_DAY_SEQ}==${rDTO.count}">
                 <button
                         id="btnDelDay"
                         class="flex items-left justify-between w-1/15 px-4 py-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"

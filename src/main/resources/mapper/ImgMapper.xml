@@ -30,6 +30,20 @@
             PLACE_SEQ = #{placeSeq}
     </update>
 
+    <update id="initialTourImgInfo" parameterType="ImgDTO">
+        UPDATE TOUR_PLACE
+        SET
+            IMG_LAT = null,
+            IMG_LON = null,
+            IMG_URL = null
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+          AND
+            PLACE_SEQ = #{placeSeq}
+    </update>
+
     <select id="getTourImgOne" parameterType="ImgDTO" resultType="ImgDTO">
         SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL
         FROM  TOUR_IMG
@@ -40,6 +54,23 @@
           AND
             PLACE_SEQ = #{placeSeq}
     </select>
+
+    <select id="getTourImgAll" parameterType="ImgDTO" resultType="ImgDTO">
+        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL
+        FROM  TOUR_IMG
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+    </select>
+
+    <select id="getTourDayImg" parameterType="ImgDTO" resultType="ImgDTO">
+        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL
+        FROM  TOUR_IMG
+        WHERE
+            TOUR_DAY = #{tourDay}
+          AND
+            TOUR_SEQ = #{tourSeq}
+    </select>
+
 
     <update id="updateTourImg" parameterType="ImgDTO">
         UPDATE TOUR_IMG
@@ -72,4 +103,29 @@
           AND
             PLACE_SEQ = #{placeSeq}
     </update>
+
+    <delete id="deleteImgOne" parameterType="ImgDTO">
+        DELETE FROM TOUR_IMG
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+          AND
+            PLACE_SEQ = #{placeSeq}
+    </delete>
+
+    <delete id="deleteDayImg" parameterType="ImgDTO">
+        DELETE FROM TOUR_IMG
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+          AND
+            TOUR_DAY = #{tourDay}
+    </delete>
+
+    <delete id="deleteTourImg" parameterType="ImgDTO">
+        DELETE FROM TOUR_IMG
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+    </delete>
+
 </mapper>

@@ -58,7 +58,7 @@
                         <a href="/tour/tourInfo" class="nav-item nav-link">Do Itda</a>
                         <a href="/notice/noticeList" class="nav-item nav-link">List</a>
                         <div class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">User Pages</a>
                             <div class="dropdown-menu m-0">
                                 <a th:unless="${session.SS_USER_ID}" href="/user/login" class="dropdown-item">Login</a>
                                 <a href="/user/userRegForm" class="dropdown-item">Create Account</a>
@@ -79,7 +79,7 @@
 
 
                     <th:block th:if="${rDTO.userId}">
-                        <a href="/user/myPage" class="btn btn-light rounded-pill text-primary py-2 px-4 ms-lg-5"
+                        <a href="#" class="btn btn-light rounded-pill text-primary py-2 px-4 ms-lg-5"
                            th:text="${rDTO.userName} + '님 환영합니다.'"></a>
                     </th:block>
 

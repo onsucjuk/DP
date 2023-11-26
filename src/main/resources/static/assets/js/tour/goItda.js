@@ -86,14 +86,6 @@ $(document).ready(function () {
         doCong();
     }
 })
-
-if (dSeq) {
-
-} else {
-    alert("비정상적인 접근입니다.")
-    location.href="/index/index"
-}
-
 function viewRoute() {
 
 

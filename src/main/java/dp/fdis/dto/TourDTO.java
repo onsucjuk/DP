@@ -14,8 +14,10 @@ public class TourDTO {
     private String tourProcess; // 여행 진행도
     private String tourEnd; // 여행 종료일자
     private String userId; // 아이디
-
     private String existsYn; // 존재 여부 확인
+    private String startTime; // 시작시간
+    private String endTime; // 끝난 시간
+
 
 
     //--------------------------------------------------------------- TOUR_DAY
@@ -39,11 +41,6 @@ public class TourDTO {
     private String lat; // 위도
     private String lon; // 경도
     private String lng; // 실시간 서울 도시 데이터의 경도
-
-    private String startTime; // 시작시간
-
-    private String endTime; // 끝난 시간
-
     //--------------------------------------------------------- API
 
     private String Congestion;
