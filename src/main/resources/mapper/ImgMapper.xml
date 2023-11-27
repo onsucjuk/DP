@@ -7,11 +7,11 @@
     <insert id="insertTourImg" parameterType="ImgDTO">
         INSERT INTO TOUR_IMG (
             IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE,  CONTENTS, LIKE_CNT,
-            REG_ID, REG_DT, CHG_ID, CHG_DT, IMG_URL
+            REG_ID, REG_DT, CHG_ID, CHG_DT, IMG_URL, IMG_LON , IMG_LAT
         )
         VALUES (
                    COALESCE((SELECT MAX(A.IMG_SEQ) FROM TOUR_IMG A), 0) + 1, #{tourSeq}, #{tourDay}, #{placeSeq},
-                   #{title}, #{contents}, 0, #{userId}, NOW(), #{userId}, NOW(), #{imgURL}
+                   #{title}, #{contents}, 0, #{userId}, NOW(), #{userId}, NOW(), #{imgURL}, #{imgLon}, #{imgLat}
                )
     </insert>
 
@@ -45,7 +45,7 @@
     </update>
 
     <select id="getTourImgOne" parameterType="ImgDTO" resultType="ImgDTO">
-        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL
+        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL, TRIM(TRAILING '0' FROM IMG_LAT) AS IMG_LAT, TRIM(TRAILING '0' FROM IMG_LON) AS IMG_LON
         FROM  TOUR_IMG
         WHERE
             TOUR_DAY = #{tourDay}
@@ -55,15 +55,8 @@
             PLACE_SEQ = #{placeSeq}
     </select>
 
-    <select id="getTourImgAll" parameterType="ImgDTO" resultType="ImgDTO">
-        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL
-        FROM  TOUR_IMG
-        WHERE
-            TOUR_SEQ = #{tourSeq}
-    </select>
-
     <select id="getTourDayImg" parameterType="ImgDTO" resultType="ImgDTO">
-        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL
+        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL, TRIM(TRAILING '0' FROM IMG_LAT) AS IMG_LAT, TRIM(TRAILING '0' FROM IMG_LON) AS IMG_LON
         FROM  TOUR_IMG
         WHERE
             TOUR_DAY = #{tourDay}
@@ -72,6 +65,18 @@
     </select>
 
 
+    <select id="getTourImgAll" parameterType="ImgDTO" resultType="ImgDTO">
+        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL, TRIM(TRAILING '0' FROM IMG_LAT) AS IMG_LAT, TRIM(TRAILING '0' FROM IMG_LON) AS IMG_LON
+        FROM  TOUR_IMG
+        WHERE
+            TOUR_SEQ = #{tourSeq}
+    </select>
+
+    <select id="getImgAll" resultType="ImgDTO" >
+        SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL, TRIM(TRAILING '0' FROM IMG_LAT) AS IMG_LAT, TRIM(TRAILING '0' FROM IMG_LON) AS IMG_LON
+        FROM TOUR_IMG
+    </select>
+
     <update id="updateTourImg" parameterType="ImgDTO">
         UPDATE TOUR_IMG
         SET
@@ -79,7 +84,9 @@
             CONTENTS = #{contents},
             IMG_URL = #{imgURL},
             CHG_ID = #{chgId},
-            CHG_DT = NOW()
+            CHG_DT = NOW(),
+            IMG_LON = #{imgLon},
+            IMG_LAT = #{imgLat}
 
         WHERE
             TOUR_SEQ = #{tourSeq}

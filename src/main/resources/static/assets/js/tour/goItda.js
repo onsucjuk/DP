@@ -76,6 +76,20 @@ $(document).ready(function () {
 
     })
 
+    $("#btnViewImg").on("click", function () {
+
+        if(imgMarkerYn==="N"){
+            imgMarkerYn = "Y";
+            drawImgMaker()
+        } else if (imgMarkerYn==="Y"){
+
+            imgMarkerYn = "N";
+            deleteImgMarker()
+
+        }
+
+    })
+
     if(sessionStorage.getItem("SS_ROUTE_GD")==="Y"){
         viewRoute()
     }
@@ -820,6 +834,8 @@ function doGuide(placeSeq) {
 
 function regImg(seq) {
 
+    let newWindow;
+
     $('[id^="plc_"]').each(function () {
         // 현재 요소의 id 값을 가져옴 (예: plc_123)
         let id = $(this).attr('id');
@@ -840,15 +856,20 @@ function regImg(seq) {
 
             console.log("regIMG start! seq : " + seq + "lat : " + lat + "lon : " + lon + "placeNick : " + placeNick)
 
-            // 새 창에서 tourPlaceEditForm 열기
-            window.open("/img/imgReg?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon + "&placeNick=" + placeNick);
-
+            // 새 창에서 regImg 열기
+            newWindow =window.open("/img/imgReg?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon + "&placeNick=" + placeNick);
+            newWindow.addEventListener('beforeunload', function () {
+                // 부모 창을 새로고침합니다.
+                window.location.reload();
+            });
         }
     })
 }
 
 function editImg(seq) {
 
+    let newWindow;
+
     $('[id^="plc_"]').each(function () {
         // 현재 요소의 id 값을 가져옴 (예: plc_123)
         let id = $(this).attr('id');
@@ -868,9 +889,100 @@ function editImg(seq) {
 
             console.log("regIMG start! seq : " + seq + "lat : " + lat + "lon : " + lon + "placeNick : " + placeNick)
 
-            // 새 창에서 tourPlaceEditForm 열기
-            window.open("/img/imgEdit?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon + "&placeNick=" + placeNick);
-
+            // 새 창에서 editImg 열기
+            newWindow = window.open("/img/imgEdit?placeSeq=" + seq + "&lat=" + lat + "&lon=" + lon + "&placeNick=" + placeNick);
+            newWindow.addEventListener('beforeunload', function () {
+                // 부모 창을 새로고침합니다.
+                window.location.reload();
+            });
         }
     })
+}
+
+
+//이미지 마커를 저장할 배열
+imgMarkers = [];
+let currentInfoWindow; // 현재 열려있는 InfoWindow를 추적하기 위한 변수
+
+function drawImgMaker() {
+
+
+    for (let i = 0; i < iList.length; i++) {
+        // 마커 생성
+        let marker = new Tmapv2.Marker({
+            position: new Tmapv2.LatLng(iList[i].imgLat, iList[i].imgLon),
+            map: map,
+            icon: "/itda/images/marker/imgMarker.png"
+        });
+
+        // 클로저를 사용하여 현재 인덱스의 데이터를 클릭 이벤트 리스너에 전달
+        marker.addListener("click", (function (index) {
+            let isOpen = false; // 각 팝업의 열림 상태를 추적하기 위한 변수
+
+            return function (evt) {
+                console.log((index + 1) + '번째 마커 정보');
+                console.log('imgURL = ' + iList[index].imgURL + ' title = ' + iList[index].title + ' userId : ' + iList[index].userId);
+                console.log('contents = ' + iList[index].contents + ' imgLat = ' + iList[index].imgLat + ' imgLon : ' + iList[index].imgLon);
+
+                // 열려있는 InfoWindow가 있으면 닫기
+                if (currentInfoWindow) {
+                    currentInfoWindow.setVisible(false);
+                }
+
+                let infoWindowContent = `
+                    <div class="_tmap_preview_popup_4">
+                        <div class="_tmap_preview_popup_image_l">
+                            <img src="${iList[index].imgURL}" alt="" style="max-width: 150px; max-height: 150px;">
+                        </div>
+                        <div class="_tmap_preview_popup_info">
+                            <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
+                            <div class="_tmap_preview_popup_address right-align">${iList[index].regId}</div>
+                            <div class="_tmap_preview_popup_address bold">${iList[index].contents}</div>
+                        </div>
+                    </div>
+                `;
+
+                if (isOpen) {
+                    currentInfoWindow.setVisible(false); // 이미 열린 상태면 닫음
+                    isOpen = false;
+                } else {
+                    currentInfoWindow = new Tmapv2.InfoWindow({
+                        position: new Tmapv2.LatLng(iList[index].imgLat, iList[index].imgLon),
+                        content: infoWindowContent,
+                        border: '0px solid #FF0000',
+                        backgroundColor: 'white', // 배경색
+                        borderRadius: '5px', // 테두리 모서리 둥글게
+                        padding: '10px', // 내용과 테두리 간격 조절
+                        type: 2,
+                        map: map
+                    });
+                    isOpen = true;
+                }
+            };
+        })(i));
+
+        // 생성된 마커를 markers 배열에 추가
+        imgMarkers.push(marker);
+    }
+}
+// 이미지 마커 지우기
+function deleteImgMarker() {
+
+    // 열려있는 InfoWindow 닫기
+    if (currentInfoWindow) {
+        currentInfoWindow.setVisible(false);
+    }
+
+    removeMarkers(imgMarkers);
+
+}
+
+// 모든 마커를 제거하는 함수
+function removeMarkers(markers) {
+    for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+    }
+    // markers 배열 비우기
+    markers = [];
+
 }

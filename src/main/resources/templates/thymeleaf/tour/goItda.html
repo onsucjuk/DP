@@ -29,14 +29,24 @@
       const startTime = [[${session.SS_STARTTIME_YN}]];
       const startTimeMn = [[${session.SS_STARTTIME_MN}]];
       const tourSeq = [[${session.SS_TOUR_SEQ}]];
-      const existsYn = [[${session.SS_EXISTS_YN}]]
+      const existsYn = [[${session.SS_EXISTS_YN}]];
+      let imgMarkerYn = [[${session.SS_IMGMARKER_YN}]];
+      const userId = [[${session.SS_USER_ID}]];
+      const iList = [[${iList}]];
 
-      if (tourSeq == null || tourSeq === '') {
+      if (userId == null || userId === '') {
+        alert("로그인을 해주세요.")
+        location.href = "/user/login"
+
+      }
+
+      else if (tourSeq == null || tourSeq === '') {
 
         alert("비정상적인 접근입니다.")
         location.href = "/index/index"
+
       }
-      if (existsYn === "N") {
+      else if (existsYn === "N") {
 
         if (confirm("Itda 서비스를 이용하시려면 여행지를 먼저 등록해주세요." + "Day " + dSeq + " 의 목적지를 등록하시겠습니까?")) {
           location.href = "/tour/tourDayInfo?nSeq=" + dSeq;
@@ -312,6 +322,9 @@
                   <button class="btn btn-sm btn-light bg-white border-dark" style="margin-bottom: 5px;" type="button" id="btnViewNow">
                     <i class="mdi mdi-crosshairs-gps"></i> 현재 위치 확인
                   </button>
+                  <button class="btn btn-sm btn-light bg-white border-dark" th:if="${session.SS_IMGMARKER_YN}=='N'" style="margin-bottom: 5px;" type="button" id="btnViewImg">
+                    <i class="mdi mdi-crosshairs-gps"></i> Itda Img 확인
+                  </button>
                     <!--여기에 지도 넣기-->
                     <div id="map_div"></div>
 
@@ -319,7 +332,6 @@
               </div>
             </div>
           </div>
-
           <!-- 여행 진행도-->
           <div class="tourGraph"  th:if="${session.SS_EXISTS_YN} == 'Y'">
             <p class="nowProcess">

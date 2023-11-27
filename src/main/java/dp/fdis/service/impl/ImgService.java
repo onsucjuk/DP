@@ -190,6 +190,14 @@ public class ImgService implements IImgService {
 
     @Transactional
     @Override
+    public List<ImgDTO> getImgAll() throws Exception {
+        log.info(this.getClass().getName() + ".getImgAll start!");
+
+        return imgMapper.getImgAll();
+    }
+
+    @Transactional
+    @Override
     public void deleteImgOne(ImgDTO pDTO) throws Exception {
 
         log.info(this.getClass().getName() + ".deleteImgOne start!");

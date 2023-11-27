@@ -1145,8 +1145,22 @@ public class TourController {
 
         log.info("SS_STARTTIME_YN : " + CmmUtil.nvl((String)session.getAttribute("SS_STARTTIME_YN")));
 
+        String imgMarkerYn = CmmUtil.nvl((String)session.getAttribute("SS_IMGMAKER_YN"));
+
+        if(imgMarkerYn.isEmpty() || imgMarkerYn.equals("N")){
+            session.setAttribute("SS_IMGMARKER_YN", "N");
+        } else {
+            session.setAttribute("SS_IMGMARKER_YN", "Y");
+        }
+
+        List<ImgDTO> iList = Optional.ofNullable(iImgService.getImgAll())
+                .orElseGet(ArrayList::new);
+
+        log.info("이미지 갯수 : " + iList.size());
+
         model.addAttribute("rList", rList);
         model.addAttribute("dList", dList);
+        model.addAttribute("iList", iList);
         model.addAttribute("rDTO", rDTO);
         model.addAttribute("dDTO", dDTO);
         model.addAttribute("cDTO", cDTO);

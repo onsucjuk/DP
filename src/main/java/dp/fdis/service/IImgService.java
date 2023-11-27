@@ -22,6 +22,7 @@ public interface IImgService {
     ImgDTO getTourImgOne(ImgDTO pDTO) throws Exception;
     List<ImgDTO> getTourDayImg(ImgDTO pDTO) throws Exception;
     List<ImgDTO> getTourImgAll(ImgDTO pDTO) throws Exception;
+    List<ImgDTO> getImgAll() throws Exception;
     void deleteImgOne(ImgDTO pDTO) throws Exception;
     void deleteDayImg(ImgDTO pDTO) throws Exception;
     void deleteTourImg(ImgDTO pDTO) throws Exception;

@@ -53,5 +53,7 @@ public class TourDTO {
     private double imgLon;
     private String imgURL;
 
+    private String imgMakerYn;
+
 
 }
