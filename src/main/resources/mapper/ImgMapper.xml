@@ -15,6 +15,15 @@
                )
     </insert>
 
+    <insert id="insertLike" parameterType="ImgDTO">
+        INSERT INTO LIKE_TB (
+            LIKE_SEQ, IMG_SEQ, USER_ID
+        )
+        VALUES (
+                   COALESCE((SELECT MAX(A.LIKE_SEQ) FROM LIKE_TB A), 0) + 1, #{imgSeq}, #{userId}
+               )
+    </insert>
+
     <update id="updatePlaceImg" parameterType="ImgDTO">
         UPDATE TOUR_PLACE
         SET
@@ -28,6 +37,22 @@
             TOUR_DAY = #{tourDay}
         AND
             PLACE_SEQ = #{placeSeq}
+    </update>
+
+    <update id="addImgLike" parameterType="ImgDTO">
+        UPDATE TOUR_IMG
+        SET
+            LIKE_CNT = LIKE_CNT + 1
+        WHERE
+            IMG_SEQ = #{imgSeq}
+    </update>
+
+    <update id="subImgLike" parameterType="ImgDTO">
+        UPDATE TOUR_IMG
+        SET
+            LIKE_CNT = LIKE_CNT - 1
+        WHERE
+            IMG_SEQ = #{imgSeq}
     </update>
 
     <update id="initialTourImgInfo" parameterType="ImgDTO">
@@ -75,6 +100,14 @@
     <select id="getImgAll" resultType="ImgDTO" >
         SELECT IMG_SEQ, TOUR_SEQ, TOUR_DAY, PLACE_SEQ, TITLE, CONTENTS, REG_ID, REG_DT, CHG_ID, CHG_DT, LIKE_CNT, IMG_URL, TRIM(TRAILING '0' FROM IMG_LAT) AS IMG_LAT, TRIM(TRAILING '0' FROM IMG_LON) AS IMG_LON
         FROM TOUR_IMG
+    </select>
+
+    <select id="checkImg" resultType="ImgDTO" parameterType="ImgDTO">
+        SELECT COUNT(*) AS LIKE_CHK
+        FROM LIKE_TB
+        WHERE USER_ID = #{userId}
+            AND
+              IMG_SEQ = #{imgSeq}
     </select>
 
     <update id="updateTourImg" parameterType="ImgDTO">
@@ -135,4 +168,11 @@
             TOUR_SEQ = #{tourSeq}
     </delete>
 
+    <delete id="deleteLike" parameterType="ImgDTO">
+        DELETE FROM LIKE_TB
+        WHERE
+            IMG_SEQ = #{imgSeq}
+            AND
+            USER_ID = #{userId}
+    </delete>
 </mapper>

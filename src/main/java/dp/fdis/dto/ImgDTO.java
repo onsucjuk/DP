@@ -23,6 +23,9 @@ public class ImgDTO {
     private String chgId;
     private String chgDt;
     private int likeCnt;
+    private int likeChk;
+
+    private int likeSeq;
     // 메타 데이터 확인용 lat, lon
     private double imgLat;
     private double imgLon;

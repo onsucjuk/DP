@@ -12,13 +12,20 @@ public interface IImgMapper {
     List<ImgDTO> getTourDayImg(ImgDTO pDTO) throws Exception;
     List<ImgDTO> getTourImgAll(ImgDTO pDTO) throws Exception;
     List<ImgDTO> getImgAll() throws Exception;
+
+    ImgDTO checkImg(ImgDTO pDTO) throws Exception;
     void insertTourImg(ImgDTO pDTO) throws Exception;
+    void insertLike(ImgDTO pDTO) throws Exception;
     void updatePlaceImg(ImgDTO pDTO) throws Exception;
     void updateTourImg(ImgDTO pDTO) throws Exception;
     void updateTourImgInfo(ImgDTO pDTO) throws Exception;
+
+    void addImgLike(ImgDTO pDTO) throws Exception;
+    void subImgLike(ImgDTO pDTO) throws Exception;
     void deleteImgOne(ImgDTO pDTO) throws Exception;
     void deleteDayImg(ImgDTO pDTO) throws Exception;
     void deleteTourImg(ImgDTO pDTO) throws Exception;
+    void deleteLike(ImgDTO pDTO) throws Exception;
     void initialTourImgInfo(ImgDTO pDTO) throws Exception;
 
     /* 이미지 등록되어있는지 확인 */

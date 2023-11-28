@@ -503,4 +503,151 @@ public class ImgController {
 
         return dto;
     }
+
+
+    @ResponseBody
+    @PostMapping(value = "checkLike")
+    public ImgDTO checkLike(HttpSession session, HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".checkLike Start!");
+
+        ImgDTO rDTO = new ImgDTO();
+
+        try {
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+            String imgSeq = CmmUtil.nvl(request.getParameter("imgSeq"));
+
+            log.info("userId : " + userId);
+            log.info("imgSeq : " + imgSeq);
+
+            if (userId.length() > 0 && imgSeq.length() > 0) {
+
+                ImgDTO pDTO = new ImgDTO();
+
+                pDTO.setUserId(userId);
+                pDTO.setImgSeq(imgSeq);
+
+                // 사진 정보 한 개 삭제하기 DB
+                rDTO = iImgService.checkImg(pDTO);
+
+                log.info("count : " + rDTO.getLikeChk());
+
+            }
+
+        } catch (Exception e) {
+
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            log.info(this.getClass().getName() + ".checkLike End!");
+
+        }
+
+        return rDTO;
+    }
+
+
+    @ResponseBody
+    @PostMapping(value = "likeCheck")
+    public MsgDTO likeCheck(HttpSession session, HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".likeCheck Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+            String imgSeq = CmmUtil.nvl(request.getParameter("imgSeq"));
+
+            log.info("userId : " + userId);
+            log.info("imgURL : " + imgSeq);
+
+            if (userId.length() > 0 && imgSeq.length() > 0) {
+
+                ImgDTO pDTO = new ImgDTO();
+
+                pDTO.setUserId(userId);
+                pDTO.setImgSeq(imgSeq);
+
+                // Like 추가하기
+                iImgService.insertLike(pDTO);
+                iImgService.addImgLike(pDTO);
+
+                msg = "좋아요 했습니다.";
+
+            }
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".likeCheck End!");
+
+        }
+
+        return dto;
+    }
+
+
+    @ResponseBody
+    @PostMapping(value = "likeDel")
+    public MsgDTO likeDel(HttpSession session, HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".likeDel Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+
+        try {
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+            String imgSeq = CmmUtil.nvl(request.getParameter("imgSeq"));
+
+            log.info("userId : " + userId);
+            log.info("imgURL : " + imgSeq);
+
+            if (userId.length() > 0 && imgSeq.length() > 0) {
+
+                ImgDTO pDTO = new ImgDTO();
+
+                pDTO.setUserId(userId);
+                pDTO.setImgSeq(imgSeq);
+
+                // Like 추가하기
+                iImgService.deleteLike(pDTO);
+                iImgService.subImgLike(pDTO);
+
+                msg = "좋아요를 취소했습니다.";
+
+            }
+
+        } catch (Exception e) {
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info(this.getClass().getName() + ".likeDel End!");
+
+        }
+
+        return dto;
+    }
 }

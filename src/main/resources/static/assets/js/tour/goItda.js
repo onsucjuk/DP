@@ -899,10 +899,48 @@ function editImg(seq) {
     })
 }
 
+function likeCheck(imgSeq) {
+
+    alert("likeCheck 시작!")
+
+    $.ajax({
+        url: "/img/likeCheck",
+        type: "POST",
+        datatype: "JSON",
+        data: {
+            "imgSeq" : imgSeq
+        },
+        success: function (json) {
+            console.log(json.msg)
+            $(".likeImage").attr("src", "/itda/images/likeAfter.png");
+        }
+    })
+
+}
+
+function likeDel(imgSeq) {
+
+    alert("likeDel 시작!")
+
+    $.ajax({
+        url: "/img/likeDel",
+        type: "POST",
+        datatype: "JSON",
+        data: {
+            "imgSeq" : imgSeq
+        },
+        success: function (json) {
+            console.log(json.msg)
+            $(".likeImage").attr("src", "/itda/images/likeBefore.jpg");
+        }
+    })
+
+}
 
 //이미지 마커를 저장할 배열
 imgMarkers = [];
 let currentInfoWindow; // 현재 열려있는 InfoWindow를 추적하기 위한 변수
+let imgCheck = '';
 
 function drawImgMaker() {
 
@@ -917,22 +955,56 @@ function drawImgMaker() {
 
         // 클로저를 사용하여 현재 인덱스의 데이터를 클릭 이벤트 리스너에 전달
         marker.addListener("click", (function (index) {
+
+            let imgSeq = iList[index].imgSeq
+            console.log("/img/checkLike 시작!")
+
+            $.ajax({
+                url: "/img/checkLike",
+                type: "POST",
+                datatype: "JSON",
+                data: {
+                    "imgSeq" : imgSeq
+                },
+                success: function (json) {
+
+                    if (json.likeChk === 1) {
+                        // 유저가 like를 눌러놨음
+                        imgCheck = "Y"
+                        console.log("checkLike 결과 : " + imgCheck)
+
+                    } else if(json.likeChk === 0) {
+                        // 유저가 like를 누르지 않았음
+                        imgCheck = "N"
+                        console.log("checkLike 결과 : " + imgCheck)
+
+                    }
+                }
+            })
+
             let isOpen = false; // 각 팝업의 열림 상태를 추적하기 위한 변수
 
             return function (evt) {
                 console.log((index + 1) + '번째 마커 정보');
-                console.log('imgURL = ' + iList[index].imgURL + ' title = ' + iList[index].title + ' userId : ' + iList[index].userId);
+                console.log('imgURL = ' + iList[index].imgURL + ' title = ' + iList[index].title + ' userId : ' + iList[index].regId);
                 console.log('contents = ' + iList[index].contents + ' imgLat = ' + iList[index].imgLat + ' imgLon : ' + iList[index].imgLon);
+
 
                 // 열려있는 InfoWindow가 있으면 닫기
                 if (currentInfoWindow) {
                     currentInfoWindow.setVisible(false);
                 }
+                console.log('imgCheck = ' + imgCheck)
 
-                let infoWindowContent = `
+                let infoWindowContent = ''
+
+                if (imgCheck==='N') {
+                    /*likeBefore.jpg*/
+                        infoWindowContent = `
                     <div class="_tmap_preview_popup_4">
-                        <div class="_tmap_preview_popup_image_l">
+                        <div class="_tmap_preview_popup_image_l" style="position: relative;">
                             <img src="${iList[index].imgURL}" alt="" style="max-width: 150px; max-height: 150px;">
+                            <img class="likeImage" src="/itda/images/likeAfter.png" style="position: absolute; bottom: 5px; left: 5px;" th:onclick="likeCheck([[${imgSeq}]])">
                         </div>
                         <div class="_tmap_preview_popup_info">
                             <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
@@ -941,6 +1013,24 @@ function drawImgMaker() {
                         </div>
                     </div>
                 `;
+                } else if (imgCheck==='Y') {
+
+                        infoWindowContent = `
+                    <div class="_tmap_preview_popup_4">
+                        <div class="_tmap_preview_popup_image_l" style="position: relative;">
+                            <img src="${iList[index].imgURL}" alt="" style="width: 150px; height: 150px;">
+                            <img class="likeImage" src="/itda/images/likeBefore.jpg" style="position: absolute; bottom: 5px; left: 5px;" th:onclick="likeDel([[${imgSeq}]])">
+                        </div>
+                        <div class="_tmap_preview_popup_info">
+                            <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
+                            <div class="_tmap_preview_popup_address right-align">${iList[index].regId}</div>
+                            <div class="_tmap_preview_popup_address bold">${iList[index].contents}</div>
+                        </div>
+                    </div>
+                `;
+
+                }
+
 
                 if (isOpen) {
                     currentInfoWindow.setVisible(false); // 이미 열린 상태면 닫음
@@ -958,7 +1048,8 @@ function drawImgMaker() {
                     });
                     isOpen = true;
                 }
-            };
+        };
+
         })(i));
 
         // 생성된 마커를 markers 배열에 추가

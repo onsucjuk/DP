@@ -126,6 +126,16 @@ public class ImgService implements IImgService {
 
     }
 
+    @Transactional
+    @Override
+    public void insertLike(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".insertLike start!");
+
+        imgMapper.insertLike(pDTO);
+
+    }
+
     /**
      *  TOUR_PLACE DB의 IMG_LAT, IMG_LON, IMG_URL 업데이트
      */
@@ -159,6 +169,20 @@ public class ImgService implements IImgService {
 
         imgMapper.updateTourImgInfo(pDTO);
 
+    }
+
+    @Override
+    public void addImgLike(ImgDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".addImgLike start!");
+
+        imgMapper.addImgLike(pDTO);
+    }
+
+    @Override
+    public void subImgLike(ImgDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".subImgLike start!");
+
+        imgMapper.subImgLike(pDTO);
     }
 
     @Transactional
@@ -196,6 +220,14 @@ public class ImgService implements IImgService {
         return imgMapper.getImgAll();
     }
 
+    @Override
+    public ImgDTO checkImg(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".checkImg start!");
+
+        return imgMapper.checkImg(pDTO);
+    }
+
     @Transactional
     @Override
     public void deleteImgOne(ImgDTO pDTO) throws Exception {
@@ -223,6 +255,15 @@ public class ImgService implements IImgService {
         log.info(this.getClass().getName() + ".deleteTourImg start!");
 
         imgMapper.deleteTourImg(pDTO);
+
+    }
+
+    @Override
+    public void deleteLike(ImgDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".deleteLike start!");
+
+        imgMapper.deleteLike(pDTO);
 
     }
 
