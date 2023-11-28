@@ -49,3 +49,6 @@ th[name="conghiddenTh"]
     text-align: right; /* regId를 오른쪽 정렬 */
     font-size: 10px; /* regId의 폰트 사이즈를 작게 설정 */
 }
+.likeImage_heart{
+    margin-left: 2px;
+}

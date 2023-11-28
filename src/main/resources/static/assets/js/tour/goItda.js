@@ -1,5 +1,46 @@
 $(document).ready(function () {
 
+
+    function likeCheck(imgSeq) {
+
+        alert("likeCheck 시작!")
+
+        $.ajax({
+            url: "/img/likeCheck",
+            type: "POST",
+            datatype: "JSON",
+            data: {
+                "imgSeq" : imgSeq
+            },
+            success: function (json) {
+                console.log(json.msg)
+                $(".likeImage").attr("src", "/itda/images/likeAfter.png");
+            }
+        })
+
+    }
+
+    function likeDel(imgSeq) {
+
+        alert("likeDel 시작!")
+
+        $.ajax({
+            url: "/img/likeDel",
+            type: "POST",
+            datatype: "JSON",
+            data: {
+                "imgSeq" : imgSeq
+            },
+            success: function (json) {
+                console.log(json.msg)
+                $(".likeImage").attr("src", "/itda/images/likeBefore.jpg");
+            }
+        })
+
+    }
+
+
+
     $("#btnViewNow").on("click", function () {
 
       sessionStorage.setItem("SS_ROUTE_GD", "");
@@ -899,44 +940,6 @@ function editImg(seq) {
     })
 }
 
-function likeCheck(imgSeq) {
-
-    alert("likeCheck 시작!")
-
-    $.ajax({
-        url: "/img/likeCheck",
-        type: "POST",
-        datatype: "JSON",
-        data: {
-            "imgSeq" : imgSeq
-        },
-        success: function (json) {
-            console.log(json.msg)
-            $(".likeImage").attr("src", "/itda/images/likeAfter.png");
-        }
-    })
-
-}
-
-function likeDel(imgSeq) {
-
-    alert("likeDel 시작!")
-
-    $.ajax({
-        url: "/img/likeDel",
-        type: "POST",
-        datatype: "JSON",
-        data: {
-            "imgSeq" : imgSeq
-        },
-        success: function (json) {
-            console.log(json.msg)
-            $(".likeImage").attr("src", "/itda/images/likeBefore.jpg");
-        }
-    })
-
-}
-
 //이미지 마커를 저장할 배열
 imgMarkers = [];
 let currentInfoWindow; // 현재 열려있는 InfoWindow를 추적하기 위한 변수
@@ -1004,9 +1007,11 @@ function drawImgMaker() {
                     <div class="_tmap_preview_popup_4">
                         <div class="_tmap_preview_popup_image_l" style="position: relative;">
                             <img src="${iList[index].imgURL}" alt="" style="max-width: 150px; max-height: 150px;">
-                            <img class="likeImage" src="/itda/images/likeAfter.png" style="position: absolute; bottom: 5px; left: 5px;" th:onclick="likeCheck([[${imgSeq}]])">
                         </div>
                         <div class="_tmap_preview_popup_info">
+                            <div  class="likeImage_heart" th:onclick="likeCheck([[${imgSeq}]])">
+                                <img src="/itda/images/likeBefore.png" style="height:10px; width:10px; margin-right: 5px;">${iList[index].likeCnt}
+                            </div>
                             <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
                             <div class="_tmap_preview_popup_address right-align">${iList[index].regId}</div>
                             <div class="_tmap_preview_popup_address bold">${iList[index].contents}</div>
@@ -1019,8 +1024,10 @@ function drawImgMaker() {
                     <div class="_tmap_preview_popup_4">
                         <div class="_tmap_preview_popup_image_l" style="position: relative;">
                             <img src="${iList[index].imgURL}" alt="" style="width: 150px; height: 150px;">
-                            <img class="likeImage" src="/itda/images/likeBefore.jpg" style="position: absolute; bottom: 5px; left: 5px;" th:onclick="likeDel([[${imgSeq}]])">
                         </div>
+                         <div  class="likeImage_heart" th:onclick="likeCheck([[${imgSeq}]])">
+                            <img src="/itda/images/likeAfter.png" style="height:10px; width:10px; margin-right: 5px;">${iList[index].likeCnt}
+                         </div>
                         <div class="_tmap_preview_popup_info">
                             <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
                             <div class="_tmap_preview_popup_address right-align">${iList[index].regId}</div>
