@@ -616,7 +616,7 @@ public class ImgController {
             String imgSeq = CmmUtil.nvl(request.getParameter("imgSeq"));
 
             log.info("userId : " + userId);
-            log.info("imgURL : " + imgSeq);
+            log.info("imgSeq : " + imgSeq);
 
             if (userId.length() > 0 && imgSeq.length() > 0) {
 

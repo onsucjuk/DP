@@ -1,46 +1,6 @@
 $(document).ready(function () {
 
 
-    function likeCheck(imgSeq) {
-
-        alert("likeCheck 시작!")
-
-        $.ajax({
-            url: "/img/likeCheck",
-            type: "POST",
-            datatype: "JSON",
-            data: {
-                "imgSeq" : imgSeq
-            },
-            success: function (json) {
-                console.log(json.msg)
-                $(".likeImage").attr("src", "/itda/images/likeAfter.png");
-            }
-        })
-
-    }
-
-    function likeDel(imgSeq) {
-
-        alert("likeDel 시작!")
-
-        $.ajax({
-            url: "/img/likeDel",
-            type: "POST",
-            datatype: "JSON",
-            data: {
-                "imgSeq" : imgSeq
-            },
-            success: function (json) {
-                console.log(json.msg)
-                $(".likeImage").attr("src", "/itda/images/likeBefore.jpg");
-            }
-        })
-
-    }
-
-
-
     $("#btnViewNow").on("click", function () {
 
       sessionStorage.setItem("SS_ROUTE_GD", "");
@@ -1002,14 +962,14 @@ function drawImgMaker() {
                 let infoWindowContent = ''
 
                 if (imgCheck==='N') {
-                    /*likeBefore.jpg*/
+
                         infoWindowContent = `
                     <div class="_tmap_preview_popup_4">
                         <div class="_tmap_preview_popup_image_l" style="position: relative;">
                             <img src="${iList[index].imgURL}" alt="" style="max-width: 150px; max-height: 150px;">
                         </div>
                         <div class="_tmap_preview_popup_info">
-                            <div  class="likeImage_heart" th:onclick="likeCheck([[${imgSeq}]])">
+                            <div  class="likeImage_heart" onclick="likeCheck([[${imgSeq}]])">
                                 <img src="/itda/images/likeBefore.png" style="height:10px; width:10px; margin-right: 5px;">${iList[index].likeCnt}
                             </div>
                             <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
@@ -1025,7 +985,7 @@ function drawImgMaker() {
                         <div class="_tmap_preview_popup_image_l" style="position: relative;">
                             <img src="${iList[index].imgURL}" alt="" style="width: 150px; height: 150px;">
                         </div>
-                         <div  class="likeImage_heart" th:onclick="likeCheck([[${imgSeq}]])">
+                         <div  class="likeImage_heart" onclick="likeDel([[${imgSeq}]])">
                             <img src="/itda/images/likeAfter.png" style="height:10px; width:10px; margin-right: 5px;">${iList[index].likeCnt}
                          </div>
                         <div class="_tmap_preview_popup_info">
@@ -1082,5 +1042,44 @@ function removeMarkers(markers) {
     }
     // markers 배열 비우기
     markers = [];
+
+}
+
+function likeCheck(imgSeq) {
+
+    alert("likeCheck 시작!")
+
+    $.ajax({
+        url: "/img/likeCheck",
+        type: "POST",
+        datatype: "JSON",
+        data: {
+            "imgSeq" : imgSeq
+        },
+        success: function (json) {
+            console.log(json.msg)
+            $(".likeImage").attr("src", "/itda/images/likeAfter.png");
+        }
+    })
+
+}
+
+function likeDel(imgSeq) {
+
+    alert("likeDel 시작!")
+    alert("imgSeq : " + imgSeq);
+
+    $.ajax({
+        url: "/img/likeDel",
+        type: "POST",
+        datatype: "JSON",
+        data: {
+            "imgSeq" : imgSeq
+        },
+        success: function (json) {
+            console.log(json.msg)
+            $(".likeImage").attr("src", "/itda/images/likeBefore.jpg");
+        }
+    })
 
 }
