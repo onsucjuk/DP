@@ -1047,18 +1047,24 @@ function removeMarkers(markers) {
 
 function likeCheck(imgSeq) {
 
-    alert("likeCheck 시작!")
+    console.log(JSON.stringify({ "imgSeq": imgSeq[0][0] }))
 
     $.ajax({
         url: "/img/likeCheck",
         type: "POST",
         datatype: "JSON",
-        data: {
-            "imgSeq" : imgSeq
-        },
+        contentType: "application/json",
+        data: JSON.stringify({
+                "imgSeq": imgSeq[0][0]
+        }),
         success: function (json) {
             console.log(json.msg)
-            $(".likeImage").attr("src", "/itda/images/likeAfter.png");
+            alert(json.msg)
+            location.reload();
+        } ,error: function (xhr) {
+            console.log(xhr)
+            alert("좋아요를 체크하였습니다.")
+            location.reload();
         }
     })
 
@@ -1066,19 +1072,24 @@ function likeCheck(imgSeq) {
 
 function likeDel(imgSeq) {
 
-    alert("likeDel 시작!")
-    alert("imgSeq : " + imgSeq);
+    console.log(JSON.stringify({ "imgSeq": imgSeq[0][0] }))
 
     $.ajax({
         url: "/img/likeDel",
         type: "POST",
-        datatype: "JSON",
-        data: {
-            "imgSeq" : imgSeq
-        },
+        dataType: "JSON",
+        contentType: "application/json",
+        data: JSON.stringify({
+            "imgSeq": imgSeq[0][0]  // 배열 형태로 보내는 것이 아니라 단일 값으로 보냄
+        }),
         success: function (json) {
             console.log(json.msg)
-            $(".likeImage").attr("src", "/itda/images/likeBefore.jpg");
+            alert(json.msg)
+
+        }, error: function (xhr) {
+            console.log(xhr)
+            alert("좋아요를 취소하였습니다.")
+            location.reload();
         }
     })
 

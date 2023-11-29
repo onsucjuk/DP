@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -550,9 +547,8 @@ public class ImgController {
     }
 
 
-    @ResponseBody
     @PostMapping(value = "likeCheck")
-    public MsgDTO likeCheck(HttpSession session, HttpServletRequest request) {
+    public MsgDTO likeCheck(HttpSession session, @RequestBody ImgDTO rDTO) {
 
         log.info(this.getClass().getName() + ".likeCheck Start!");
 
@@ -562,7 +558,7 @@ public class ImgController {
         try {
 
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-            String imgSeq = CmmUtil.nvl(request.getParameter("imgSeq"));
+            String imgSeq = CmmUtil.nvl(rDTO.getImgSeq());
 
             log.info("userId : " + userId);
             log.info("imgURL : " + imgSeq);
@@ -593,6 +589,7 @@ public class ImgController {
             dto = new MsgDTO();
             dto.setMsg(msg);
 
+            log.info("msg : " + msg);
             log.info(this.getClass().getName() + ".likeCheck End!");
 
         }
@@ -601,9 +598,9 @@ public class ImgController {
     }
 
 
-    @ResponseBody
+
     @PostMapping(value = "likeDel")
-    public MsgDTO likeDel(HttpSession session, HttpServletRequest request) {
+    public MsgDTO likeDel(HttpSession session, @RequestBody ImgDTO rDTO) {
 
         log.info(this.getClass().getName() + ".likeDel Start!");
 
@@ -613,7 +610,7 @@ public class ImgController {
         try {
 
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-            String imgSeq = CmmUtil.nvl(request.getParameter("imgSeq"));
+            String imgSeq = CmmUtil.nvl(rDTO.getImgSeq());
 
             log.info("userId : " + userId);
             log.info("imgSeq : " + imgSeq);
@@ -644,6 +641,7 @@ public class ImgController {
             dto = new MsgDTO();
             dto.setMsg(msg);
 
+            log.info("msg : " + msg);
             log.info(this.getClass().getName() + ".likeDel End!");
 
         }
