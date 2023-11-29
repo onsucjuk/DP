@@ -969,8 +969,10 @@ function drawImgMaker() {
                             <img src="${iList[index].imgURL}" alt="" style="max-width: 150px; max-height: 150px;">
                         </div>
                         <div class="_tmap_preview_popup_info">
-                            <div  class="likeImage_heart" onclick="likeCheck([[${imgSeq}]])">
-                                <img src="/itda/images/likeBefore.png" style="height:10px; width:10px; margin-right: 5px;">${iList[index].likeCnt}
+                            <div class="likeDiv">
+                                <div class="likeImage_heart">
+                                    <img src="/itda/images/likeBefore.png" style="height:10px; width:10px; margin-right: 5px;" onclick="likeCheck([[${imgSeq}]])">${iList[index].likeCnt}
+                                </div>
                             </div>
                             <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
                             <div class="_tmap_preview_popup_address right-align">${iList[index].regId}</div>
@@ -985,13 +987,15 @@ function drawImgMaker() {
                         <div class="_tmap_preview_popup_image_l" style="position: relative;">
                             <img src="${iList[index].imgURL}" alt="" style="width: 150px; height: 150px;">
                         </div>
-                         <div  class="likeImage_heart" onclick="likeDel([[${imgSeq}]])">
-                            <img src="/itda/images/likeAfter.png" style="height:10px; width:10px; margin-right: 5px;">${iList[index].likeCnt}
-                         </div>
                         <div class="_tmap_preview_popup_info">
-                            <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
-                            <div class="_tmap_preview_popup_address right-align">${iList[index].regId}</div>
-                            <div class="_tmap_preview_popup_address bold">${iList[index].contents}</div>
+                            <div class="likeDiv"> 
+                                <div class="likeImage_heart">
+                                    <img src="/itda/images/likeAfter.png" style="height:10px; width:10px; margin-right: 5px;"  onclick="likeDel([[${imgSeq}]])">${iList[index].likeCnt}
+                                </div>
+                            </div>
+                        <div class="_tmap_preview_popup_title bold">${iList[index].title}</div>
+                        <div class="_tmap_preview_popup_address right-align">${iList[index].regId}</div>
+                        <div class="_tmap_preview_popup_address bold">${iList[index].contents}</div>
                         </div>
                     </div>
                 `;
@@ -1046,32 +1050,57 @@ function removeMarkers(markers) {
 }
 
 function likeCheck(imgSeq) {
-
     console.log(JSON.stringify({ "imgSeq": imgSeq[0][0] }))
 
     $.ajax({
         url: "/img/likeCheck",
         type: "POST",
-        datatype: "JSON",
+        dataType: "JSON",
         contentType: "application/json",
         data: JSON.stringify({
-                "imgSeq": imgSeq[0][0]
+            "imgSeq": imgSeq[0][0]
         }),
         success: function (json) {
-            console.log(json.msg)
-            alert(json.msg)
-            location.reload();
-        } ,error: function (xhr) {
-            console.log(xhr)
-            alert("좋아요를 체크하였습니다.")
-            location.reload();
-        }
-    })
 
+            console.log(json);
+            console.log(json.msg);
+            console.log(json.likeCount);
+
+            if(json.msg==="좋아요 했습니다.") {
+
+                let likeDiv = $(".likeDiv");
+
+                if (likeDiv.length === 0) {
+                    // likeDiv가 없으면 새로 추가
+                    let newDiv = $('<div class="likeImage_heart"><img src="/itda/images/likeAfter.png" style="height:10px; width:10px; margin-right: 5px;">' + json.likeCount + '</div>');
+                    newDiv.find('img').off("click").on("click", function () {
+                        likeDel(imgSeq);
+                    });
+                    $("._tmap_preview_popup_info").append(newDiv);
+                } else {
+                    // likeDiv가 이미 있으면 업데이트
+                    likeDiv.html('<div class="likeImage_heart"><img src="/itda/images/likeAfter.png" style="height:10px; width:10px; margin-right: 5px;">' + json.likeCount + '</div>');
+                    likeDiv.find('img').off("click").on("click", function () {
+                        likeDel(imgSeq);
+                    });
+                }
+            } else if(msg==="로그인 해주세요.") {
+
+                location.href = "/user/login"
+
+            } else {
+
+                location.reload();
+
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
+        }
+    });
 }
 
 function likeDel(imgSeq) {
-
     console.log(JSON.stringify({ "imgSeq": imgSeq[0][0] }))
 
     $.ajax({
@@ -1080,17 +1109,47 @@ function likeDel(imgSeq) {
         dataType: "JSON",
         contentType: "application/json",
         data: JSON.stringify({
-            "imgSeq": imgSeq[0][0]  // 배열 형태로 보내는 것이 아니라 단일 값으로 보냄
+            "imgSeq": imgSeq[0][0]
         }),
         success: function (json) {
-            console.log(json.msg)
-            alert(json.msg)
+            console.log(json);
+            console.log(json.msg);
+            console.log(json.likeCount);
 
-        }, error: function (xhr) {
-            console.log(xhr)
-            alert("좋아요를 취소하였습니다.")
-            location.reload();
+            if(json.likeCount==null) {
+                json.likeCount=0;
+            }
+
+            if(json.msg==="좋아요를 취소했습니다.") {
+
+                let likeDiv = $(".likeDiv");
+
+                if (likeDiv.length === 0) {
+                    // likeDiv가 없으면 새로 추가
+                    let newDiv = $('<div class="likeImage_heart"><img src="/itda/images/likeBefore.png" style="height:10px; width:10px; margin-right: 5px;">' + json.likeCount + '</div>');
+                    newDiv.find('img').off("click").on("click", function () {
+                        likeCheck(imgSeq);
+                    });
+                    $("._tmap_preview_popup_info").append(newDiv);
+                } else {
+                    // likeDiv가 이미 있으면 업데이트
+                    likeDiv.html('<div class="likeImage_heart"><img src="/itda/images/likeBefore.png" style="height:10px; width:10px; margin-right: 5px;">' + json.likeCount + '</div>');
+                    likeDiv.find('img').off("click").on("click", function () {
+                        likeCheck(imgSeq);
+                    });
+                }
+            } else if(msg==="로그인 해주세요.") {
+
+                location.href = "/user/login"
+
+            } else {
+
+                location.reload();
+
+            }
+        },
+        error: function (xhr) {
+            console.log(xhr);
         }
-    })
-
+    });
 }

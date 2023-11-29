@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -525,7 +526,6 @@ public class ImgController {
                 pDTO.setUserId(userId);
                 pDTO.setImgSeq(imgSeq);
 
-                // 사진 정보 한 개 삭제하기 DB
                 rDTO = iImgService.checkImg(pDTO);
 
                 log.info("count : " + rDTO.getLikeChk());
@@ -547,34 +547,70 @@ public class ImgController {
     }
 
 
+    @ResponseBody
     @PostMapping(value = "likeCheck")
-    public MsgDTO likeCheck(HttpSession session, @RequestBody ImgDTO rDTO) {
+    public MsgDTO likeCheck(HttpSession session, @RequestBody Map<String, Object> requestBody) {
 
         log.info(this.getClass().getName() + ".likeCheck Start!");
 
         String msg = ""; // 메시지 내용
         MsgDTO dto = null; // 결과 메시지 구조
+        ImgDTO rDTO = new ImgDTO();
+        int likeCount = 0;
 
         try {
 
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-            String imgSeq = CmmUtil.nvl(rDTO.getImgSeq());
+            String imgSeq = CmmUtil.nvl(String.valueOf(requestBody.get("imgSeq")));
 
             log.info("userId : " + userId);
             log.info("imgURL : " + imgSeq);
 
-            if (userId.length() > 0 && imgSeq.length() > 0) {
+            if (!(userId.length() > 0)) {
+
+                msg = "로그인 해주세요.";
+
+            } else if(!(imgSeq.length() > 0)) {
+
+                msg = "이미지 정보가 옳지 않습니다.";
+
+            }
+
+            else if (userId.length() > 0 && imgSeq.length() > 0) {
+
 
                 ImgDTO pDTO = new ImgDTO();
 
                 pDTO.setUserId(userId);
                 pDTO.setImgSeq(imgSeq);
 
-                // Like 추가하기
-                iImgService.insertLike(pDTO);
-                iImgService.addImgLike(pDTO);
+                rDTO = iImgService.checkImg(pDTO);
+                int likeChk = rDTO.getLikeChk();
 
-                msg = "좋아요 했습니다.";
+                log.info("likeChk : " + likeChk);
+
+                if (likeChk == 0) {
+
+                    // Like 추가하기
+                    iImgService.insertLike(pDTO);
+                    iImgService.addImgLike(pDTO);
+
+                    ImgDTO iDTO = Optional.ofNullable(iImgService.getTourImgOne(pDTO))
+                            .orElseGet(ImgDTO::new);
+
+                    likeCount = iDTO.getLikeCnt();
+
+                    msg = "좋아요 했습니다.";
+
+                } else if(likeChk == 1) {
+
+                    msg = "이미 좋아요를 하셨습니다.";
+
+                } else {
+
+                    msg = "알 수 없는 문제가 발상했습니다.";
+
+                }
 
             }
 
@@ -588,8 +624,10 @@ public class ImgController {
 
             dto = new MsgDTO();
             dto.setMsg(msg);
+            dto.setLikeCount(likeCount);
 
             log.info("msg : " + msg);
+            log.info("likeCount : " + likeCount);
             log.info(this.getClass().getName() + ".likeCheck End!");
 
         }
@@ -598,35 +636,69 @@ public class ImgController {
     }
 
 
-
+    @ResponseBody
     @PostMapping(value = "likeDel")
-    public MsgDTO likeDel(HttpSession session, @RequestBody ImgDTO rDTO) {
+    public MsgDTO likeDel(HttpSession session, @RequestBody Map<String, Object> requestBody) {
 
         log.info(this.getClass().getName() + ".likeDel Start!");
 
         String msg = ""; // 메시지 내용
         MsgDTO dto = null; // 결과 메시지 구조
+        ImgDTO rDTO = new ImgDTO();
+        int likeCount = 0;
 
         try {
 
             String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
-            String imgSeq = CmmUtil.nvl(rDTO.getImgSeq());
+            String imgSeq = CmmUtil.nvl(String.valueOf(requestBody.get("imgSeq")));
 
             log.info("userId : " + userId);
             log.info("imgSeq : " + imgSeq);
 
-            if (userId.length() > 0 && imgSeq.length() > 0) {
+            if (!(userId.length() > 0)) {
+
+                msg = "로그인 해주세요.";
+
+            } else if(!(imgSeq.length() > 0)) {
+
+                msg = "이미지 정보가 옳지 않습니다.";
+
+            }
+
+            else if(userId.length() > 0 && imgSeq.length() > 0) {
 
                 ImgDTO pDTO = new ImgDTO();
 
                 pDTO.setUserId(userId);
                 pDTO.setImgSeq(imgSeq);
 
-                // Like 추가하기
-                iImgService.deleteLike(pDTO);
-                iImgService.subImgLike(pDTO);
+                rDTO = iImgService.checkImg(pDTO);
+                int likeChk = rDTO.getLikeChk();
 
-                msg = "좋아요를 취소했습니다.";
+                log.info("likeChk : " + likeChk);
+
+                if (likeChk == 1) {
+
+                    // Like 취소하기
+                    iImgService.deleteLike(pDTO);
+                    iImgService.subImgLike(pDTO);
+
+                    ImgDTO iDTO = Optional.ofNullable(iImgService.getTourImgOne(pDTO))
+                            .orElseGet(ImgDTO::new);
+
+                    likeCount = iDTO.getLikeCnt();
+
+                    msg = "좋아요를 취소했습니다.";
+
+                } else if(likeChk == 0) {
+
+                    msg = "먼저 좋아요를 해주세요.";
+
+                } else {
+
+                    msg = "알 수 없는 문제가 발상했습니다.";
+
+                }
 
             }
 
@@ -640,8 +712,10 @@ public class ImgController {
 
             dto = new MsgDTO();
             dto.setMsg(msg);
+            dto.setLikeCount(likeCount);
 
             log.info("msg : " + msg);
+            log.info("likeCount : " + dto.getLikeCount());
             log.info(this.getClass().getName() + ".likeDel End!");
 
         }

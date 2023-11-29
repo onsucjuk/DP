@@ -50,7 +50,7 @@
     <update id="subImgLike" parameterType="ImgDTO">
         UPDATE TOUR_IMG
         SET
-            LIKE_CNT = LIKE_CNT - 1
+            LIKE_CNT = GREATEST(0, LIKE_CNT - 1)
         WHERE
             IMG_SEQ = #{imgSeq}
     </update>
@@ -78,6 +78,8 @@
             TOUR_SEQ = #{tourSeq}
           AND
             PLACE_SEQ = #{placeSeq}
+          OR
+            IMG_SEQ = #{imgSeq}
     </select>
 
     <select id="getTourDayImg" parameterType="ImgDTO" resultType="ImgDTO">
