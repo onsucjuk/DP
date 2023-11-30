@@ -10,6 +10,8 @@ public interface ITourMapper {
 
     List<TourDTO> getTourList(TourDTO pDTO) throws Exception;
 
+    List<TourDTO> getTourEndList(TourDTO pDTO) throws Exception;
+
     //여행지 상세보기
     TourDTO getTourInfo(TourDTO pDTO) throws Exception;
 

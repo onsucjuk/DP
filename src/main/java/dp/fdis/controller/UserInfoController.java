@@ -1,11 +1,12 @@
 package dp.fdis.controller;
 
-import dp.fdis.dto.MailDTO;
 import dp.fdis.dto.MsgDTO;
-import dp.fdis.dto.NoticeDTO;
+import dp.fdis.dto.TourDTO;
 import dp.fdis.dto.UserInfoDTO;
+import dp.fdis.service.ITourInfoService;
 import dp.fdis.service.IUserInfoService;
 import dp.fdis.util.CmmUtil;
+import dp.fdis.util.DateUtil;
 import dp.fdis.util.EncryptUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +32,7 @@ import java.util.Optional;
 public class UserInfoController {
 
     private final IUserInfoService userInfoService;
+    private final ITourInfoService tourInfoService;
 
     /**
      * 회원 가입 화면으로 이동
@@ -363,8 +367,79 @@ public class UserInfoController {
     }
 
     @GetMapping(value = "myPage")
-    public String myPage() {
+    public String myPage(HttpSession session, ModelMap model) throws Exception {
+
         log.info(this.getClass().getName() + ".user/myPage Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("userId : " + userId);
+
+
+        if (userId.length() > 0) {
+
+            UserInfoDTO pDTO = new UserInfoDTO();
+
+            pDTO.setUserId(userId);
+
+            UserInfoDTO rDTO = Optional.ofNullable(userInfoService.getUserInfo(pDTO))
+                        .orElseGet(UserInfoDTO::new);
+
+            // 날짜 포매터 정의 (yyyy-MM-dd 형식)
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            String[] regDt = rDTO.getRegDt().split(" ");
+
+            log.info("DateUtil.getDateTime() : " + DateUtil.getDateTime());
+            log.info("regDt : " + regDt[0]);
+
+            // 문자열을 LocalDate으로 변환
+            LocalDate date1 = LocalDate.parse(DateUtil.getDateTime(), formatter);
+            LocalDate date2 = LocalDate.parse(regDt[0], formatter);
+
+            // 두 날짜 간의 차이 계산 (일(day) 단위)
+            int daysDifference = (int) java.time.temporal.ChronoUnit.DAYS.between(date2, date1);
+
+            System.out.println("Days Difference: " + daysDifference);
+
+            rDTO.setDayCnt(daysDifference);
+
+            String email = EncryptUtil.decAES128CBC(CmmUtil.nvl(rDTO.getEmail()));
+
+            log.info("dec email : " + email);
+
+            rDTO.setEmail(email);
+
+
+
+            // 여기서부터 여행 정보
+
+            TourDTO tDTO = new TourDTO();
+            tDTO.setUserId(userId);
+
+            List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourList(tDTO))
+                    .orElseGet(ArrayList::new);
+
+            int beforeStart = rList.size();
+
+            rList = Optional.ofNullable(tourInfoService.getTourEndList(tDTO))
+                    .orElseGet(ArrayList::new);
+
+            int afterEnd = rList.size();
+
+            log.info("beforeStart : " + beforeStart);
+            log.info("afterEnd : " + afterEnd);
+
+            rDTO.setBeforeStart(beforeStart);
+            rDTO.setAfterEnd(afterEnd);
+
+            model.addAttribute("rDTO", rDTO);
+
+        } else {
+
+            return "/user/login";
+
+        }
+
 
         log.info(this.getClass().getName() + ".user/myPage End!");
 

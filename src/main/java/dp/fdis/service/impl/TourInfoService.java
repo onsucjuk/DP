@@ -27,6 +27,14 @@ public class TourInfoService implements ITourInfoService {
         return tourMapper.getTourList(pDTO);
     }
 
+    @Override
+    public List<TourDTO> getTourEndList(TourDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".getTourEndList start!");
+
+
+        return tourMapper.getTourEndList(pDTO);
+    }
 
 
     @Transactional

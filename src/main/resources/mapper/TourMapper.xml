@@ -5,11 +5,13 @@
 <mapper namespace="dp.fdis.persistance.mapper.ITourMapper">
 
     <!-- 여행 리스트 쿼리 -->
-    <select id="getTourList" parameterType = "TourDTO" resultType="TourDTO">
+    <select id="getTourList" parameterType="TourDTO" resultType="TourDTO">
         SELECT
             TI.TOUR_SEQ,
             TI.TOUR_NAME,
             TI.TOUR_PROCESS,
+            TI.START_TIME,
+            TI.END_TIME,
             COUNT(CASE WHEN TP.TOUR_YN = 'Y' THEN 1 END) AS TOUR_Y,
             COUNT(CASE WHEN TP.TOUR_YN = 'N' THEN 1 END) AS TOUR_N
         FROM
@@ -20,6 +22,29 @@
             TI.USER_ID = #{userId}
             AND
             TI.END_TIME >= NOW()
+        GROUP BY
+            TI.TOUR_SEQ
+        ORDER BY
+            TI.TOUR_SEQ;
+    </select>
+
+    <select id="getTourEndList" parameterType="TourDTO" resultType="TourDTO">
+        SELECT
+            TI.TOUR_SEQ,
+            TI.TOUR_NAME,
+            TI.TOUR_PROCESS,
+            TI.START_TIME,
+            TI.END_TIME,
+            COUNT(CASE WHEN TP.TOUR_YN = 'Y' THEN 1 END) AS TOUR_Y,
+            COUNT(CASE WHEN TP.TOUR_YN = 'N' THEN 1 END) AS TOUR_N
+        FROM
+            TOUR_INFO TI
+                LEFT JOIN
+            TOUR_PLACE TP ON TI.TOUR_SEQ = TP.TOUR_SEQ
+        WHERE
+            TI.USER_ID = #{userId}
+          AND
+            NOT(TI.END_TIME >= NOW())
         GROUP BY
             TI.TOUR_SEQ
         ORDER BY

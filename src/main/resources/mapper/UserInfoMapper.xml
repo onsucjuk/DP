@@ -62,7 +62,7 @@
 
     <!-- 유저 상세보기 쿼리 -->
     <select id="getUserInfo" parameterType="UserInfoDTO" resultType="UserInfoDTO">
-        SELECT USER_ID, USER_NAME, EMAIL, ADDR1, ADDR2
+        SELECT USER_ID, USER_NAME, EMAIL, ADDR1, ADDR2, REG_DT
         FROM USER_INFO
         WHERE USER_ID = #{userId}
     </select>

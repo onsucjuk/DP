@@ -7,6 +7,8 @@ import java.util.List;
 public interface ITourInfoService {
     List<TourDTO> getTourList(TourDTO pDTO) throws Exception;
 
+    List<TourDTO> getTourEndList(TourDTO pDTO) throws Exception;
+
     TourDTO getTourNameExists(TourDTO pDTO) throws Exception;
 
     TourDTO getTourSeq(TourDTO pDTO) throws Exception;

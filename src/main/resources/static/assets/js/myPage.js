@@ -3,4 +3,12 @@ $(document).ready(function () {
     $("#btnEdit").on("click", function () {
         location.href = "/user/myPageEdit"
     })
+
+    $("#btnBefore").on("click", function () {
+        location.href = "/tour/tourInfo"
+    })
+
+    $("#btnEnd").on("click", function () {
+        location.href = "/tour/tourEndInfo"
+    })
 })
