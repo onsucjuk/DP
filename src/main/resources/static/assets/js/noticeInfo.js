@@ -13,6 +13,10 @@ $(document).ready(function () {
     $("#btnList").on("click", function () {
         location.href = "/notice/noticeList"; // 공지사항 리스트 이동
     })
+
+    $("#btnUserReg").on("click", function () {
+        location.href = "/user/userRegForm";
+    })
 })
 
 //수정하기

@@ -366,9 +366,18 @@ public class UserInfoController {
     public String myPage() {
         log.info(this.getClass().getName() + ".user/myPage Start!");
 
-                log.info(this.getClass().getName() + ".user/myPage End!");
+        log.info(this.getClass().getName() + ".user/myPage End!");
 
-        return "thymeleaf/index/404";
+        return "thymeleaf/user/myPage";
+    }
+
+    @GetMapping(value = "myPageEdit")
+    public String myPageEdit() {
+        log.info(this.getClass().getName() + ".user/myPageEdit Start!");
+
+        log.info(this.getClass().getName() + ".user/myPageEdit End!");
+
+        return "thymeleaf/user/myPageEdit";
     }
 
     @ResponseBody

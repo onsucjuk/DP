@@ -4,10 +4,21 @@ $(document).ready(function () {
         doSubmit(); // 공지사항 등록하기 실행
     })
 
-    if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
-        alert("로그인 해주세요.");
-        location.href = "/user/login";
-    }
+    $("#btnList").on("click", function () {
+        location.href = "/notice/noticeList"; // 공지사항 목록으로 이동하기 실행
+    })
+
+    $("#btnUserReg").on("click", function () {
+        location.href = "/user/userRegForm";
+    })
+
+        let radioGroupName = 'noticeYn';
+
+        // 특정 name 값을 가진 라디오 버튼 그룹 가져오기
+        let radioGroup = document.querySelectorAll('input[name="' + radioGroupName + '"]');
+
+        // 첫 번째 라디오 버튼 체크하기
+        radioGroup[0].checked = true;
 })
 
 //글자 길이 바이트 단위로 체크하기(바이트값 전달)

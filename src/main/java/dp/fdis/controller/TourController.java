@@ -493,6 +493,7 @@ public class TourController {
         rDTO.setCount(dayCount);
         model.addAttribute("rDTO", rDTO);
         model.addAttribute("rList", rList);
+        model.addAttribute("dayCount", dayCount);
 
         return "thymeleaf/tour/tourDayInfo";
 

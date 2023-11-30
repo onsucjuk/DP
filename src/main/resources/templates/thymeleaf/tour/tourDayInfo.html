@@ -35,6 +35,14 @@
     const nSeq = [[${session.SS_TOUR_SEQ}]];
     const dSeq = [[${session.SS_DAY_SEQ}]];
     const dayCount = "[[${rDTO.count}]]";
+
+    if (dayCount === "0") {
+
+      alert("비정상적인 접근입니다.")
+      location.href = "/index/index"
+
+    }
+
   </script>
 </head>
 <body>

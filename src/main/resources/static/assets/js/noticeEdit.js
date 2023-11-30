@@ -5,26 +5,39 @@ $(document).ready(function () {
         doSubmit(); // 공지사항 수정하기 실행
     })
 
-    if (SS_USER_ID == null || !(SS_USER_ID.length > 0)) {
-        alert("로그인 해주세요.");
-        location.href = "/user/login";
-    }
+    $("#btnUserReg").on("click", function () {
+        location.href = "/user/userRegForm";
+    })
 
-    // input 요소를 찾아서 value 속성을 설정
     var inputElement = document.querySelector('input[name="title"]');
     inputElement.value = titleValue;
 
-    let noticeYnElements = document.getElementsByName("noticeYn");
-    for (let i = 0; i < noticeYnElements.length; i++) {
-        if (noticeYnValue === "Y") {
-            noticeYnElements[0].checked = true;
-        } else {
-            noticeYnElements[1].checked = true;
+    if (SS_USER_ID === "admin") {
+        // input 요소를 찾아서 value 속성을 설정
+
+        let noticeYnElements = document.getElementsByName("noticeYn");
+        for (let i = 0; i < noticeYnElements.length; i++) {
+            if (noticeYnValue === "Y") {
+                noticeYnElements[0].checked = true;
+            } else {
+                noticeYnElements[1].checked = true;
+            }
         }
+    } else {
+
+        let radioGroupName = 'noticeYn';
+
+        // 특정 name 값을 가진 라디오 버튼 그룹 가져오기
+        let radioGroup = document.querySelectorAll('input[name="' + radioGroupName + '"]');
+
+        // 첫 번째 라디오 버튼 체크하기
+        radioGroup[0].checked = true;
+
     }
 
     var inputcontentElement = document.querySelector('textarea[name="contents"]');
     inputcontentElement.value = contentsValue;
+
 })
 
 //글자 길이 바이트 단위로 체크하기(바이트값 전달)

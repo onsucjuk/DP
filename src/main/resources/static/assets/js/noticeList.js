@@ -5,7 +5,10 @@
 
         $(document).ready(function () {
 
-        $("#btnListReg").on("click", function () {
-            location.href = "/notice/noticeReg";
-        })
+            $("#btnListReg").on("click", function () {
+                location.href = "/notice/noticeReg";
+            })
+            $("#btnUserReg").on("click", function () {
+                location.href = "/user/userRegForm";
+            })
         })

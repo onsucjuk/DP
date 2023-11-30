@@ -963,10 +963,10 @@ function drawImgMaker() {
 
                 if (imgCheck==='N') {
 
-                        infoWindowContent = `
+                    infoWindowContent = `
                     <div class="_tmap_preview_popup_4">
                         <div class="_tmap_preview_popup_image_l" style="position: relative;">
-                            <img src="${iList[index].imgURL}" alt="" style="max-width: 150px; max-height: 150px;">
+                            <img src="${iList[index].imgURL}" alt="" style="max-width: 200px; max-height: 200px; width: auto; height: auto;">
                         </div>
                         <div class="_tmap_preview_popup_info">
                             <div class="likeDiv">
@@ -982,10 +982,10 @@ function drawImgMaker() {
                 `;
                 } else if (imgCheck==='Y') {
 
-                        infoWindowContent = `
+                    infoWindowContent = `
                     <div class="_tmap_preview_popup_4">
                         <div class="_tmap_preview_popup_image_l" style="position: relative;">
-                            <img src="${iList[index].imgURL}" alt="" style="width: 150px; height: 150px;">
+                            <img src="${iList[index].imgURL}" alt="" style="max-width: 200px; max-height: 200px; width: auto; height: auto;">
                         </div>
                         <div class="_tmap_preview_popup_info">
                             <div class="likeDiv"> 
@@ -1019,7 +1019,7 @@ function drawImgMaker() {
                     });
                     isOpen = true;
                 }
-        };
+            };
 
         })(i));
 
@@ -1027,6 +1027,8 @@ function drawImgMaker() {
         imgMarkers.push(marker);
     }
 }
+
+
 // 이미지 마커 지우기
 function deleteImgMarker() {
 
