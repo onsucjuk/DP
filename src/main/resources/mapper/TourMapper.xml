@@ -35,6 +35,7 @@
             TI.TOUR_PROCESS,
             TI.START_TIME,
             TI.END_TIME,
+            DATEDIFF(TI.END_TIME, TI.START_TIME) AS DAY_DIFF,
             COUNT(CASE WHEN TP.TOUR_YN = 'Y' THEN 1 END) AS TOUR_Y,
             COUNT(CASE WHEN TP.TOUR_YN = 'N' THEN 1 END) AS TOUR_N
         FROM
@@ -48,7 +49,7 @@
         GROUP BY
             TI.TOUR_SEQ
         ORDER BY
-            TI.TOUR_SEQ;
+            TI.END_TIME;
     </select>
 
     <select id="getTourSeq" parameterType = "TourDTO" resultType="TourDTO">

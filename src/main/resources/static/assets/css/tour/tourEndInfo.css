@@ -1,0 +1,13 @@
+hr.thick-line {
+    height: 4px; /* 원하는 선의 두께로 조절 */
+    background-color: #00B98E; /* 선의 색상 */
+    margin: 20px 0; /* 선 위아래의 여백 */
+}
+
+.contents{
+
+    max-height: 800px; /* 최대 너비 설정 */
+    overflow-y: auto; /* 가로 스크롤을 위한 설정 */
+    padding: 15px; /* 내용을 감싸는 여백 */
+
+}

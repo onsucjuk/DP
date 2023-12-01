@@ -93,4 +93,15 @@
         WHERE USER_ID = #{userId}
     </update>
 
+    <update id="updateUserInfo" parameterType="UserInfoDTO">
+        UPDATE USER_INFO
+        SET USER_NAME = #{userName},
+            EMAIL = #{email},
+            ADDR1 = #{addr1},
+            ADDR2 = #{addr2},
+            CHG_ID = #{userId},
+            CHG_DT = NOW()
+        WHERE USER_ID = #{userId}
+    </update>
+
 </mapper>

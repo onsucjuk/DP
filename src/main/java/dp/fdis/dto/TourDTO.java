@@ -18,6 +18,8 @@ public class TourDTO {
     private String startTime; // 시작시간
     private String endTime; // 끝난 시간
 
+    private int tourRate; // 여행 달성률
+
 
 
     //--------------------------------------------------------------- TOUR_DAY
@@ -27,6 +29,8 @@ public class TourDTO {
     private String tourDay; // 여행 일자 <- 이건 일자 직접 등록 Day1(1), Day2(2) ...
 
     private int count; // Day 수
+
+    private int dayDiff; // Day 차이
 
     //--------------------------------------------------------------- TOUR_PLACE
 

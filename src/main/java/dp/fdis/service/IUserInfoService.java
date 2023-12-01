@@ -33,4 +33,6 @@ public interface IUserInfoService {
 
     UserInfoDTO sendEmailAuth(UserInfoDTO pDTO) throws Exception;
 
+    void updateUserInfo(UserInfoDTO pDTO) throws Exception;
+
 }

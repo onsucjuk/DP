@@ -5,6 +5,7 @@ import dp.fdis.dto.MsgDTO;
 import dp.fdis.dto.TourDTO;
 import dp.fdis.service.IImgService;
 import dp.fdis.service.ITourInfoService;
+import dp.fdis.service.IUserInfoService;
 import dp.fdis.util.CmmUtil;
 import dp.fdis.util.DateUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ import java.util.Optional;
 public class TourController {
 
     private final ITourInfoService tourInfoService;
+    private final IUserInfoService userInfoService;
     private final IImgService iImgService;
     /**
      * 여행 정보 페이지로 이동
@@ -62,6 +64,87 @@ public class TourController {
 
         return "thymeleaf/tour/tourInfo";
     }
+
+    /**
+     * 여행 완료 목록 페이지로 이동
+     */
+    @GetMapping(value = "tourEndInfo")
+    public String tourEndInfo(HttpSession session, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".tourEndInfo Start!");
+
+            String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+
+            log.info("userId : " + userId);
+
+            if (userId.length() > 0) {
+
+                TourDTO pDTO = new TourDTO();
+
+                pDTO.setUserId(userId);
+
+                List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourEndList(pDTO))
+                        .orElseGet(ArrayList::new);
+
+                model.addAttribute("rList", rList);
+
+                int i = 0;
+                int hap = 0;
+
+                if(rList.size() > 0) {
+
+                    for (TourDTO tourDTO : rList) {
+
+                        int tourY = tourDTO.getTourY();
+                        int tourN = tourDTO.getTourN();
+
+                        log.info("dayDiff : " + tourDTO.getDayDiff());
+
+                        if (tourN + tourY == 0) {
+
+                            tourDTO.setTourRate(0);
+
+                        } else if (tourN + tourY > 0) {
+
+                            int tourRate = (tourY * 100) / (tourY + tourN);
+
+                            log.info("tourRate : " + tourRate);
+
+                            tourDTO.setTourRate(tourRate);
+
+                            i++;
+                            hap = hap + tourRate;
+
+                        }
+
+                    }
+                }
+
+                log.info("hap : " + hap);
+
+                TourDTO rDTO = new TourDTO();
+                if (i>0) {
+                    rDTO.setTourRate(hap / i);
+                } else {
+                    rDTO.setTourRate(0);
+                }
+
+                rDTO.setCount(rList.size());
+
+                model.addAttribute("rDTO", rDTO);
+
+            } else {
+
+                return "/user/login";
+
+            }
+
+        log.info(this.getClass().getName() + ".tourEndInfo End!");
+
+        return "thymeleaf/tour/tourEndInfo";
+
+    }
+
 
     /**
      * 여행 등록 페이지로 이동

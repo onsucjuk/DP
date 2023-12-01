@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>tourEndInfo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet"
+    />
+    <link href="/assets/css/tailwind.output.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/css/tour/tourEndInfo.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/assets/js/tour/tourEndInfo.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="main-body">
+
+        <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/index/index">Home</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+                <li class="breadcrumb-item"><a href="/user/myPage">User Profile</a></li>
+                <li class="breadcrumb-item active font-bold" aria-current="page">tourEndInfo</li>
+            </ol>
+        </nav>
+
+        <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            <img src="/assets/img/profile.jpg" alt="Admin" class="rounded-circle" width="150">
+                            <div class="mt-3">
+                                <h4 th:text="${session.SS_USER_ID}"></h4>
+                                <p class="text-secondary mb-1" th:text="'완료 여행 수 : ' + ${rDTO.count} + '개'"></p>
+                                <p class="text-secondary mb-1" th:text="'총 여행 달성도 : ' + ${rDTO.tourRate} + '%'"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-3">
+                </div>
+            </div>
+            <div class="col-md-8 contents">
+                <div class="card mb-3">
+                    <div class="card-body" th:each="dto : ${rList}">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">여행명</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text = "${dto.tourName}">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">여행 일자</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text = "${dto.dayDiff}+'박'+(${dto.dayDiff}+1)+'일'">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">여행 시작일</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text = "${dto.startTime}">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">여행 종료일</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text = "${dto.endTime}">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">여행 달성도</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary" th:text = "${dto.tourRate} + '%'">
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="px-2 my-1">
+                            <button
+                                    class="flex items-left justify-between w-1/10 px-2 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                    type="button" th:onclick="doDetail([[${dto.tourSeq}]])"
+                            >
+                                <div class="w-full">
+                                    <span class="px-2 py-1 text-sm font-semibold">상세 보기</span>
+                                    <span class="ml-2" aria-hidden="true">></span>
+                                </div>
+                            </button>
+                        </div>
+                        <hr class="thick-line">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+            </div>
+            <!--<div class="col-md-8">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0" th:text="'완료한 여행 수'"></h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <div class="col-sm-9 text-secondary AfterEnd" th:text="${rDTO.afterEnd}+'개'" style="width:30%"></div>
+                                <div class="row endStart AfterEnd">
+                                    <div class="px-2 my-1">
+                                        <button
+                                                id="btnEnd"
+                                                class="flex items-left justify-between w-1/10 px-2 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                type="button"
+                                        >
+                                            <div class="w-full">
+                                                <span class="px-2 py-1 text-sm font-semibold">완료 여행 보기</span>
+                                                <span class="ml-2" aria-hidden="true">></span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0" th:text="'예정된 여행 수'"></h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <div class="col-sm-9 text-secondary beforeStart" th:text="${rDTO.beforeStart}+'개'" style="width:30%"></div>
+                                <div class="row beforeStart">
+                                    <div class="px-2 my-1">
+                                        <button
+                                                id="btnBefore"
+                                                class="flex items-left justify-between w-1/10 px-2 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+                                                type="button"
+                                        >
+                                            <div class="w-full">
+                                                <span class="px-2 py-1 text-sm font-semibold">Do Itda</span>
+                                                <span class="ml-2" aria-hidden="true">></span>
+                                            </div>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

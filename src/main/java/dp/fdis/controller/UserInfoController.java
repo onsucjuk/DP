@@ -447,12 +447,105 @@ public class UserInfoController {
     }
 
     @GetMapping(value = "myPageEdit")
-    public String myPageEdit() {
+    public String myPageEdit(HttpSession session, ModelMap model) throws Exception {
         log.info(this.getClass().getName() + ".user/myPageEdit Start!");
+
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+        log.info("userId : " + userId);
+
+
+        if (userId.length() > 0) {
+
+            UserInfoDTO pDTO = new UserInfoDTO();
+
+            pDTO.setUserId(userId);
+
+            UserInfoDTO rDTO = Optional.ofNullable(userInfoService.getUserInfo(pDTO))
+                    .orElseGet(UserInfoDTO::new);
+
+
+            String email = EncryptUtil.decAES128CBC(CmmUtil.nvl(rDTO.getEmail()));
+
+            log.info("dec email : " + email);
+
+            rDTO.setEmail(email);
+
+            model.addAttribute("rDTO", rDTO);
+
+        } else {
+
+            return "/user/login";
+
+        }
+
 
         log.info(this.getClass().getName() + ".user/myPageEdit End!");
 
         return "thymeleaf/user/myPageEdit";
+    }
+
+    @ResponseBody
+    @PostMapping(value = "updateUserInfo")
+    public MsgDTO updateUserInfo(HttpSession session, HttpServletRequest request) {
+
+        log.info(this.getClass().getName() + ".updateUserInfo Start!");
+
+        String msg = ""; // 로그인 결과에 대한 메세지 전달 변수
+        MsgDTO dto = null; // 결과 메세지 구조
+
+        try {
+
+            String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+            if (CmmUtil.nvl(userId).length() > 0) {
+
+            String userName = CmmUtil.nvl(request.getParameter("userName"));
+            String email = CmmUtil.nvl(request.getParameter("email"));
+            String addr1 = CmmUtil.nvl(request.getParameter("addr1"));
+            String addr2 = CmmUtil.nvl(request.getParameter("addr2"));
+
+            log.info("userId : " + userId);
+            log.info("userName : " + userName);
+            log.info("email : " + email);
+            log.info("addr1 : " + addr1);
+            log.info("addr2 : " + addr2);
+
+            UserInfoDTO pDTO = new UserInfoDTO();
+
+            pDTO.setUserId(userId);
+            pDTO.setUserName(userName);
+            pDTO.setEmail(EncryptUtil.encAES128CBC(email));
+            pDTO.setAddr1(addr1);
+            pDTO.setAddr2(addr2);
+
+            userInfoService.updateUserInfo(pDTO);
+
+
+                msg = "유저 정보 변경하였습니다.";
+
+
+            } else {
+
+                msg = "로그인해주세요.";
+
+            }
+
+        } catch (Exception e) {
+
+            msg = "시스템 문제로 유저 정보를 변경하지 못 했습니다.";
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메세지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+
+            log.info("msg : " + dto.getMsg());
+            log.info(this.getClass().getName() + ".updateUserInfo End!");
+        }
+
+        return dto;
     }
 
     @ResponseBody

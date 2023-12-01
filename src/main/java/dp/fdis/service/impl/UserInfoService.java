@@ -223,5 +223,14 @@ public class UserInfoService implements IUserInfoService {
         return rDTO;
     }
 
+    @Override
+    public void updateUserInfo(UserInfoDTO pDTO) throws Exception {
+
+        log.info(this.getClass().getName() + ".updateUserInfo Start!");
+
+        userInfoMapper.updateUserInfo(pDTO);
+
+    }
+
 
 }
