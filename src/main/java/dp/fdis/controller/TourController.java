@@ -1254,6 +1254,124 @@ public class TourController {
     }
 
     /**
+     * viewItda 페이지 이동
+     */
+
+    @GetMapping(value = "viewItda")
+    public String viewItda(HttpServletRequest request, HttpSession session, ModelMap model) throws Exception {
+
+        log.info(this.getClass().getName() + ".goItda Start!");
+
+        String tourDay = CmmUtil.nvl(request.getParameter("dSeq"));
+        String tourSeq = CmmUtil.nvl((String) session.getAttribute("SS_TOUR_SEQ"));
+        String userId = CmmUtil.nvl((String) session.getAttribute("SS_USER_ID"));
+
+        log.info("tourDay : " + tourDay);
+        log.info("tourSeq : " + tourSeq);
+        log.info("userId : " + userId);
+
+        TourDTO pDTO = new TourDTO();
+
+        pDTO.setTourDay(tourDay);
+        pDTO.setTourSeq(tourSeq);
+        pDTO.setUserId(userId);
+
+        if(!(userId.length() > 0)) {
+
+            return "/user/login";
+
+        } else if(!(tourSeq.length() > 0)) {
+
+            return "/index/index";
+
+        }
+
+        else {
+
+
+
+            List<TourDTO> rList = Optional.ofNullable(tourInfoService.getTourPlace(pDTO))
+                    .orElseGet(ArrayList::new);
+
+            List<TourDTO> dList = Optional.ofNullable(tourInfoService.getTourDayList(pDTO))
+                    .orElseGet(ArrayList::new);
+
+            if (rList.isEmpty()) {
+                session.setAttribute("SS_EXISTS_YN", "N");
+            } else {
+                session.setAttribute("SS_EXISTS_YN", "Y");
+            }
+
+            session.setAttribute("SS_DAY_SEQ", tourDay);
+
+            TourDTO rDTO = Optional.ofNullable(tourInfoService.getTourInfo(pDTO))
+                    .orElseGet(TourDTO::new);
+
+            TourDTO dDTO = Optional.ofNullable(tourInfoService.getTourDayInfo(pDTO))
+                    .orElseGet(TourDTO::new);
+
+            log.info("Day 시작일자 : " + dDTO.getStartTime());
+
+            // Day에 해당하는 TOUR_PLACE의 TOUR_YN값 축출 : cDTO(count)
+            TourDTO cDTO = Optional.ofNullable(tourInfoService.getTourDayYn(pDTO))
+                    .orElseGet(TourDTO::new);
+
+            int cTourY = cDTO.getTourY();
+            int cTourN = cDTO.getTourN();
+
+            log.info("cDTO : TourY " + cTourY);
+            log.info("cDTO : TourN " + cTourN);
+
+            log.info("rDTO.getStartTime() : " + CmmUtil.nvl(dDTO.getEndTime()));
+            log.info("DateUtil.getDateTime() : " + DateUtil.getDateTime());
+
+            log.info("테스트1 : " + CmmUtil.nvl(dDTO.getStartTime()).equals(DateUtil.getDateTime()));
+
+            log.info("SS_STARTTIME_YN : " + CmmUtil.nvl((String) session.getAttribute("SS_STARTTIME_YN")));
+
+            String imgMarkerYn = CmmUtil.nvl((String) session.getAttribute("SS_IMGMAKER_YN"));
+
+            if (imgMarkerYn.isEmpty() || imgMarkerYn.equals("N")) {
+
+                session.setAttribute("SS_IMGMARKER_YN", "N");
+
+            } else {
+
+                session.setAttribute("SS_IMGMARKER_YN", "Y");
+
+            }
+
+            List<ImgDTO> iList = Optional.ofNullable(iImgService.getImgAll())
+                    .orElseGet(ArrayList::new);
+
+            ImgDTO iDTO = new ImgDTO();
+
+            iDTO.setTourSeq(tourSeq);
+            iDTO.setTourDay(tourDay);
+            iDTO.setUserId(userId);
+
+            List<ImgDTO> miList = Optional.ofNullable(iImgService.getMyImg(iDTO))
+                    .orElseGet(ArrayList::new);
+
+            log.info("이미지 갯수 : " + iList.size());
+            log.info("유저 이미지 갯수 : " + miList.size());
+
+            model.addAttribute("rList", rList);
+            model.addAttribute("dList", dList);
+            model.addAttribute("iList", iList);
+            model.addAttribute("miList", miList);
+            model.addAttribute("rDTO", rDTO);
+            model.addAttribute("dDTO", dDTO);
+            model.addAttribute("cDTO", cDTO);
+
+        }
+
+            return "thymeleaf/tour/viewItda";
+
+
+    }
+
+    /**
      * 여행 시작
      **/
     @ResponseBody
@@ -1513,6 +1631,60 @@ public class TourController {
             dto.setMsg(msg);
 
             log.info(this.getClass().getName() + ".setSessionMn End!");
+
+        }
+
+        return dto;
+    }
+
+
+    @ResponseBody
+    @PostMapping(value="setTourSeq")
+    MsgDTO setTourSeq(HttpServletRequest request, HttpSession session) {
+
+        log.info(this.getClass().getName() + ".setTourSeq Start!");
+
+        String msg = ""; // 메시지 내용
+        MsgDTO dto = null; // 결과 메시지 구조
+        int res = 0;
+
+        String tourSeq = CmmUtil.nvl(request.getParameter("tourSeq"));
+        String userId = CmmUtil.nvl((String)session.getAttribute("SS_USER_ID"));
+
+        log.info("userId : " + userId);
+        log.info("tourSeq : " + tourSeq);
+
+
+        try {
+
+            if (!(userId.length()>0)) {
+
+                msg = "로그인 해주세요.";
+
+
+            } else {
+
+                session.setAttribute("SS_TOUR_SEQ", tourSeq);
+
+                res = 1;
+            }
+
+
+        } catch (Exception e) {
+
+            res = 2;
+
+            msg = "실패하였습니다. : " + e.getMessage();
+            log.info(e.toString());
+            e.printStackTrace();
+
+        } finally {
+            // 결과 메시지 전달하기
+            dto = new MsgDTO();
+            dto.setMsg(msg);
+            dto.setResult(res);
+
+            log.info(this.getClass().getName() + ".setTourSeq End!");
 
         }
 

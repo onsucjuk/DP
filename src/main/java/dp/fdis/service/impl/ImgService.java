@@ -220,6 +220,14 @@ public class ImgService implements IImgService {
         return imgMapper.getImgAll();
     }
 
+    @Transactional
+    @Override
+    public List<ImgDTO> getMyImg(ImgDTO pDTO) throws Exception {
+        log.info(this.getClass().getName() + ".getMyImg start!");
+
+        return imgMapper.getMyImg(pDTO);
+    }
+
     @Override
     public ImgDTO checkImg(ImgDTO pDTO) throws Exception {
 

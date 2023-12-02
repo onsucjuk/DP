@@ -321,6 +321,8 @@
             TOUR_DAY = #{tourDay}
           AND
             TOUR_SEQ = #{tourSeq}
+        ORDER BY
+            END_TIME;
     </select>
 
     <!-- 여행 목적지 하나 들고 오기 -->

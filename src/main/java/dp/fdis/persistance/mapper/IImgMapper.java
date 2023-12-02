@@ -12,6 +12,7 @@ public interface IImgMapper {
     List<ImgDTO> getTourDayImg(ImgDTO pDTO) throws Exception;
     List<ImgDTO> getTourImgAll(ImgDTO pDTO) throws Exception;
     List<ImgDTO> getImgAll() throws Exception;
+    List<ImgDTO> getMyImg(ImgDTO pDTO) throws Exception;
 
     ImgDTO checkImg(ImgDTO pDTO) throws Exception;
     void insertTourImg(ImgDTO pDTO) throws Exception;
