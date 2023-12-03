@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
 
-    $("#btnViewMyImg").on("click", function () {
+    /*$("#btnViewMyImg").on("click", function () {
 
         if(imgMarkerYn==="N"){
 
@@ -15,7 +15,7 @@ $(document).ready(function () {
         }
 
 
-    })
+    })*/
 
     $("#btnViewRoute").on("click", function () {
 
@@ -388,6 +388,7 @@ function drawImgMaker() {
     }
 }
 
+/*
 
 function drawMyImgMaker() {
 
@@ -511,6 +512,7 @@ function drawMyImgMaker() {
         imgMarkers.push(marker);
     }
 }
+*/
 
 
 // 이미지 마커 지우기
