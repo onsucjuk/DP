@@ -948,6 +948,7 @@ function drawImgMaker() {
             let isOpen = false; // 각 팝업의 열림 상태를 추적하기 위한 변수
 
             return function (evt) {
+
                 console.log((index + 1) + '번째 마커 정보');
                 console.log('imgURL = ' + iList[index].imgURL + ' title = ' + iList[index].title + ' userId : ' + iList[index].regId);
                 console.log('contents = ' + iList[index].contents + ' imgLat = ' + iList[index].imgLat + ' imgLon : ' + iList[index].imgLon);
@@ -958,6 +959,29 @@ function drawImgMaker() {
                     currentInfoWindow.setVisible(false);
                 }
                 console.log('imgCheck = ' + imgCheck)
+
+                $.ajax({
+                    url: "/img/checkLike",
+                    type: "POST",
+                    datatype: "JSON",
+                    data: {
+                        "imgSeq" : imgSeq
+                    },
+                    success: function (json) {
+
+                        if (json.likeChk === 1) {
+                            // 유저가 like를 눌러놨음
+                            imgCheck = "Y"
+                            console.log("checkLike 결과 : " + imgCheck)
+
+                        } else if(json.likeChk === 0) {
+                            // 유저가 like를 누르지 않았음
+                            imgCheck = "N"
+                            console.log("checkLike 결과 : " + imgCheck)
+
+                        }
+                    }
+                })
 
                 let infoWindowContent = ''
 
@@ -1067,6 +1091,9 @@ function likeCheck(imgSeq) {
             console.log(json);
             console.log(json.msg);
             console.log(json.likeCount);
+            console.log(json.ilist);
+
+            iList = json.ilist;
 
             if(json.msg==="좋아요 했습니다.") {
 
@@ -1086,7 +1113,7 @@ function likeCheck(imgSeq) {
                         likeDel(imgSeq);
                     });
                 }
-            } else if(msg==="로그인 해주세요.") {
+            } else if(json.msg==="로그인 해주세요.") {
 
                 location.href = "/user/login"
 
@@ -1117,6 +1144,9 @@ function likeDel(imgSeq) {
             console.log(json);
             console.log(json.msg);
             console.log(json.likeCount);
+            console.log(json.ilist);
+
+            iList = json.ilist;
 
             if(json.likeCount==null) {
                 json.likeCount=0;
@@ -1140,7 +1170,7 @@ function likeDel(imgSeq) {
                         likeCheck(imgSeq);
                     });
                 }
-            } else if(msg==="로그인 해주세요.") {
+            } else if(json.msg==="로그인 해주세요.") {
 
                 location.href = "/user/login"
 

@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
 
-    /*$("#btnViewMyImg").on("click", function () {
+    $("#btnViewMyImg").on("click", function () {
 
         if(imgMarkerYn==="N"){
 
@@ -15,7 +15,7 @@ $(document).ready(function () {
         }
 
 
-    })*/
+    })
 
     $("#btnViewRoute").on("click", function () {
 
@@ -388,7 +388,6 @@ function drawImgMaker() {
     }
 }
 
-/*
 
 function drawMyImgMaker() {
 
@@ -433,6 +432,7 @@ function drawMyImgMaker() {
             let isOpen = false; // 각 팝업의 열림 상태를 추적하기 위한 변수
 
             return function (evt) {
+
                 console.log((index + 1) + '번째 마커 정보');
                 console.log('imgURL = ' + miList[index].imgURL + ' title = ' + miList[index].title + ' userId : ' + miList[index].regId);
                 console.log('contents = ' + miList[index].contents + ' imgLat = ' + miList[index].imgLat + ' imgLon : ' + miList[index].imgLon);
@@ -443,6 +443,29 @@ function drawMyImgMaker() {
                     currentInfoWindow.setVisible(false);
                 }
                 console.log('imgCheck = ' + imgCheck)
+
+                $.ajax({
+                    url: "/img/checkLike",
+                    type: "POST",
+                    datatype: "JSON",
+                    data: {
+                        "imgSeq" : imgSeq
+                    },
+                    success: function (json) {
+
+                        if (json.likeChk === 1) {
+                            // 유저가 like를 눌러놨음
+                            imgCheck = "Y"
+                            console.log("checkLike 결과 : " + imgCheck)
+
+                        } else if(json.likeChk === 0) {
+                            // 유저가 like를 누르지 않았음
+                            imgCheck = "N"
+                            console.log("checkLike 결과 : " + imgCheck)
+
+                        }
+                    }
+                })
 
                 let infoWindowContent = ''
 
@@ -512,7 +535,6 @@ function drawMyImgMaker() {
         imgMarkers.push(marker);
     }
 }
-*/
 
 
 // 이미지 마커 지우기
@@ -554,10 +576,14 @@ function likeCheck(imgSeq) {
             console.log(json);
             console.log(json.msg);
             console.log(json.likeCount);
+            console.log(json.ilist);
 
             if(json.msg==="좋아요 했습니다.") {
 
-                let likeDiv = $(".likeDiv");
+                alert(json.msg);
+                location.reload();
+
+                /*let likeDiv = $(".likeDiv");
 
                 if (likeDiv.length === 0) {
                     // likeDiv가 없으면 새로 추가
@@ -572,8 +598,8 @@ function likeCheck(imgSeq) {
                     likeDiv.find('img').off("click").on("click", function () {
                         likeDel(imgSeq);
                     });
-                }
-            } else if(msg==="로그인 해주세요.") {
+                }*/
+            } else if(json.msg==="로그인 해주세요.") {
 
                 location.href = "/user/login"
 
@@ -604,6 +630,7 @@ function likeDel(imgSeq) {
             console.log(json);
             console.log(json.msg);
             console.log(json.likeCount);
+            console.log(json.ilist);
 
             if(json.likeCount==null) {
                 json.likeCount=0;
@@ -611,7 +638,10 @@ function likeDel(imgSeq) {
 
             if(json.msg==="좋아요를 취소했습니다.") {
 
-                let likeDiv = $(".likeDiv");
+                alert(json.msg);
+                location.reload();
+
+                /*let likeDiv = $(".likeDiv");
 
                 if (likeDiv.length === 0) {
                     // likeDiv가 없으면 새로 추가
@@ -626,8 +656,8 @@ function likeDel(imgSeq) {
                     likeDiv.find('img').off("click").on("click", function () {
                         likeCheck(imgSeq);
                     });
-                }
-            } else if(msg==="로그인 해주세요.") {
+                }*/
+            } else if(json.msg==="로그인 해주세요.") {
 
                 location.href = "/user/login"
 
