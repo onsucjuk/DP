@@ -10,7 +10,6 @@ import dp.fdis.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -552,14 +551,14 @@ public class ImgController {
 
     @ResponseBody
     @PostMapping(value = "likeCheck")
-    public MsgDTO likeCheck(HttpSession session, @RequestBody Map<String, Object> requestBody, ModelMap model) {
+    public MsgDTO likeCheck(HttpSession session, @RequestBody Map<String, Object> requestBody) {
 
         log.info(this.getClass().getName() + ".likeCheck Start!");
 
         String msg = ""; // 메시지 내용
         MsgDTO dto = null; // 결과 메시지 구조
         ImgDTO rDTO = new ImgDTO();
-        List<ImgDTO> iList = null;
+        List<ImgDTO> iList = new ArrayList<>();
         int likeCount = 0;
 
         try {
@@ -607,8 +606,6 @@ public class ImgController {
                     iList = Optional.ofNullable(iImgService.getImgAll())
                             .orElseGet(ArrayList::new);
 
-                    log.info("iList : " + iList);
-
                     msg = "좋아요 했습니다.";
 
                 } else if(likeChk == 1) {
@@ -638,6 +635,7 @@ public class ImgController {
 
             log.info("msg : " + msg);
             log.info("likeCount : " + likeCount);
+            log.info("getIList : " + dto.getIList());
             log.info(this.getClass().getName() + ".likeCheck End!");
 
         }
@@ -648,14 +646,14 @@ public class ImgController {
 
     @ResponseBody
     @PostMapping(value = "likeDel")
-    public MsgDTO likeDel(HttpSession session, @RequestBody Map<String, Object> requestBody, ModelMap model) {
+    public MsgDTO likeDel(HttpSession session, @RequestBody Map<String, Object> requestBody) {
 
         log.info(this.getClass().getName() + ".likeDel Start!");
 
         String msg = ""; // 메시지 내용
         MsgDTO dto = null; // 결과 메시지 구조
         ImgDTO rDTO = new ImgDTO();
-        List<ImgDTO> iList = null;
+        List<ImgDTO> iList = new ArrayList<>();
         int likeCount = 0;
 
         try {
@@ -699,7 +697,7 @@ public class ImgController {
 
                     likeCount = iDTO.getLikeCnt();
 
-                    iList = Optional.ofNullable(iImgService.getImgAll())
+                     iList = Optional.ofNullable(iImgService.getImgAll())
                             .orElseGet(ArrayList::new);
 
                     msg = "좋아요를 취소했습니다.";

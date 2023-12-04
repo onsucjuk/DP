@@ -15,6 +15,6 @@ public class MsgDTO {
     private String msg; // 메시지
 
     private int likeCount; // like 수
+    private List<ImgDTO> iList;
 
-    private List<ImgDTO> iList; // imgList 갱신용
 }
