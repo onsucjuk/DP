@@ -9,6 +9,7 @@ import dp.fdis.service.IImgService;
 import dp.fdis.util.CmmUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,9 @@ import java.util.Optional;
 @Controller
 @Slf4j
 public class ImgController {
+
+    @Value("${file.upload.path}")
+    private String imgPath;
 
     private final IImgService iImgService;
 
@@ -101,7 +105,6 @@ public class ImgController {
         return "thymeleaf/img/imgEdit";
     }
 
-
     @ResponseBody
     @PostMapping("/imgGPS")
     public MsgDTO imgGPS(HttpSession session, MultipartHttpServletRequest mRequest) throws Exception {
@@ -116,8 +119,15 @@ public class ImgController {
 
             MultipartFile multipartFile = mRequest.getFile("file");
 
-            String filePath = "src/main/resources/static/upload/";
+            File directory = new File(imgPath);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            String filePath = imgPath;
             String fileName = multipartFile.getOriginalFilename();
+
+            log.info("file Path : " + filePath + fileName);
 
             File file = new File(filePath + fileName);
             file.createNewFile();

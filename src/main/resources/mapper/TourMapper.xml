@@ -21,7 +21,7 @@
         WHERE
             TI.USER_ID = #{userId}
             AND
-            TI.END_TIME >= NOW()
+            TI.END_TIME >= CURRENT_DATE()
         GROUP BY
             TI.TOUR_SEQ
         ORDER BY
@@ -45,7 +45,7 @@
         WHERE
             TI.USER_ID = #{userId}
           AND
-            NOT(TI.END_TIME >= NOW())
+            NOT(TI.END_TIME >= CURRENT_DATE)
         GROUP BY
             TI.TOUR_SEQ
         ORDER BY
